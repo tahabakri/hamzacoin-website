@@ -73,7 +73,7 @@ export function Economy() {
       </div>
 
       <div className="mb-12 flex justify-center">
-        <label className="relative flex items-center p-1 bg-[#e2e8f0] rounded-full cursor-pointer w-[16rem] shadow-[inset_0_2px_4px_rgba(0,0,0,0.06),0_1px_1px_rgba(255,255,255,1)] border border-slate-300">
+        <label className="relative flex items-center p-1 bg-[#e2e8f0] rounded-full cursor-pointer w-full max-w-[16rem] shadow-[inset_0_2px_4px_rgba(0,0,0,0.06),0_1px_1px_rgba(255,255,255,1)] border border-slate-300">
           <input
             type="checkbox"
             checked={isSpendView}

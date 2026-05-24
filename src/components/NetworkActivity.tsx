@@ -76,13 +76,13 @@ export function NetworkActivity({ realEvents, ghostEvents, demoMode }: Props) {
                 }`}
               >
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono text-coffee-500">
+                  <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono text-coffee-500 break-all">
                     {ev.isGhost && (
                       <span
                         className="inline-flex items-center gap-1 rounded-full bg-violet-50 border border-violet-200 px-1.5 py-0.5 text-[9px] font-semibold text-violet-700"
                         aria-label="Simulated transaction"
                       >
-                        <span>👻</span>
+                        <span aria-hidden="true">👻</span>
                         demo
                       </span>
                     )}
@@ -90,9 +90,10 @@ export function NetworkActivity({ realEvents, ghostEvents, demoMode }: Props) {
                     <Icon
                       icon="solar:arrow-right-linear"
                       className="text-coffee-400"
+                      aria-hidden="true"
                     />
                     <span>{formatAddress(ev.to)}</span>
-                    <span className="text-coffee-300">·</span>
+                    <span className="text-coffee-300" aria-hidden="true">·</span>
                     <RelativeTime
                       timestamp={ev.timestamp}
                       className="text-coffee-400"

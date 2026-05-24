@@ -262,10 +262,14 @@ export function SendForm({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2">
+                <label
+                  htmlFor="amount-input"
+                  className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
+                >
                   Amount (HMZ)
                 </label>
                 <input
+                  id="amount-input"
                   type="number"
                   required
                   min="0.0001"
@@ -277,11 +281,14 @@ export function SendForm({
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2">
+                <label
+                  htmlFor="txtype-select"
+                  className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
+                >
                   Transaction Type
                 </label>
                 <select
-                  aria-label="Transaction type"
+                  id="txtype-select"
                   value={txType}
                   onChange={(e) => setTxType(e.target.value as TxType)}
                   className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
@@ -296,10 +303,14 @@ export function SendForm({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2">
+              <label
+                htmlFor="memo-input"
+                className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
+              >
                 Recommendation Message (Stored Local/Memo)
               </label>
               <input
+                id="memo-input"
                 type="text"
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}

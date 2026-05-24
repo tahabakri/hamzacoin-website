@@ -37,7 +37,7 @@ export function SettingsMenu({ settings }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-label="Open settings"
         aria-expanded={open}
-        className="w-9 h-9 rounded-full bg-white/70 hover:bg-white border border-coffee-200 flex items-center justify-center text-coffee-700 transition-colors focus-visible:ring-2 focus-visible:ring-coffee-500 focus-visible:outline-none"
+        className="w-10 h-10 rounded-full bg-white/70 hover:bg-white active:scale-95 border border-coffee-200 flex items-center justify-center text-coffee-700 transition-all focus-visible:ring-2 focus-visible:ring-coffee-500 focus-visible:outline-none"
       >
         <Icon icon="solar:settings-linear" className="text-base" />
       </button>
@@ -46,7 +46,7 @@ export function SettingsMenu({ settings }: Props) {
         <div
           role="dialog"
           aria-label="Settings"
-          className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-50"
+          className="absolute right-0 mt-2 w-[min(18rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-50"
         >
           <div className="px-4 py-3 border-b border-coffee-100">
             <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
@@ -102,7 +102,7 @@ export function SettingsMenu({ settings }: Props) {
                       onClick={() =>
                         settings.setReduceMotionOverride(opt.value)
                       }
-                      className={`flex-1 rounded-full px-2 py-1 text-[10px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-coffee-500 focus-visible:outline-none ${
+                      className={`flex-1 min-h-[36px] rounded-full px-2 py-1.5 text-[10px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-coffee-500 focus-visible:outline-none ${
                         settings.reduceMotionOverride === opt.value
                           ? "bg-white text-coffee-950 shadow-sm"
                           : "text-coffee-500 hover:text-coffee-800"
@@ -139,7 +139,7 @@ function Toggle({ icon, label, description, checked, onChange }: ToggleProps) {
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-coffee-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
+      className="w-full min-h-[44px] px-4 py-3 flex items-center gap-3 hover:bg-coffee-50 active:bg-coffee-100 transition-colors text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
     >
       <div className="w-7 h-7 rounded-lg bg-coffee-50 border border-coffee-100 flex items-center justify-center shrink-0">
         <Icon icon={icon} className="text-base text-coffee-700" />

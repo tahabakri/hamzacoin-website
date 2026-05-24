@@ -104,7 +104,9 @@ export function Header({
                   <button
                     type="button"
                     onClick={() => setOpen((v) => !v)}
-                    className={`flex items-center gap-2 bg-coffee-100/80 hover:bg-coffee-100 border border-coffee-200 rounded-full px-3.5 py-1.5 shadow-[inset_0_1px_0_white] transition-colors ${
+                    aria-label={`Wallet ${formatAddress(account)} — open menu`}
+                    aria-haspopup="menu"
+                    className={`flex items-center gap-2 bg-coffee-100/80 hover:bg-coffee-100 active:scale-95 border border-coffee-200 rounded-full px-3.5 py-2 shadow-[inset_0_1px_0_white] transition-all ${
                       !showNetworkWarn && !settings.reduceMotion
                         ? "hmz-pulse-connected"
                         : ""
@@ -129,7 +131,7 @@ export function Header({
                   </button>
 
                   {open && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden">
+                    <div className="absolute right-0 mt-2 w-[min(16rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden">
                       <div className="px-4 py-3 border-b border-coffee-100">
                         <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
                           Connected

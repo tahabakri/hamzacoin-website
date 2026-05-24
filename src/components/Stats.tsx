@@ -28,12 +28,12 @@ export function Stats({ transfers, onCopyContract }: Props) {
             className="hmz-row-in rounded-xl bg-white border border-coffee-100 p-4 shadow-[0_2px_8px_rgba(67,48,36,0.02)]"
           >
             <div className="flex justify-between items-start gap-2">
-              <div className="flex items-center gap-2 text-[10px] font-mono text-coffee-500">
+              <div className="flex items-center gap-2 flex-wrap text-[10px] font-mono text-coffee-500 min-w-0 break-all">
                 <span>From: {tx.from}</span>
-                <span>→</span>
+                <span aria-hidden="true">→</span>
                 <span>To: {tx.to}</span>
               </div>
-              <span className="text-xs font-bold text-coffee-800">
+              <span className="text-xs font-bold text-coffee-800 shrink-0">
                 +{tx.amount} HMZ
               </span>
             </div>
@@ -47,11 +47,11 @@ export function Stats({ transfers, onCopyContract }: Props) {
         ))}
       </div>
 
-      <div className="p-4 bg-coffee-50 border-t border-coffee-100 flex items-center justify-between text-[11px] text-coffee-600">
-        <span>Address: {CONTRACT_ADDRESS.substring(0, 8)}...</span>
+      <div className="p-4 bg-coffee-50 border-t border-coffee-100 flex items-center justify-between gap-2 text-[11px] text-coffee-600 flex-wrap">
+        <span className="break-all">Address: {CONTRACT_ADDRESS.substring(0, 8)}...</span>
         <button
           onClick={onCopyContract}
-          className="underline font-semibold hover:text-coffee-950"
+          className="underline font-semibold hover:text-coffee-950 active:text-coffee-700 min-h-[36px] py-1"
         >
           Copy Contract Address
         </button>
