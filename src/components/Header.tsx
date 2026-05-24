@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
+import type { SettingsState } from "../hooks/useSettings";
+import { SettingsMenu } from "./SettingsMenu";
 
 type Props = {
   account: string;
@@ -8,6 +10,7 @@ type Props = {
   isCorrectNetwork: boolean;
   onConnect: () => void;
   onDisconnect: () => void;
+  settings: SettingsState;
 };
 
 export function Header({
@@ -16,6 +19,7 @@ export function Header({
   isCorrectNetwork,
   onConnect,
   onDisconnect,
+  settings,
 }: Props) {
   const [open, setOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -92,12 +96,17 @@ export function Header({
             </div>
 
             <div className="flex items-center gap-2">
+              <SettingsMenu settings={settings} />
               {account ? (
                 <div className="relative" ref={popoverRef}>
                   <button
                     type="button"
                     onClick={() => setOpen((v) => !v)}
-                    className="flex items-center gap-2 bg-coffee-100/80 hover:bg-coffee-100 border border-coffee-200 rounded-full px-3.5 py-1.5 shadow-[inset_0_1px_0_white] transition-colors"
+                    className={`flex items-center gap-2 bg-coffee-100/80 hover:bg-coffee-100 border border-coffee-200 rounded-full px-3.5 py-1.5 shadow-[inset_0_1px_0_white] transition-colors ${
+                      !showNetworkWarn && !settings.reduceMotion
+                        ? "hmz-pulse-connected"
+                        : ""
+                    }`}
                   >
                     <span
                       className={`w-2 h-2 rounded-full ${

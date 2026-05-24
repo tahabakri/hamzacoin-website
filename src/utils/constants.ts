@@ -9,8 +9,19 @@ export const HMZ_ABI = [
 
 export const CONTRACT_ADDRESS = "0x619F30ec004442cdc3BE060FC927A3688054e6c3";
 export const SEPOLIA_CHAIN_ID = "0xaa36a7";
-export const SEPOLIA_RPC = "https://rpc.ankr.com/eth_sepolia";
+// PublicNode primary, dRPC backup — both free, key-free.
+// Ankr now gates rpc.ankr.com/eth_sepolia behind an API key.
+export const SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
+export const SEPOLIA_RPCS: readonly string[] = [
+  "https://ethereum-sepolia-rpc.publicnode.com",
+  "https://sepolia.drpc.org",
+  "https://eth-sepolia.public.blastapi.io",
+];
 export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";
+
+export const HISTORY_BLOCK_RANGE = 50_000n;
+export const MAX_FEED_ITEMS = 20;
+export const TOTAL_SUPPLY_POLL_MS = 30_000;
 
 export type Transfer = {
   id: number;
@@ -19,7 +30,10 @@ export type Transfer = {
   to: string;
   amount: string;
   recommendation: string;
+  timestamp: number;
 };
+
+const SEED_NOW = Date.now();
 
 export const SEED_TRANSFERS: Transfer[] = [
   {
@@ -29,6 +43,7 @@ export const SEED_TRANSFERS: Transfer[] = [
     to: "0x619F...e6c3",
     amount: "5",
     recommendation: "Coffee check-in: 'Solitude Brews' Cafe",
+    timestamp: SEED_NOW - 1000 * 60 * 18,
   },
   {
     id: 2,
@@ -37,6 +52,7 @@ export const SEED_TRANSFERS: Transfer[] = [
     to: "0x74Ab...c112",
     amount: "2",
     recommendation: "Shared: 'Quietly Yours' by Warm Melodies",
+    timestamp: SEED_NOW - 1000 * 60 * 47,
   },
   {
     id: 3,
@@ -45,5 +61,6 @@ export const SEED_TRANSFERS: Transfer[] = [
     to: "0x22Ee...a991",
     amount: "3",
     recommendation: "Recommended reading: 'The Art of Solitude'",
+    timestamp: SEED_NOW - 1000 * 60 * 60 * 2,
   },
 ];
