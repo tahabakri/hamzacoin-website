@@ -3,6 +3,7 @@ import { type EventLog } from "ethers";
 import { HISTORY_BLOCK_RANGE } from "../utils/constants";
 import {
   computeHolders,
+  decodeTransferArgs,
   groupByDay,
   topSenders,
   type DailyVolumePoint,
@@ -28,6 +29,7 @@ export function useTransferHistory(): TransferHistoryState {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Initial historical load
   useEffect(() => {
     let cancelled = false;
 
@@ -52,7 +54,6 @@ export function useTransferHistory(): TransferHistoryState {
 
         if (cancelled) return;
 
-        // Batch-fetch block timestamps; multiple events may share a block
         const blockNumbers = Array.from(
           new Set(rawEvents.map((e) => e.blockNumber)),
         );
@@ -106,6 +107,65 @@ export function useTransferHistory(): TransferHistoryState {
 
     return () => {
       cancelled = true;
+    };
+  }, [contract, provider]);
+
+  // Live append: subscribe to new Transfer events and merge into the event list.
+  // The memoized derivations (dailyVolume, holderCount, leaderboard) will recompute.
+  useEffect(() => {
+    let cancelled = false;
+    const filter = contract.filters.Transfer();
+
+    const handler = async (...args: unknown[]) => {
+      if (cancelled) return;
+      try {
+        const decoded = decodeTransferArgs(args);
+        if (!decoded) return;
+        const { from, to, value, log } = decoded;
+        if (!log || typeof log.blockNumber !== "number") return;
+
+        let timestampMs = Date.now();
+        try {
+          const block = await provider.getBlock(log.blockNumber);
+          if (block?.timestamp) {
+            timestampMs = block.timestamp * 1000;
+          }
+        } catch {
+          // fall back to now()
+        }
+
+        if (cancelled) return;
+
+        setEvents((prev) => {
+          const exists = prev.some(
+            (e) =>
+              e.txHash === log.transactionHash && e.logIndex === log.index,
+          );
+          if (exists) return prev;
+          const next: RawTransferEvent = {
+            from,
+            to,
+            value,
+            blockNumber: log.blockNumber,
+            blockTimestampMs: timestampMs,
+            txHash: log.transactionHash,
+            logIndex: log.index ?? 0,
+          };
+          return [next, ...prev];
+        });
+      } catch (err) {
+        console.warn(
+          "Skipping malformed Transfer event in history hook",
+          err,
+        );
+      }
+    };
+
+    void contract.on(filter, handler);
+
+    return () => {
+      cancelled = true;
+      void contract.off(filter, handler);
     };
   }, [contract, provider]);
 
