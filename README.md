@@ -19,15 +19,42 @@ A browser-based dApp that connects MetaMask to the [HamzaCoin ERC20 contract](ht
 
 ## Screenshots
 
-_Coming soon — add screenshots to a `docs/screenshots/` folder and reference them here._
+> Drop your PNGs into [`docs/screenshots/`](docs/screenshots/) using the filenames below and they'll render automatically.
+
+### Hero — Fluid background + token overview card
+
+![Hero section](docs/screenshots/hero.png)
+
+### Wallet connected — Header pill with address + Disconnect popover
+
+![Wallet connected](docs/screenshots/wallet-connected.png)
+
+### Send form — HMZ transfer with custom memo
+
+![Send HMZ form](docs/screenshots/send-form.png)
+
+### Transaction history — Live on-chain Transfer events
+
+![Transaction history feed](docs/screenshots/transaction-history.png)
+
+### Etherscan — Public verification of every transfer
+
+![Sepolia Etherscan view](docs/screenshots/etherscan.png)
+
+<details>
+<summary>Expected folder structure</summary>
 
 ```text
 docs/
 └── screenshots/
     ├── hero.png
+    ├── wallet-connected.png
     ├── send-form.png
-    └── transaction-history.png
+    ├── transaction-history.png
+    └── etherscan.png
 ```
+
+</details>
 
 ---
 

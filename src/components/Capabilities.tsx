@@ -14,7 +14,7 @@ const CAPABILITIES = [
     body: "Share quiet albums or vinyl links. Connect with people over refined soundscapes.",
   },
   {
-    icon: "solar:book-open-linear",
+    icon: "solar:book-bookmark-linear",
     badge: "Earn 3 HMZ",
     title: "Book Outlines",
     body: "Summarize key paragraphs or quotes. Share raw literature advice and receive tokens quietly.",

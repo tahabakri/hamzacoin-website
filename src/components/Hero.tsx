@@ -98,7 +98,7 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
                     <Icon
-                      icon="solar:cup-hot-linear"
+                      icon="solar:map-point-linear"
                       className="text-lg text-emerald-600"
                     />
                   </div>
@@ -117,7 +117,7 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
                     <Icon
-                      icon="solar:music-note-linear"
+                      icon="solar:headphones-round-linear"
                       className="text-lg text-amber-600"
                     />
                   </div>
@@ -136,7 +136,7 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-coffee-100 flex items-center justify-center">
                     <Icon
-                      icon="solar:book-open-linear"
+                      icon="solar:notebook-linear"
                       className="text-lg text-coffee-600"
                     />
                   </div>
