@@ -13,6 +13,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FluidBackground } from "./components/FluidBackground";
 import { Header } from "./components/Header";
 import { StatusBanner } from "./components/StatusBanner";
+import { MobileWalletBanner } from "./components/MobileWalletBanner";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Capabilities } from "./components/Capabilities";
@@ -83,6 +84,7 @@ function App() {
           void wallet.ensureSepolia();
         }}
       />
+      <MobileWalletBanner account={wallet.account} />
       <main className="relative z-10">
         <Hero
           account={wallet.account}
