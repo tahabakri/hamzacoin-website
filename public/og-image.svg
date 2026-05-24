@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF8F5"/>
+      <stop offset="100%" stop-color="#E6DDD0"/>
+    </linearGradient>
+    <radialGradient id="coin" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#F2E6D8"/>
+      <stop offset="55%" stop-color="#D4B488"/>
+      <stop offset="100%" stop-color="#7C5635"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g transform="translate(900, 315)">
+    <circle cx="0" cy="0" r="210" fill="url(#coin)"/>
+    <circle cx="0" cy="0" r="195" fill="none" stroke="rgba(184,115,51,0.75)" stroke-width="6"/>
+    <circle cx="0" cy="0" r="178" fill="none" stroke="rgba(108,79,59,0.4)" stroke-width="2"/>
+    <text x="0" y="44" text-anchor="middle" font-family="'Bebas Neue', 'Arial Black', sans-serif" font-weight="900" font-size="170" fill="#432824">HMZ</text>
+  </g>
+  <g transform="translate(80, 200)">
+    <text x="0" y="0" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="22" font-weight="600" fill="#84644D" letter-spacing="3">HAMZACOIN · SEPOLIA</text>
+    <text x="0" y="100" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="80" font-weight="300" fill="#432824">Share beauty.</text>
+    <text x="0" y="180" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="80" font-weight="300" fill="#432824">Earn quietly.</text>
+    <text x="0" y="260" font-family="'Inter', 'Helvetica Neue', sans-serif" font-style="italic" font-weight="600" font-size="80" fill="#6C4F3B">Hold moments.</text>
+    <text x="0" y="340" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="26" font-weight="300" fill="#7C5635">The Quiet Recommendation Token — a React + Web3 dApp on Sepolia.</text>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "name": "HamzaCoin — The Quiet Recommendation Token",
+  "short_name": "HamzaCoin",
+  "description": "Send HMZ on Sepolia with a custom memo. Live transfer feed, animated activity map, on-chain charts — built with React + ethers v6.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#6C4F3B",
+  "background_color": "#FAF8F5",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
+    }
+  ]
+}

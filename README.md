@@ -323,6 +323,50 @@ Every transfer is publicly verifiable. That's the whole point of a blockchain �
 
 ---
 
+## Using on mobile
+
+The dApp is responsive from 320 px upward and ships PWA-style metadata (theme color, apple-touch-icon, web manifest, Open Graph tags).
+
+### Signing transactions
+
+Mobile Safari and Chrome cannot run the MetaMask browser extension. To sign HMZ transfers from a phone you need **MetaMask Mobile**, available from the App Store / Play Store. There are two routes:
+
+1. **Open the site in MetaMask's in-app browser.** Tap the banner that says _"On mobile? Open this in the MetaMask app for full Web3 access."_ Behind the scenes it links to:
+
+   ```text
+   https://metamask.app.link/dapp/<your-host>/
+   ```
+
+   You can also paste this URL straight into MetaMask Mobile's address bar.
+
+2. **Open the site in regular Safari / Chrome** to read on-chain data (balances, transfer feed, charts) without connecting a wallet. The banner gives you a one-tap way to relaunch inside MetaMask whenever you want to sign.
+
+If you're already inside MetaMask Mobile (UA contains `MetaMaskMobile`), the banner stays hidden.
+
+### Performance on mobile
+
+The hero's Three.js fluid background, the spinning HMZ coin, the transaction map and the audio visualizer all detect mobile viewports and automatically reduce work:
+
+| Feature | Desktop | Mobile (≤ 768 px) | Slow 3G |
+| --- | --- | --- | --- |
+| Fluid background render target | × 1.0 | × 0.6 (× 1.25 dpr cap) | × 0.4 |
+| Fluid background simulation | full | full | full (skipped when `prefers-reduced-motion`) |
+| Spinning coin geometry | 96 segments | 32 segments | — |
+| Spinning coin face texture | 512 px | 256 px | — |
+| Transaction map particles | up to 14 | up to 6 | — |
+| Map ambient interval | 850 ms | 1400 ms | — |
+| Audio visualizer bars | 32 | 24 | — |
+
+Sections below the fold (Transaction Map specifically) are wrapped in an `IntersectionObserver` and only start their render loop once you scroll near them.
+
+### Adding to the home screen
+
+Tap the share icon in iOS Safari → **Add to Home Screen**. The app opens in standalone mode (no browser chrome) using the theme color `#6C4F3B`. On Android Chrome, the same is available from the menu as **Install app**.
+
+The bundled SVG icons (`/icon.svg`, `/apple-touch-icon.svg`) work on iOS 15+ and recent Android. For older device support you can swap them for PNGs at the same paths; the manifest and `<link rel="apple-touch-icon">` already reference them.
+
+---
+
 ## Architecture
 
 ### Custom React hooks

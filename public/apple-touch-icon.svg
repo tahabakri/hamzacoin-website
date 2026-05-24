@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#F2E6D8"/>
+      <stop offset="55%" stop-color="#D4B488"/>
+      <stop offset="100%" stop-color="#7C5635"/>
+    </radialGradient>
+  </defs>
+  <rect width="180" height="180" rx="34" fill="#FAF8F5"/>
+  <circle cx="90" cy="90" r="76" fill="url(#g)"/>
+  <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(184,115,51,0.75)" stroke-width="3"/>
+  <text x="90" y="104" text-anchor="middle" font-family="'Bebas Neue', 'Arial Black', sans-serif" font-weight="900" font-size="62" fill="#432824">HMZ</text>
+</svg>
