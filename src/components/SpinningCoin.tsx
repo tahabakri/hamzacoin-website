@@ -71,8 +71,14 @@ export function SpinningCoin({ reduceMotion, size = 120, className }: Props) {
     const container = containerRef.current;
     if (!container) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.innerWidth < 768;
+    const dpr = Math.min(
+      window.devicePixelRatio || 1,
+      isMobile ? 1.5 : 2,
+    );
     const pxSize = container.clientWidth || size;
+    const segments = isMobile ? 32 : 96;
+    const textureSize = isMobile ? 256 : 512;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
@@ -90,7 +96,7 @@ export function SpinningCoin({ reduceMotion, size = 120, className }: Props) {
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
 
-    const faceCanvas = drawFaceTexture(512);
+    const faceCanvas = drawFaceTexture(textureSize);
     const faceTexture = new THREE.CanvasTexture(faceCanvas);
     faceTexture.anisotropy = 8;
     faceTexture.colorSpace = THREE.SRGBColorSpace;
@@ -106,7 +112,7 @@ export function SpinningCoin({ reduceMotion, size = 120, className }: Props) {
       roughness: 0.35,
     });
 
-    const geometry = new THREE.CylinderGeometry(1, 1, 0.16, 96, 1);
+    const geometry = new THREE.CylinderGeometry(1, 1, 0.16, segments, 1);
     geometry.rotateX(Math.PI / 2);
 
     const coin = new THREE.Mesh(geometry, [

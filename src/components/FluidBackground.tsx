@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { getConnectionQuality } from "../hooks/useConnectionQuality";
 
 const VERTEX_SHADER = /* glsl */ `
   varying vec2 vUv;
@@ -109,7 +110,20 @@ export function FluidBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.innerWidth < 768;
+    const isSlow = getConnectionQuality() === "slow";
+    const reduceMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Cap dpr lower on mobile to halve the simulation grid pixel count
+    // versus desktop retina, then drop the render target by a quality factor.
+    const dpr = isMobile
+      ? Math.min(window.devicePixelRatio || 1, 1.25)
+      : Math.min(window.devicePixelRatio || 1, 2);
+    const qualityScale = isSlow ? 0.4 : isMobile ? 0.6 : 1.0;
+    const rtScale = dpr * qualityScale;
+
     let width = window.innerWidth;
     let height = window.innerHeight;
 
@@ -142,8 +156,8 @@ export function FluidBackground() {
       stencilBuffer: false,
     };
 
-    let rtA = new THREE.WebGLRenderTarget(width * dpr, height * dpr, rtOptions);
-    let rtB = new THREE.WebGLRenderTarget(width * dpr, height * dpr, rtOptions);
+    let rtA = new THREE.WebGLRenderTarget(width * rtScale, height * rtScale, rtOptions);
+    let rtB = new THREE.WebGLRenderTarget(width * rtScale, height * rtScale, rtOptions);
 
     const textTexture = new THREE.CanvasTexture(textCanvas);
     textTexture.minFilter = THREE.LinearFilter;
@@ -157,7 +171,7 @@ export function FluidBackground() {
       fragmentShader: SIM_FRAGMENT,
       uniforms: {
         uResolution: {
-          value: new THREE.Vector2(width * dpr, height * dpr),
+          value: new THREE.Vector2(width * rtScale, height * rtScale),
         },
         uMouse: { value: mouse },
         uMouseActive: { value: 0.0 },
@@ -172,7 +186,7 @@ export function FluidBackground() {
       fragmentShader: RENDER_FRAGMENT,
       uniforms: {
         uResolution: {
-          value: new THREE.Vector2(width * dpr, height * dpr),
+          value: new THREE.Vector2(width * rtScale, height * rtScale),
         },
         uSimTexture: { value: null as THREE.Texture | null },
         uTextTexture: { value: textTexture },
@@ -216,11 +230,11 @@ export function FluidBackground() {
       height = window.innerHeight;
 
       renderer.setSize(width, height);
-      rtA.setSize(width * dpr, height * dpr);
-      rtB.setSize(width * dpr, height * dpr);
+      rtA.setSize(width * rtScale, height * rtScale);
+      rtB.setSize(width * rtScale, height * rtScale);
 
-      simMaterial.uniforms.uResolution.value.set(width * dpr, height * dpr);
-      renderMaterial.uniforms.uResolution.value.set(width * dpr, height * dpr);
+      simMaterial.uniforms.uResolution.value.set(width * rtScale, height * rtScale);
+      renderMaterial.uniforms.uResolution.value.set(width * rtScale, height * rtScale);
 
       drawTextCanvas(textCanvas, textCtx, width, height, dpr);
       textTexture.needsUpdate = true;
@@ -238,6 +252,14 @@ export function FluidBackground() {
     let animationId = 0;
     const renderLoop = () => {
       animationId = requestAnimationFrame(renderLoop);
+
+      if (reduceMotion) {
+        // Skip the wave simulation entirely; render the text texture flat.
+        renderMaterial.uniforms.uSimTexture.value = rtA.texture;
+        renderer.setRenderTarget(null);
+        renderer.render(mainScene, camera);
+        return;
+      }
 
       simMaterial.uniforms.uPrevTexture.value = rtA.texture;
       simMaterial.uniforms.uMouse.value.copy(mouse);

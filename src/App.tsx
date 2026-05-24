@@ -24,6 +24,7 @@ import { NetworkActivity } from "./components/NetworkActivity";
 import { TransactionMap } from "./components/TransactionMap";
 import { NetworkInsights } from "./components/NetworkInsights";
 import { AudioVisualizer } from "./components/AudioVisualizer";
+import { LazyMount } from "./components/LazyMount";
 import { Technical } from "./components/Technical";
 import { Economy } from "./components/Economy";
 import { FAQ } from "./components/FAQ";
@@ -121,15 +122,17 @@ function App() {
             demoMode={settings.demoMode}
           />
         </ErrorBoundary>
-        <ErrorBoundary label="TransactionMap">
-          <TransactionMap
-            realEvents={liveTransfers}
-            ghostEvents={ghostTransfers}
-            reduceMotion={settings.reduceMotion}
-            demoMode={settings.demoMode}
-            onEnableDemo={() => settings.setDemoMode(true)}
-          />
-        </ErrorBoundary>
+        <LazyMount minHeightPx={720}>
+          <ErrorBoundary label="TransactionMap">
+            <TransactionMap
+              realEvents={liveTransfers}
+              ghostEvents={ghostTransfers}
+              reduceMotion={settings.reduceMotion}
+              demoMode={settings.demoMode}
+              onEnableDemo={() => settings.setDemoMode(true)}
+            />
+          </ErrorBoundary>
+        </LazyMount>
         <ErrorBoundary label="NetworkInsights">
           <NetworkInsights
             account={wallet.account}

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
 import type { LiveTransfer } from "../hooks/useTransferEvents";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Props = {
   realEvents: LiveTransfer[];
@@ -44,8 +45,11 @@ const VIEW_SIZE = 600;
 const CENTER = VIEW_SIZE / 2;
 const MAX_NODES = 16;
 const PARTICLE_DURATION = 2200;
-const AMBIENT_PARTICLE_MS = 850;
-const MAX_PARTICLES = 14;
+
+const AMBIENT_PARTICLE_MS_DESKTOP = 850;
+const AMBIENT_PARTICLE_MS_MOBILE = 1400;
+const MAX_PARTICLES_DESKTOP = 14;
+const MAX_PARTICLES_MOBILE = 6;
 
 const PALETTE = {
   real: { core: "#B87333", halo: "#E6B97A" },
@@ -143,6 +147,12 @@ export function TransactionMap({
   demoMode,
   onEnableDemo,
 }: Props) {
+  const isMobile = useIsMobile();
+  const maxParticles = isMobile ? MAX_PARTICLES_MOBILE : MAX_PARTICLES_DESKTOP;
+  const ambientIntervalMs = isMobile
+    ? AMBIENT_PARTICLE_MS_MOBILE
+    : AMBIENT_PARTICLE_MS_DESKTOP;
+
   const allEvents = useMemo<LiveTransfer[]>(
     () => [...realEvents, ...ghostEvents],
     [realEvents, ghostEvents],
@@ -198,9 +208,9 @@ export function TransactionMap({
     if (fresh.length === 0) return;
     setParticles((prev) => {
       const next = [...prev, ...fresh];
-      return next.slice(-MAX_PARTICLES);
+      return next.slice(-maxParticles);
     });
-  }, [allEvents, nodes, reduceMotion]);
+  }, [allEvents, nodes, reduceMotion, maxParticles]);
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -216,7 +226,7 @@ export function TransactionMap({
       const fromNode = direction ? from : to;
       const toNode = direction ? to : from;
       setParticles((prev) => {
-        if (prev.length >= MAX_PARTICLES - 2) return prev;
+        if (prev.length >= maxParticles - 2) return prev;
         return [
           ...prev,
           {
@@ -231,10 +241,10 @@ export function TransactionMap({
           },
         ];
       });
-    }, AMBIENT_PARTICLE_MS);
+    }, ambientIntervalMs);
 
     return () => clearInterval(id);
-  }, [edges, nodes, reduceMotion]);
+  }, [edges, nodes, reduceMotion, maxParticles, ambientIntervalMs]);
 
   useEffect(() => {
     if (reduceMotion) return;

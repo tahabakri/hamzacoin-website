@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Props = {
   enabled: boolean;
@@ -12,6 +13,7 @@ export function AudioVisualizer({ enabled, lastPlayedAt, getAnalyser }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [visible, setVisible] = useState(false);
   const visibleRef = useRef(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     visibleRef.current = visible;
@@ -63,7 +65,7 @@ export function AudioVisualizer({ enabled, lastPlayedAt, getAnalyser }: Props) {
 
       ctx.clearRect(0, 0, width, height);
 
-      const barCount = 32;
+      const barCount = isMobile ? 24 : 32;
       const gap = 4;
       const barWidth = (width - gap * (barCount - 1)) / barCount;
       const palette = ["#84644D", "#B87333", "#E6B97A", "#D4C4B0"];
@@ -95,7 +97,7 @@ export function AudioVisualizer({ enabled, lastPlayedAt, getAnalyser }: Props) {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };
-  }, [enabled, getAnalyser]);
+  }, [enabled, getAnalyser, isMobile]);
 
   if (!enabled) return null;
 
