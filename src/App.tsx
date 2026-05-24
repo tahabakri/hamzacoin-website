@@ -7,6 +7,7 @@ import { useHaptic } from "./hooks/useHaptic";
 import { useTotalSupply } from "./hooks/useTotalSupply";
 import { useTransferHistory } from "./hooks/useTransferHistory";
 import { useTransferEvents } from "./hooks/useTransferEvents";
+import { useGhostTransfers } from "./hooks/useGhostTransfers";
 import { CONTRACT_ADDRESS } from "./utils/constants";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FluidBackground } from "./components/FluidBackground";
@@ -37,6 +38,7 @@ function App() {
   const supply = useTotalSupply();
   const history = useTransferHistory();
   const liveTransfers = useTransferEvents(supply.decimals);
+  const ghostTransfers = useGhostTransfers(settings.demoMode);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -110,12 +112,19 @@ function App() {
           />
         </DemoSection>
         <ErrorBoundary label="NetworkActivity">
-          <NetworkActivity decimals={supply.decimals} />
+          <NetworkActivity
+            realEvents={liveTransfers}
+            ghostEvents={ghostTransfers}
+            demoMode={settings.demoMode}
+          />
         </ErrorBoundary>
         <ErrorBoundary label="TransactionMap">
           <TransactionMap
-            events={liveTransfers}
+            realEvents={liveTransfers}
+            ghostEvents={ghostTransfers}
             reduceMotion={settings.reduceMotion}
+            demoMode={settings.demoMode}
+            onEnableDemo={() => settings.setDemoMode(true)}
           />
         </ErrorBoundary>
         <ErrorBoundary label="NetworkInsights">

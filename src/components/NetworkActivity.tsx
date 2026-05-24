@@ -1,15 +1,22 @@
+import { useMemo } from "react";
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
-import { SEPOLIA_EXPLORER } from "../utils/constants";
-import { useTransferEvents } from "../hooks/useTransferEvents";
+import { MAX_FEED_ITEMS, SEPOLIA_EXPLORER } from "../utils/constants";
+import type { LiveTransfer } from "../hooks/useTransferEvents";
 import { RelativeTime } from "./RelativeTime";
 
 type Props = {
-  decimals: bigint | null;
+  realEvents: LiveTransfer[];
+  ghostEvents: LiveTransfer[];
+  demoMode: boolean;
 };
 
-export function NetworkActivity({ decimals }: Props) {
-  const events = useTransferEvents(decimals);
+export function NetworkActivity({ realEvents, ghostEvents, demoMode }: Props) {
+  const events = useMemo<LiveTransfer[]>(() => {
+    const merged = [...realEvents, ...ghostEvents];
+    merged.sort((a, b) => b.timestamp - a.timestamp);
+    return merged.slice(0, MAX_FEED_ITEMS);
+  }, [realEvents, ghostEvents]);
 
   return (
     <section
@@ -40,6 +47,11 @@ export function NetworkActivity({ decimals }: Props) {
             <span className="text-xs font-semibold text-coffee-950">
               Sepolia testnet stream
             </span>
+            {demoMode && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-violet-50 border border-violet-200 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+                <span>👻</span> Demo mode on
+              </span>
+            )}
           </div>
           <span className="font-mono text-[10px] text-coffee-500">
             {events.length} / 20
@@ -59,34 +71,58 @@ export function NetworkActivity({ decimals }: Props) {
             {events.map((ev) => (
               <li
                 key={ev.id}
-                className="hmz-row-in px-2 py-3 grid grid-cols-[1fr_auto] gap-2 items-start"
+                className={`hmz-row-in px-2 py-3 grid grid-cols-[1fr_auto] gap-2 items-start ${
+                  ev.isGhost ? "hmz-ghost-row" : ""
+                }`}
               >
-                <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono text-coffee-500">
-                  <span>{formatAddress(ev.from)}</span>
-                  <Icon
-                    icon="solar:arrow-right-linear"
-                    className="text-coffee-400"
-                  />
-                  <span>{formatAddress(ev.to)}</span>
-                  <span className="text-coffee-300">·</span>
-                  <RelativeTime
-                    timestamp={ev.timestamp}
-                    className="text-coffee-400"
-                  />
-                </div>
-                <div className="text-right">
-                  <a
-                    href={`${SEPOLIA_EXPLORER}/tx/${ev.txHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-bold text-coffee-800 hover:text-coffee-950 inline-flex items-center gap-1"
-                  >
-                    +{parseFloat(ev.amount).toFixed(2)} HMZ
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono text-coffee-500">
+                    {ev.isGhost && (
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full bg-violet-50 border border-violet-200 px-1.5 py-0.5 text-[9px] font-semibold text-violet-700"
+                        aria-label="Simulated transaction"
+                      >
+                        <span>👻</span>
+                        demo
+                      </span>
+                    )}
+                    <span>{formatAddress(ev.from)}</span>
                     <Icon
-                      icon="solar:arrow-right-up-linear"
+                      icon="solar:arrow-right-linear"
                       className="text-coffee-400"
                     />
-                  </a>
+                    <span>{formatAddress(ev.to)}</span>
+                    <span className="text-coffee-300">·</span>
+                    <RelativeTime
+                      timestamp={ev.timestamp}
+                      className="text-coffee-400"
+                    />
+                  </div>
+                  {ev.isGhost && ev.memo && (
+                    <p className="mt-1 text-[11px] text-coffee-600 font-light italic truncate">
+                      “{ev.memo}”
+                    </p>
+                  )}
+                </div>
+                <div className="text-right">
+                  {ev.isGhost ? (
+                    <span className="text-xs font-bold text-violet-700 inline-flex items-center gap-1">
+                      +{parseFloat(ev.amount).toFixed(2)} HMZ
+                    </span>
+                  ) : (
+                    <a
+                      href={`${SEPOLIA_EXPLORER}/tx/${ev.txHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-bold text-coffee-800 hover:text-coffee-950 inline-flex items-center gap-1"
+                    >
+                      +{parseFloat(ev.amount).toFixed(2)} HMZ
+                      <Icon
+                        icon="solar:arrow-right-up-linear"
+                        className="text-coffee-400"
+                      />
+                    </a>
+                  )}
                 </div>
               </li>
             ))}

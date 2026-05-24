@@ -7,12 +7,14 @@ export type ReduceMotionMode = "auto" | "on" | "off";
 export type Settings = {
   soundEnabled: boolean;
   ambientEnabled: boolean;
+  demoMode: boolean;
   reduceMotionOverride: ReduceMotionMode;
 };
 
 const DEFAULT_SETTINGS: Settings = {
   soundEnabled: false,
   ambientEnabled: false,
+  demoMode: false,
   reduceMotionOverride: "auto",
 };
 
@@ -34,6 +36,10 @@ const readStored = (): Settings => {
         typeof parsed.ambientEnabled === "boolean"
           ? parsed.ambientEnabled
           : DEFAULT_SETTINGS.ambientEnabled,
+      demoMode:
+        typeof parsed.demoMode === "boolean"
+          ? parsed.demoMode
+          : DEFAULT_SETTINGS.demoMode,
       reduceMotionOverride: isReduceMotionMode(parsed.reduceMotionOverride)
         ? parsed.reduceMotionOverride
         : DEFAULT_SETTINGS.reduceMotionOverride,
@@ -47,6 +53,7 @@ export type SettingsState = Settings & {
   reduceMotion: boolean;
   setSoundEnabled: (v: boolean) => void;
   setAmbientEnabled: (v: boolean) => void;
+  setDemoMode: (v: boolean) => void;
   setReduceMotionOverride: (v: ReduceMotionMode) => void;
 };
 
@@ -87,6 +94,10 @@ export function useSettings(): SettingsState {
     (v: boolean) => setSettings((s) => ({ ...s, ambientEnabled: v })),
     [],
   );
+  const setDemoMode = useCallback(
+    (v: boolean) => setSettings((s) => ({ ...s, demoMode: v })),
+    [],
+  );
   const setReduceMotionOverride = useCallback(
     (v: ReduceMotionMode) =>
       setSettings((s) => ({ ...s, reduceMotionOverride: v })),
@@ -98,6 +109,7 @@ export function useSettings(): SettingsState {
     reduceMotion,
     setSoundEnabled,
     setAmbientEnabled,
+    setDemoMode,
     setReduceMotionOverride,
   };
 }

@@ -71,6 +71,13 @@ export function SettingsMenu({ settings }: Props) {
             checked={settings.ambientEnabled}
             onChange={settings.setAmbientEnabled}
           />
+          <Toggle
+            icon="solar:ghost-linear"
+            label="Demo mode"
+            description="Simulated transactions every 5s."
+            checked={settings.demoMode}
+            onChange={settings.setDemoMode}
+          />
 
           <div className="px-4 py-3 border-t border-coffee-100">
             <div className="flex items-start gap-3">

@@ -272,8 +272,25 @@
     animation: hmz-node-aura 2.6s ease-in-out infinite;
   }
 
+  @keyframes hmz-ghost-shimmer {
+    0%,
+    100% {
+      background-color: rgba(167, 139, 250, 0.04);
+    }
+    50% {
+      background-color: rgba(167, 139, 250, 0.1);
+    }
+  }
+
+  .hmz-ghost-row {
+    border-left: 2px dashed rgba(124, 58, 237, 0.45);
+    padding-left: 0.5rem !important;
+    animation: hmz-ghost-shimmer 2.4s ease-in-out infinite;
+  }
+
   .hmz-motion-reduced .hmz-pulse-connected,
   .hmz-motion-reduced .hmz-pulse-pending,
+  .hmz-motion-reduced .hmz-ghost-row,
   .hmz-motion-reduced .hmz-node-aura,
   .hmz-motion-reduced .hmz-steam-wisp,
   .hmz-motion-reduced .hmz-row-in,
@@ -298,6 +315,7 @@
     .hmz-hero-card,
     .hmz-pulse-connected,
     .hmz-pulse-pending,
+    .hmz-ghost-row,
     .hmz-node-aura,
     .hmz-steam-wisp,
     .hmz-row-in,

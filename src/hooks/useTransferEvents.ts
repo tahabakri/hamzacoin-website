@@ -12,6 +12,8 @@ export type LiveTransfer = {
   txHash: string;
   blockNumber: number;
   timestamp: number;
+  isGhost?: boolean;
+  memo?: string;
 };
 
 // How far back to seed the feed on mount. Sepolia averages ~12s/block, so 5000

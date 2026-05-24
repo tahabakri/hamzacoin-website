@@ -129,7 +129,7 @@ The contract is a standard OpenZeppelin ERC20 — nothing custom on-chain. All t
 
 ### Settings & accessibility
 
-- ✅ **Settings menu** in the header — toggle sound, ambient noise, motion override
+- ✅ **Settings menu** in the header — toggle sound, ambient noise, demo mode, motion override
 - ✅ Settings persisted in `localStorage` under `hmz-settings-v1`
 - ✅ Honors `prefers-reduced-motion` (OS) with a user-level override ("Auto / Full / Reduced")
 - ✅ Charts ship hidden `<table>` fallbacks for screen readers
@@ -141,6 +141,7 @@ The contract is a standard OpenZeppelin ERC20 — nothing custom on-chain. All t
 Visual flourishes that make the dApp feel alive even when Sepolia is quiet. Each can be toggled or respects motion preferences.
 
 - ✅ **Live transaction map** — every transfer becomes a glowing coffee-colored particle traveling between SVG nodes. Node size scales with cumulative HMZ volume; hover a node for its address + volume. Ambient flow particles drift between connected wallets so the map never goes silent.
+- ✅ **Ghost demo mode** — opt-in toggle in Settings. Injects synthetic Transfer events every 3 s with a pool of cafe / book / vinyl memos, so the live feed and map keep moving when Sepolia is idle. Ghost rows show a dashed violet border + 👻 badge and never link to Etherscan. Ghost particles in the map use a distinct violet color.
 
 ---
 
@@ -192,15 +193,16 @@ hamzacoin-react/
     │   ├── useTotalSupply.ts        # 30s polling, visibility-aware
     │   ├── useTransferEvents.ts     # live contract.on("Transfer")
     │   ├── useTransferHistory.ts    # 50k-block window, derives daily/holders/top
+    │   ├── useGhostTransfers.ts     # synthetic transfer events every 3s (demo mode)
     │   ├── useAnimatedNumber.ts     # RAF ease-out tween
     │   ├── useRelativeTime.ts       # 10s "X ago" ticker
-    │   ├── useSettings.ts           # localStorage prefs (sound / ambient / motion)
+    │   ├── useSettings.ts           # localStorage prefs (sound / ambient / demo / motion)
     │   ├── useSound.ts              # AudioContext lifecycle, bell + ambient
     │   └── useHaptic.ts             # navigator.vibrate wrapper
     └── components/
         ├── FluidBackground.tsx      # Three.js wave-equation background
         ├── Header.tsx               # nav + wallet pill (pulses when connected)
-        ├── SettingsMenu.tsx         # header dropdown — sound / ambient / motion
+        ├── SettingsMenu.tsx         # header dropdown — sound / ambient / demo / motion
         ├── StatusBanner.tsx         # connection error + wrong-network warning
         ├── Hero.tsx                 # uses AnimatedNumber + CoffeeSteam
         ├── About.tsx
@@ -208,7 +210,7 @@ hamzacoin-react/
         ├── DemoSection.tsx
         ├── SendForm.tsx             # confetti + ding + haptic on success
         ├── Stats.tsx                # live transfer feed (relative timestamps)
-        ├── NetworkActivity.tsx      # global Transfer stream (Group B)
+        ├── NetworkActivity.tsx      # global Transfer stream + ghost rows
         ├── TransactionMap.tsx       # SVG node-link diagram with animated particles
         ├── NetworkInsights.tsx      # charts section, Intersection-Observer gated
         ├── DailyVolumeChart.tsx     # recharts AreaChart (lazy)

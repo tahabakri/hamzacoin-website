@@ -4,8 +4,11 @@ import { formatAddress } from "../utils/format";
 import type { LiveTransfer } from "../hooks/useTransferEvents";
 
 type Props = {
-  events: LiveTransfer[];
+  realEvents: LiveTransfer[];
+  ghostEvents: LiveTransfer[];
   reduceMotion: boolean;
+  demoMode: boolean;
+  onEnableDemo?: () => void;
 };
 
 type NodePos = {
@@ -24,7 +27,7 @@ type EdgeData = {
   count: number;
 };
 
-type ParticleKind = "real" | "ambient";
+type ParticleKind = "real" | "ghost" | "ambient";
 
 type ActiveParticle = {
   id: string;
@@ -46,6 +49,7 @@ const MAX_PARTICLES = 14;
 
 const PALETTE = {
   real: { core: "#B87333", halo: "#E6B97A" },
+  ghost: { core: "#7C3AED", halo: "#A78BFA" },
   ambient: { core: "#84644D", halo: "#D4C4B0" },
 } as const;
 
@@ -132,8 +136,19 @@ const nodeRadius = (volume: number, maxVolume: number): number => {
   return 10 + ratio * 18;
 };
 
-export function TransactionMap({ events, reduceMotion }: Props) {
-  const { nodes, edges } = useMemo(() => computeLayout(events), [events]);
+export function TransactionMap({
+  realEvents,
+  ghostEvents,
+  reduceMotion,
+  demoMode,
+  onEnableDemo,
+}: Props) {
+  const allEvents = useMemo<LiveTransfer[]>(
+    () => [...realEvents, ...ghostEvents],
+    [realEvents, ghostEvents],
+  );
+
+  const { nodes, edges } = useMemo(() => computeLayout(allEvents), [allEvents]);
 
   const maxVolume = useMemo(() => {
     let max = 0;
@@ -160,10 +175,10 @@ export function TransactionMap({ events, reduceMotion }: Props) {
 
   useEffect(() => {
     if (reduceMotion) return;
-    if (events.length === 0) return;
+    if (allEvents.length === 0) return;
 
     const fresh: ActiveParticle[] = [];
-    for (const ev of events) {
+    for (const ev of allEvents) {
       if (seenEventIds.current.has(ev.id)) continue;
       seenEventIds.current.add(ev.id);
       const from = nodes.get(ev.from);
@@ -177,7 +192,7 @@ export function TransactionMap({ events, reduceMotion }: Props) {
         toY: to.y,
         startTime: performance.now() + fresh.length * 80,
         durationMs: PARTICLE_DURATION,
-        kind: "real",
+        kind: ev.isGhost ? "ghost" : "real",
       });
     }
     if (fresh.length === 0) return;
@@ -185,7 +200,7 @@ export function TransactionMap({ events, reduceMotion }: Props) {
       const next = [...prev, ...fresh];
       return next.slice(-MAX_PARTICLES);
     });
-  }, [events, nodes, reduceMotion]);
+  }, [allEvents, nodes, reduceMotion]);
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -309,6 +324,11 @@ export function TransactionMap({ events, reduceMotion }: Props) {
             <span className="text-xs font-semibold text-coffee-950">
               {renderedNodes.length} wallets · {renderedEdges.length} edges
             </span>
+            {demoMode && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-violet-50 border border-violet-200 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+                <span>👻</span> Demo mode on
+              </span>
+            )}
           </div>
           <span className="font-mono text-[10px] text-coffee-500">
             {particles.length} in flight
@@ -326,8 +346,18 @@ export function TransactionMap({ events, reduceMotion }: Props) {
                 No activity to map yet
               </p>
               <p className="text-xs text-coffee-500 font-light leading-5">
-                Send some HMZ on Sepolia to see transfers light up the network.
+                Send some HMZ to fill the map, or turn on demo mode to see
+                simulated HMZ flows.
               </p>
+              {!demoMode && onEnableDemo && (
+                <button
+                  type="button"
+                  onClick={onEnableDemo}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 bg-coffee-100 hover:bg-coffee-200 border border-coffee-200 text-xs font-semibold text-coffee-900 transition-colors"
+                >
+                  <span>👻</span> Turn on demo mode
+                </button>
+              )}
             </div>
           ) : (
             <svg
@@ -460,6 +490,13 @@ export function TransactionMap({ events, reduceMotion }: Props) {
                 style={{ background: PALETTE.real.core }}
               ></span>
               Real transfer
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span
+                className="inline-block w-2 h-2 rounded-full"
+                style={{ background: PALETTE.ghost.core }}
+              ></span>
+              Demo transfer
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span
