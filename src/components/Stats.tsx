@@ -1,4 +1,5 @@
 import { CONTRACT_ADDRESS, type Transfer } from "../utils/constants";
+import { RelativeTime } from "./RelativeTime";
 
 type Props = {
   transfers: Transfer[];
@@ -24,7 +25,7 @@ export function Stats({ transfers, onCopyContract }: Props) {
         {transfers.map((tx) => (
           <div
             key={tx.id}
-            className="rounded-xl bg-white border border-coffee-100 p-4 shadow-[0_2px_8px_rgba(67,48,36,0.02)]"
+            className="hmz-row-in rounded-xl bg-white border border-coffee-100 p-4 shadow-[0_2px_8px_rgba(67,48,36,0.02)]"
           >
             <div className="flex justify-between items-start gap-2">
               <div className="flex items-center gap-2 text-[10px] font-mono text-coffee-500">
@@ -38,6 +39,9 @@ export function Stats({ transfers, onCopyContract }: Props) {
             </div>
             <p className="mt-2 text-xs text-stone-700 italic font-light">
               "{tx.recommendation}"
+            </p>
+            <p className="mt-1 text-[10px] text-coffee-400 font-mono">
+              <RelativeTime timestamp={tx.timestamp} />
             </p>
           </div>
         ))}

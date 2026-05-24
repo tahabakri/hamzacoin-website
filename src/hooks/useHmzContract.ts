@@ -121,6 +121,25 @@ export function useHmzContract(
       ]);
 
       const allEvents = [...outgoing, ...incoming] as EventLog[];
+
+      // Batch-fetch block timestamps
+      const uniqueBlocks = Array.from(
+        new Set(allEvents.map((e) => e.blockNumber)),
+      );
+      const blockTimes = new Map<number, number>();
+      await Promise.all(
+        uniqueBlocks.map(async (bn) => {
+          try {
+            const block = await provider.getBlock(bn);
+            if (block?.timestamp) {
+              blockTimes.set(bn, block.timestamp * 1000);
+            }
+          } catch {
+            // skip
+          }
+        }),
+      );
+
       const onChain: Transfer[] = allEvents
         .filter((e): e is EventLog => "args" in e)
         .map((e) => {
@@ -134,6 +153,7 @@ export function useHmzContract(
             to: formatAddress(to),
             amount: formatUnits(value, decimals),
             recommendation: `Transfer on block ${e.blockNumber}`,
+            timestamp: blockTimes.get(e.blockNumber) ?? Date.now(),
           };
         })
         .sort((a, b) => b.id - a.id);
@@ -241,6 +261,7 @@ export function useHmzContract(
             to: formatAddress(recipient),
             amount,
             recommendation: composedMemo,
+            timestamp: Date.now(),
           },
           ...prev,
         ]);
