@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Icon } from "@iconify/react";
 import confetti from "canvas-confetti";
 import { SEPOLIA_EXPLORER } from "../utils/constants";
 import type { TxStatus, TxType } from "../hooks/useHmzContract";
+import { useRecipientHistory } from "../hooks/useRecipientHistory";
+import { formatAddress } from "../utils/format";
+import { formatRelative } from "../hooks/useRelativeTime";
 
 type Props = {
   account: string;
@@ -28,6 +31,33 @@ const CONFETTI_COLORS = [
   "#B87333",
 ];
 
+const fireSideCannons = (durationMs = 3000) => {
+  const end = Date.now() + durationMs;
+  const tick = () => {
+    if (Date.now() > end) return;
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 0, y: 0.5 },
+      colors: CONFETTI_COLORS,
+      disableForReducedMotion: true,
+    });
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 1, y: 0.5 },
+      colors: CONFETTI_COLORS,
+      disableForReducedMotion: true,
+    });
+    requestAnimationFrame(tick);
+  };
+  tick();
+};
+
 const TX_TYPES: TxType[] = ["Tip Friend", "Cafe Spot", "Book Rec"];
 
 export function SendForm({
@@ -44,10 +74,37 @@ export function SendForm({
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [txType, setTxType] = useState<TxType>("Tip Friend");
+  const [showRecipientList, setShowRecipientList] = useState(false);
   const lastTxRef = useRef<string>("");
+  const lastSentRecipientRef = useRef<string>("");
+  const recipientWrapperRef = useRef<HTMLDivElement | null>(null);
+  const history = useRecipientHistory();
+
+  const filteredEntries = useMemo(() => {
+    const q = recipient.trim().toLowerCase();
+    if (!q) return history.entries;
+    return history.entries.filter((e) =>
+      e.address.toLowerCase().includes(q),
+    );
+  }, [recipient, history.entries]);
+
+  useEffect(() => {
+    if (!showRecipientList) return;
+    const handleClick = (e: MouseEvent) => {
+      if (
+        recipientWrapperRef.current &&
+        !recipientWrapperRef.current.contains(e.target as Node)
+      ) {
+        setShowRecipientList(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showRecipientList]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    lastSentRecipientRef.current = recipient;
     const success = await onSend(recipient, amount, memo, txType);
     if (success) {
       setRecipient("");
@@ -59,16 +116,12 @@ export function SendForm({
   useEffect(() => {
     if (txStatus.success === true && txStatus.txHash && txStatus.txHash !== lastTxRef.current) {
       lastTxRef.current = txStatus.txHash;
+      if (lastSentRecipientRef.current) {
+        history.add(lastSentRecipientRef.current);
+      }
       onSuccess();
       if (!reduceMotion) {
-        confetti({
-          particleCount: 60,
-          spread: 70,
-          ticks: 200,
-          origin: { y: 0.65 },
-          colors: CONFETTI_COLORS,
-          disableForReducedMotion: true,
-        });
+        fireSideCannons();
       }
     } else if (
       txStatus.success === false &&
@@ -78,7 +131,7 @@ export function SendForm({
       lastTxRef.current = txStatus.message;
       onError();
     }
-  }, [txStatus, reduceMotion, onSuccess, onError]);
+  }, [txStatus, reduceMotion, onSuccess, onError, history]);
 
   return (
     <div className="flex flex-col justify-between">
@@ -97,18 +150,114 @@ export function SendForm({
 
         {account ? (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2">
+            <div ref={recipientWrapperRef} className="relative">
+              <label
+                htmlFor="recipient-input"
+                className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
+              >
                 Recipient Sepolia Address
               </label>
-              <input
-                type="text"
-                required
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-                placeholder="0x..."
-                className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors"
-              />
+              <div className="relative">
+                <input
+                  id="recipient-input"
+                  type="text"
+                  required
+                  value={recipient}
+                  onChange={(e) => {
+                    setRecipient(e.target.value);
+                    setShowRecipientList(true);
+                  }}
+                  onFocus={() => setShowRecipientList(true)}
+                  placeholder="0x..."
+                  autoComplete="off"
+                  spellCheck={false}
+                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-10 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono"
+                />
+                {history.entries.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowRecipientList((v) => !v)}
+                    aria-label="Show recent recipients"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg hover:bg-coffee-50 flex items-center justify-center text-coffee-600 transition-colors"
+                  >
+                    <Icon
+                      icon="solar:history-linear"
+                      className="text-base"
+                    />
+                  </button>
+                )}
+              </div>
+
+              {showRecipientList && filteredEntries.length > 0 && (
+                <div
+                  aria-label="Recent recipients"
+                  className="absolute left-0 right-0 top-full mt-1 z-30 rounded-xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden max-h-72 overflow-y-auto"
+                >
+                  <div className="px-3 py-2 border-b border-coffee-100 flex items-center justify-between">
+                    <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
+                      Recent recipients
+                    </p>
+                    {history.entries.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          history.clear();
+                          setShowRecipientList(false);
+                        }}
+                        className="text-[10px] text-coffee-500 hover:text-coffee-800 transition-colors"
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+                  <ul>
+                    {filteredEntries.map((entry) => (
+                      <li
+                        key={entry.address}
+                        className="flex items-center hover:bg-coffee-50 transition-colors"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setRecipient(entry.address);
+                            setShowRecipientList(false);
+                          }}
+                          className="flex-1 px-3 py-2 flex items-center gap-3 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-coffee-50 border border-coffee-100 flex items-center justify-center shrink-0">
+                            <Icon
+                              icon="solar:user-rounded-linear"
+                              className="text-sm text-coffee-700"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p
+                              className="font-mono text-xs text-coffee-900 truncate"
+                              title={entry.address}
+                            >
+                              {formatAddress(entry.address)}
+                            </p>
+                            <p className="text-[10px] text-coffee-500 font-light">
+                              {formatRelative(entry.lastUsed)}
+                            </p>
+                          </div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => history.remove(entry.address)}
+                          aria-label={`Remove ${formatAddress(entry.address)} from history`}
+                          className="px-2 py-2 text-coffee-400 hover:text-coffee-800 transition-colors"
+                        >
+                          <Icon
+                            icon="solar:close-circle-linear"
+                            className="text-sm"
+                          />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
