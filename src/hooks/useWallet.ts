@@ -3,6 +3,30 @@ import { BrowserProvider } from "ethers";
 import { SEPOLIA_CHAIN_ID } from "../utils/constants";
 import { ensureSepoliaNetwork } from "../utils/network";
 
+const DISCONNECT_FLAG_KEY = "hmz-wallet-disconnected-v1";
+
+const isDisconnected = (): boolean => {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(DISCONNECT_FLAG_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
+const setDisconnected = (v: boolean): void => {
+  if (typeof window === "undefined") return;
+  try {
+    if (v) {
+      window.localStorage.setItem(DISCONNECT_FLAG_KEY, "true");
+    } else {
+      window.localStorage.removeItem(DISCONNECT_FLAG_KEY);
+    }
+  } catch {
+    // ignore quota
+  }
+};
+
 export type WalletState = {
   account: string;
   chainId: string;
@@ -37,9 +61,30 @@ export function useWallet(): WalletState {
       .then((id) => setChainId(id as string))
       .catch(() => {});
 
+    // Silent reconnect: ask MetaMask if it already authorized this origin.
+    // Only honour it when the user didn't explicitly Disconnect in a previous session.
+    if (!isDisconnected()) {
+      void eth
+        .request({ method: "eth_accounts" })
+        .then((accounts) => {
+          const list = accounts as string[];
+          if (list && list.length > 0) {
+            setAccount(list[0]);
+          }
+        })
+        .catch(() => {
+          // not authorized yet — user will need to click Connect
+        });
+    }
+
     const handleAccountsChanged = (...args: unknown[]) => {
       const accounts = (args[0] ?? []) as string[];
-      setAccount(accounts.length > 0 ? accounts[0] : "");
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);
+        setDisconnected(false);
+      } else {
+        setAccount("");
+      }
     };
 
     const handleChainChanged = (...args: unknown[]) => {
@@ -79,6 +124,7 @@ export function useWallet(): WalletState {
       })) as string[];
       setAccount(accounts[0]);
       setProvider(new BrowserProvider(window.ethereum));
+      setDisconnected(false);
       await ensureSepolia();
     } catch (err) {
       const reason =
@@ -93,6 +139,7 @@ export function useWallet(): WalletState {
   const disconnect = useCallback(() => {
     setAccount("");
     setError(null);
+    setDisconnected(true);
   }, []);
 
   const clearError = useCallback(() => setError(null), []);
