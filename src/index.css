@@ -11,6 +11,14 @@
   }
   body {
     @apply bg-coffee-50 text-stone-900 font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   @media (max-width: 380px) {

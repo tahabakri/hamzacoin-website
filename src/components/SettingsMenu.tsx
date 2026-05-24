@@ -18,7 +18,7 @@ export function SettingsMenu({ settings }: Props) {
 
   useEffect(() => {
     if (!open) return;
-    const handleClick = (e: MouseEvent) => {
+    const handlePointer = (e: PointerEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
@@ -26,8 +26,8 @@ export function SettingsMenu({ settings }: Props) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
   }, [open]);
 
   return (

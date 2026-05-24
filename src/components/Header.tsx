@@ -27,7 +27,7 @@ export function Header({
 
   useEffect(() => {
     if (!open) return;
-    const handleClick = (e: MouseEvent) => {
+    const handlePointer = (e: PointerEvent) => {
       if (
         popoverRef.current &&
         !popoverRef.current.contains(e.target as Node)
@@ -35,8 +35,8 @@ export function Header({
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
   }, [open]);
 
   const showNetworkWarn = account && !isCorrectNetwork;

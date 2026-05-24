@@ -90,7 +90,7 @@ export function SendForm({
 
   useEffect(() => {
     if (!showRecipientList) return;
-    const handleClick = (e: MouseEvent) => {
+    const handlePointer = (e: PointerEvent) => {
       if (
         recipientWrapperRef.current &&
         !recipientWrapperRef.current.contains(e.target as Node)
@@ -98,8 +98,8 @@ export function SendForm({
         setShowRecipientList(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
   }, [showRecipientList]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -169,7 +169,10 @@ export function SendForm({
                   }}
                   onFocus={() => setShowRecipientList(true)}
                   placeholder="0x..."
+                  inputMode="text"
                   autoComplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
                   spellCheck={false}
                   className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-10 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono"
                 />
@@ -277,6 +280,9 @@ export function SendForm({
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 5"
+                  inputMode="decimal"
+                  pattern="[0-9]*\.?[0-9]*"
+                  autoComplete="off"
                   className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
                 />
               </div>
@@ -315,6 +321,8 @@ export function SendForm({
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 placeholder="e.g. 'Enjoy a quiet cortado here...'"
+                inputMode="text"
+                maxLength={140}
                 className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
               />
             </div>
