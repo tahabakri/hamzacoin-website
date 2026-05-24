@@ -38,7 +38,7 @@ export function NetworkActivity({ decimals }: Props) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-xs font-semibold text-coffee-950">
-              Sepolia mainnet stream
+              Sepolia testnet stream
             </span>
           </div>
           <span className="font-mono text-[10px] text-coffee-500">

@@ -7,6 +7,7 @@ import { useHaptic } from "./hooks/useHaptic";
 import { useTotalSupply } from "./hooks/useTotalSupply";
 import { useTransferHistory } from "./hooks/useTransferHistory";
 import { CONTRACT_ADDRESS } from "./utils/constants";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FluidBackground } from "./components/FluidBackground";
 import { Header } from "./components/Header";
 import { StatusBanner } from "./components/StatusBanner";
@@ -105,11 +106,15 @@ function App() {
             onCopyContract={handleCopyContract}
           />
         </DemoSection>
-        <NetworkActivity decimals={supply.decimals} />
-        <NetworkInsights
-          account={wallet.account}
-          reduceMotion={settings.reduceMotion}
-        />
+        <ErrorBoundary label="NetworkActivity">
+          <NetworkActivity decimals={supply.decimals} />
+        </ErrorBoundary>
+        <ErrorBoundary label="NetworkInsights">
+          <NetworkInsights
+            account={wallet.account}
+            reduceMotion={settings.reduceMotion}
+          />
+        </ErrorBoundary>
         <Technical />
         <Economy />
         <FAQ />

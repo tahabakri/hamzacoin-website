@@ -1,4 +1,4 @@
-import { formatUnits } from "ethers";
+import { formatUnits, type EventLog, type Log } from "ethers";
 
 export type RawTransferEvent = {
   from: string;
@@ -8,6 +8,63 @@ export type RawTransferEvent = {
   blockTimestampMs: number;
   txHash: string;
   logIndex: number;
+};
+
+type AnyEventPayload = {
+  args?: ReadonlyArray<unknown>;
+  log?: Log;
+} & Partial<EventLog>;
+
+const isHexAddress = (v: unknown): v is string =>
+  typeof v === "string" && v.startsWith("0x");
+
+const isBigIntish = (v: unknown): v is bigint | string =>
+  typeof v === "bigint" || (typeof v === "string" && /^[0-9]+$/.test(v));
+
+// ethers v6 listeners can be called with either:
+//   (from, to, value, payload)  — flat decoded args
+//   (payload)                    — single ContractEventPayload
+// Normalise to one shape; return null if we can't decode.
+export const decodeTransferArgs = (
+  args: unknown[],
+):
+  | { from: string; to: string; value: bigint; log: EventLog }
+  | null => {
+  if (args.length === 0) return null;
+
+  if (
+    args.length >= 4 &&
+    isHexAddress(args[0]) &&
+    isHexAddress(args[1]) &&
+    isBigIntish(args[2])
+  ) {
+    return {
+      from: args[0],
+      to: args[1],
+      value: BigInt(args[2] as bigint | string),
+      log: args[args.length - 1] as EventLog,
+    };
+  }
+
+  const payload = args[args.length - 1] as AnyEventPayload | undefined;
+  if (!payload) return null;
+  const inner = payload.args ?? [];
+  if (
+    inner.length >= 3 &&
+    isHexAddress(inner[0]) &&
+    isHexAddress(inner[1]) &&
+    isBigIntish(inner[2])
+  ) {
+    const log = (payload.log ?? (payload as unknown as EventLog)) as EventLog;
+    return {
+      from: inner[0],
+      to: inner[1],
+      value: BigInt(inner[2] as bigint | string),
+      log,
+    };
+  }
+
+  return null;
 };
 
 export type DailyVolumePoint = {
