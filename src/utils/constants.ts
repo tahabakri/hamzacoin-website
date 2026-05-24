@@ -12,10 +12,12 @@ export const SEPOLIA_CHAIN_ID = "0xaa36a7";
 // PublicNode primary, dRPC backup — both free, key-free.
 // Ankr now gates rpc.ankr.com/eth_sepolia behind an API key.
 export const SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
+// Browser-callable: each endpoint below must return Access-Control-Allow-Origin: *
+// for localhost origins. BlastAPI's free public endpoint does NOT, so it's out.
 export const SEPOLIA_RPCS: readonly string[] = [
   "https://ethereum-sepolia-rpc.publicnode.com",
   "https://sepolia.drpc.org",
-  "https://eth-sepolia.public.blastapi.io",
+  "https://1rpc.io/sepolia",
 ];
 export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";
 
