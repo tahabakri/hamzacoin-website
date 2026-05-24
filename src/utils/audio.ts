@@ -4,6 +4,7 @@ export type AmbientHandle = {
 
 export const playBellDing = (
   ctx: AudioContext,
+  output: AudioNode = ctx.destination,
   freq = 800,
   durationMs = 600,
 ): void => {
@@ -14,12 +15,15 @@ export const playBellDing = (
   osc.frequency.value = freq;
   gain.gain.setValueAtTime(0.18, now);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + durationMs / 1000);
-  osc.connect(gain).connect(ctx.destination);
+  osc.connect(gain).connect(output);
   osc.start(now);
   osc.stop(now + durationMs / 1000);
 };
 
-export const playErrorTone = (ctx: AudioContext): void => {
+export const playErrorTone = (
+  ctx: AudioContext,
+  output: AudioNode = ctx.destination,
+): void => {
   const now = ctx.currentTime;
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -27,7 +31,7 @@ export const playErrorTone = (ctx: AudioContext): void => {
   osc.frequency.value = 320;
   gain.gain.setValueAtTime(0.16, now);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
-  osc.connect(gain).connect(ctx.destination);
+  osc.connect(gain).connect(output);
   osc.start(now);
   osc.stop(now + 0.32);
 };

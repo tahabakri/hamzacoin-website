@@ -22,6 +22,7 @@ import { Stats } from "./components/Stats";
 import { NetworkActivity } from "./components/NetworkActivity";
 import { TransactionMap } from "./components/TransactionMap";
 import { NetworkInsights } from "./components/NetworkInsights";
+import { AudioVisualizer } from "./components/AudioVisualizer";
 import { Technical } from "./components/Technical";
 import { Economy } from "./components/Economy";
 import { FAQ } from "./components/FAQ";
@@ -140,6 +141,11 @@ function App() {
         <FinalCTA account={wallet.account} onConnect={wallet.connect} />
       </main>
       <Footer onCopyContract={handleCopyContract} />
+      <AudioVisualizer
+        enabled={settings.soundEnabled}
+        lastPlayedAt={sound.lastPlayedAt}
+        getAnalyser={sound.getAnalyser}
+      />
     </>
   );
 }

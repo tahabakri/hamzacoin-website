@@ -144,6 +144,7 @@ Visual flourishes that make the dApp feel alive even when Sepolia is quiet. Each
 - ✅ **Ghost demo mode** — opt-in toggle in Settings. Injects synthetic Transfer events every 3 s with a pool of cafe / book / vinyl memos, so the live feed and map keep moving when Sepolia is idle. Ghost rows show a dashed violet border + 👻 badge and never link to Etherscan. Ghost particles in the map use a distinct violet color.
 - ✅ **3D spinning HMZ coin** — a Three.js cylinder coin in the hero, with a coffee/copper gradient face, Bebas Neue "HMZ" letters, auto Y-axis rotation, and a slight tilt on cursor hover. 120 px desktop / 80 px mobile, reuses the existing `three` dep so no new dependency weight.
 - ✅ **Live Sepolia block counter** — polls `provider.getBlockNumber()` every 12 s through the same FallbackProvider used for reads. The number animates each update with a green pulsing "LIVE" dot. Tooltip: _"New block every ~12 s on Sepolia."_
+- ✅ **Audio visualizer bars** — coffee-palette frequency bars at the bottom of the screen that react to the bell ding and error tone. An `AnalyserNode` taps the audio graph (ambient noise is not routed through it, so the bars stay quiet during the cafe loop). Auto-hides 2 s after sound stops, and only renders when sound is enabled.
 
 ---
 
@@ -200,7 +201,7 @@ hamzacoin-react/
     │   ├── useAnimatedNumber.ts     # RAF ease-out tween
     │   ├── useRelativeTime.ts       # 10s "X ago" ticker
     │   ├── useSettings.ts           # localStorage prefs (sound / ambient / demo / motion)
-    │   ├── useSound.ts              # AudioContext lifecycle, bell + ambient
+    │   ├── useSound.ts              # AudioContext + AnalyserNode tap, bell + ambient
     │   └── useHaptic.ts             # navigator.vibrate wrapper
     └── components/
         ├── FluidBackground.tsx      # Three.js wave-equation background
@@ -221,6 +222,7 @@ hamzacoin-react/
         ├── DailyVolumeChart.tsx     # recharts AreaChart (lazy)
         ├── PersonalChart.tsx        # recharts BarChart, connected only (lazy)
         ├── Leaderboard.tsx          # top-10 senders, no chart lib
+        ├── AudioVisualizer.tsx      # canvas frequency bars (taps AnalyserNode)
         ├── AnimatedNumber.tsx       # tween wrapper
         ├── RelativeTime.tsx         # "X ago" wrapper
         ├── CoffeeSteam.tsx          # SVG steam wisps

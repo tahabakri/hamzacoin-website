@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   playBellDing,
   playErrorTone,
@@ -20,25 +20,34 @@ const getAudioContextCtor = (): AudioContextCtor | null => {
 export type SoundApi = {
   playDing: () => void;
   playError: () => void;
+  getAnalyser: () => AnalyserNode | null;
+  lastPlayedAt: number | null;
 };
 
 export function useSound(soundEnabled: boolean, ambientEnabled: boolean): SoundApi {
   const ctxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
   const ambientRef = useRef<AmbientHandle | null>(null);
+  const [lastPlayedAt, setLastPlayedAt] = useState<number | null>(null);
 
   const ensureCtx = useCallback((): AudioContext | null => {
     if (ctxRef.current) return ctxRef.current;
     const Ctor = getAudioContextCtor();
     if (!Ctor) return null;
     try {
-      ctxRef.current = new Ctor();
-      return ctxRef.current;
+      const ctx = new Ctor();
+      ctxRef.current = ctx;
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.65;
+      analyser.connect(ctx.destination);
+      analyserRef.current = analyser;
+      return ctx;
     } catch {
       return null;
     }
   }, []);
 
-  // Manage ambient lifecycle
   useEffect(() => {
     if (ambientEnabled) {
       const ctx = ensureCtx();
@@ -53,12 +62,19 @@ export function useSound(soundEnabled: boolean, ambientEnabled: boolean): SoundA
     }
   }, [ambientEnabled, ensureCtx]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (ambientRef.current) {
         ambientRef.current.stop();
         ambientRef.current = null;
+      }
+      if (analyserRef.current) {
+        try {
+          analyserRef.current.disconnect();
+        } catch {
+          // ignore
+        }
+        analyserRef.current = null;
       }
       if (ctxRef.current) {
         void ctxRef.current.close();
@@ -73,7 +89,9 @@ export function useSound(soundEnabled: boolean, ambientEnabled: boolean): SoundA
     if (!ctx) return;
     void ctx.resume();
     try {
-      playBellDing(ctx);
+      const output = analyserRef.current ?? ctx.destination;
+      playBellDing(ctx, output);
+      setLastPlayedAt(Date.now());
     } catch {
       // suspended or hardware issue — silently ignore
     }
@@ -85,11 +103,15 @@ export function useSound(soundEnabled: boolean, ambientEnabled: boolean): SoundA
     if (!ctx) return;
     void ctx.resume();
     try {
-      playErrorTone(ctx);
+      const output = analyserRef.current ?? ctx.destination;
+      playErrorTone(ctx, output);
+      setLastPlayedAt(Date.now());
     } catch {
       // ignore
     }
   }, [soundEnabled, ensureCtx]);
 
-  return { playDing, playError };
+  const getAnalyser = useCallback(() => analyserRef.current, []);
+
+  return { playDing, playError, getAnalyser, lastPlayedAt };
 }
