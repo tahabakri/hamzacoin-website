@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
 import type { SettingsState } from "../hooks/useSettings";
+import { BlockCounter } from "./BlockCounter";
 import { SettingsMenu } from "./SettingsMenu";
 
 type Props = {
@@ -96,6 +97,7 @@ export function Header({
             </div>
 
             <div className="flex items-center gap-2">
+              <BlockCounter reduceMotion={settings.reduceMotion} />
               <SettingsMenu settings={settings} />
               {account ? (
                 <div className="relative" ref={popoverRef}>

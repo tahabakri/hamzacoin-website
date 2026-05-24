@@ -143,6 +143,7 @@ Visual flourishes that make the dApp feel alive even when Sepolia is quiet. Each
 - ✅ **Live transaction map** — every transfer becomes a glowing coffee-colored particle traveling between SVG nodes. Node size scales with cumulative HMZ volume; hover a node for its address + volume. Ambient flow particles drift between connected wallets so the map never goes silent.
 - ✅ **Ghost demo mode** — opt-in toggle in Settings. Injects synthetic Transfer events every 3 s with a pool of cafe / book / vinyl memos, so the live feed and map keep moving when Sepolia is idle. Ghost rows show a dashed violet border + 👻 badge and never link to Etherscan. Ghost particles in the map use a distinct violet color.
 - ✅ **3D spinning HMZ coin** — a Three.js cylinder coin in the hero, with a coffee/copper gradient face, Bebas Neue "HMZ" letters, auto Y-axis rotation, and a slight tilt on cursor hover. 120 px desktop / 80 px mobile, reuses the existing `three` dep so no new dependency weight.
+- ✅ **Live Sepolia block counter** — polls `provider.getBlockNumber()` every 12 s through the same FallbackProvider used for reads. The number animates each update with a green pulsing "LIVE" dot. Tooltip: _"New block every ~12 s on Sepolia."_
 
 ---
 
@@ -195,6 +196,7 @@ hamzacoin-react/
     │   ├── useTransferEvents.ts     # live contract.on("Transfer")
     │   ├── useTransferHistory.ts    # 50k-block window, derives daily/holders/top
     │   ├── useGhostTransfers.ts     # synthetic transfer events every 3s (demo mode)
+    │   ├── useLatestBlock.ts        # 12s blockNumber poll, visibility-aware
     │   ├── useAnimatedNumber.ts     # RAF ease-out tween
     │   ├── useRelativeTime.ts       # 10s "X ago" ticker
     │   ├── useSettings.ts           # localStorage prefs (sound / ambient / demo / motion)
@@ -202,7 +204,8 @@ hamzacoin-react/
     │   └── useHaptic.ts             # navigator.vibrate wrapper
     └── components/
         ├── FluidBackground.tsx      # Three.js wave-equation background
-        ├── Header.tsx               # nav + wallet pill (pulses when connected)
+        ├── Header.tsx               # nav + block counter + wallet pill
+        ├── BlockCounter.tsx         # live Sepolia block number
         ├── SettingsMenu.tsx         # header dropdown — sound / ambient / demo / motion
         ├── StatusBanner.tsx         # connection error + wrong-network warning
         ├── Hero.tsx                 # uses AnimatedNumber + CoffeeSteam + SpinningCoin
