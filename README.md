@@ -94,17 +94,47 @@ The contract is a standard OpenZeppelin ERC20 — nothing custom on-chain. All t
 
 ## Features
 
+### Web3
+
 - ✅ MetaMask wallet integration with full connect / disconnect lifecycle
 - ✅ Auto-switch to Sepolia network (handles the `wallet_addEthereumChain` 4902 fallback)
 - ✅ Live HMZ balance display with loading + error states
 - ✅ Send HMZ with custom memos and a typed dropdown (`Tip Friend` / `Cafe Spot` / `Book Rec`)
-- ✅ Real-time on-chain transaction history via `contract.queryFilter(Transfer)`
 - ✅ Network mismatch banner with one-click "Switch to Sepolia"
 - ✅ Disconnect wallet popover with full address display
 - ✅ Form validation (address checksum, positive amounts) before any RPC call
-- ✅ Mobile responsive (Tailwind breakpoints throughout)
-- ✅ Honors `prefers-reduced-motion` for accessibility
 - ✅ Etherscan tx links surfaced on success
+
+### Live blockchain features
+
+- ✅ **Real-time global Transfer feed** — every HMZ transfer on Sepolia streamed via `contract.on("Transfer")` with a 20-item ring buffer
+- ✅ **Live total supply counter** — polled every 30 s via a read-only `JsonRpcProvider` (pauses when tab is hidden)
+- ✅ **Holder count** — derived from the last 50,000 blocks of Transfer events (~1 week on Sepolia)
+- ✅ **Daily volume line chart** — aggregated HMZ volume per day for the last 30 days
+- ✅ **Personal sending bar chart** — your outgoing transfers, shown when connected
+- ✅ **Top-10 senders leaderboard** — most active addresses, ranked by transfer count
+- ✅ **Auto-ticking relative timestamps** — `Intl.RelativeTimeFormat` refreshing every 10 s
+- ✅ **Public RPC fallback** — all of the above works without a connected wallet
+
+### Motion + feedback
+
+- ✅ **Confetti** on transaction success (coffee palette, not rainbow)
+- ✅ **Number tweens** on balance + supply changes (`requestAnimationFrame` ease-out cubic, no library)
+- ✅ **Pulsing glow** on the wallet pill when connected
+- ✅ **Pulsing button** during pending transactions
+- ✅ **Coffee steam SVG** rising from the "Quiet Recommendations" card
+- ✅ **Soft bell ding** on success (Web Audio synth — no audio file)
+- ✅ **Haptic feedback** on supported devices (50 ms on success, three pulses on error)
+- ✅ **Ambient cafe ambience** — generated brown noise, opt-in toggle
+
+### Settings & accessibility
+
+- ✅ **Settings menu** in the header — toggle sound, ambient noise, motion override
+- ✅ Settings persisted in `localStorage` under `hmz-settings-v1`
+- ✅ Honors `prefers-reduced-motion` (OS) with a user-level override ("Auto / Full / Reduced")
+- ✅ Charts ship hidden `<table>` fallbacks for screen readers
+- ✅ ARIA labels + roles on all interactive controls
+- ✅ Mobile responsive (Tailwind breakpoints throughout)
 
 ---
 
@@ -119,6 +149,8 @@ The contract is a standard OpenZeppelin ERC20 — nothing custom on-chain. All t
 | Web3 | ethers.js v6 |
 | Icons | `@iconify/react` (Solar Linear set) |
 | WebGL background | Three.js (wave-equation fluid shader) |
+| Charts | recharts (lazy-loaded) |
+| Effects | canvas-confetti, Web Audio API, `navigator.vibrate` |
 | Fonts | Inter, JetBrains Mono, Bebas Neue (Google Fonts) |
 
 No Redux, no React Query, no router — single-page anchor-scrolled layout. State lives in two custom hooks and gets passed down.
@@ -140,24 +172,44 @@ hamzacoin-react/
     ├── App.tsx                  # composes the hooks + sections
     ├── index.css                # Tailwind directives + custom keyframes
     ├── types/
-    │   └── ethereum.d.ts        # window.ethereum typing
+    │   └── ethereum.d.ts            # window.ethereum typing
     ├── utils/
-    │   ├── constants.ts         # CONTRACT_ADDRESS, HMZ_ABI, SEPOLIA_CHAIN_ID
-    │   ├── format.ts            # formatAddress, formatBalance
-    │   └── network.ts           # ensureSepoliaNetwork (switch + add fallback)
+    │   ├── constants.ts             # CONTRACT_ADDRESS, HMZ_ABI, SEPOLIA_CHAIN_ID, block-range
+    │   ├── format.ts                # formatAddress, formatBalance
+    │   ├── network.ts               # ensureSepoliaNetwork (switch + add fallback)
+    │   ├── audio.ts                 # Web Audio bell + brown-noise generator
+    │   └── transfers.ts             # groupByDay, computeHolders, topSenders (pure)
     ├── hooks/
-    │   ├── useWallet.ts         # account, chain, connect, disconnect, error
-    │   └── useHmzContract.ts    # balance, sendHmz, transfer history
+    │   ├── useWallet.ts             # account, chain, connect, disconnect, error
+    │   ├── useHmzContract.ts        # balance, sendHmz, personal history
+    │   ├── useReadOnlyContract.ts   # public JsonRpcProvider + contract
+    │   ├── useTotalSupply.ts        # 30s polling, visibility-aware
+    │   ├── useTransferEvents.ts     # live contract.on("Transfer")
+    │   ├── useTransferHistory.ts    # 50k-block window, derives daily/holders/top
+    │   ├── useAnimatedNumber.ts     # RAF ease-out tween
+    │   ├── useRelativeTime.ts       # 10s "X ago" ticker
+    │   ├── useSettings.ts           # localStorage prefs (sound / ambient / motion)
+    │   ├── useSound.ts              # AudioContext lifecycle, bell + ambient
+    │   └── useHaptic.ts             # navigator.vibrate wrapper
     └── components/
-        ├── FluidBackground.tsx  # Three.js wave-equation background
-        ├── Header.tsx           # nav + wallet pill with disconnect popover
-        ├── StatusBanner.tsx     # connection error + wrong-network warning
-        ├── Hero.tsx
+        ├── FluidBackground.tsx      # Three.js wave-equation background
+        ├── Header.tsx               # nav + wallet pill (pulses when connected)
+        ├── SettingsMenu.tsx         # header dropdown — sound / ambient / motion
+        ├── StatusBanner.tsx         # connection error + wrong-network warning
+        ├── Hero.tsx                 # uses AnimatedNumber + CoffeeSteam
         ├── About.tsx
         ├── Capabilities.tsx
         ├── DemoSection.tsx
-        ├── SendForm.tsx         # HMZ transfer form
-        ├── Stats.tsx            # live transfer feed
+        ├── SendForm.tsx             # confetti + ding + haptic on success
+        ├── Stats.tsx                # live transfer feed (relative timestamps)
+        ├── NetworkActivity.tsx      # global Transfer stream (Group B)
+        ├── NetworkInsights.tsx      # charts section, Intersection-Observer gated
+        ├── DailyVolumeChart.tsx     # recharts AreaChart (lazy)
+        ├── PersonalChart.tsx        # recharts BarChart, connected only (lazy)
+        ├── Leaderboard.tsx          # top-10 senders, no chart lib
+        ├── AnimatedNumber.tsx       # tween wrapper
+        ├── RelativeTime.tsx         # "X ago" wrapper
+        ├── CoffeeSteam.tsx          # SVG steam wisps
         ├── Technical.tsx
         ├── Economy.tsx
         ├── FAQ.tsx

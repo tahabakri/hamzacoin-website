@@ -1,0 +1,126 @@
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Icon } from "@iconify/react";
+import { useTransferHistory } from "../hooks/useTransferHistory";
+import { Leaderboard } from "./Leaderboard";
+
+const DailyVolumeChart = lazy(() => import("./DailyVolumeChart"));
+const PersonalChart = lazy(() => import("./PersonalChart"));
+
+type Props = {
+  account: string;
+  reduceMotion: boolean;
+};
+
+const ChartSkeleton = () => (
+  <div className="rounded-[1.85rem] bg-white/60 border border-coffee-200 p-5 h-64 flex items-center justify-center text-xs text-coffee-500 font-light">
+    <Icon
+      icon="solar:loading-linear"
+      className="text-xl text-coffee-400 mr-2 animate-spin"
+    />
+    Loading chart…
+  </div>
+);
+
+export function NetworkInsights({ account, reduceMotion }: Props) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [inView, setInView] = useState(false);
+  const history = useTransferHistory();
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || inView) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [inView]);
+
+  const animate = !reduceMotion;
+
+  return (
+    <section
+      ref={sectionRef}
+      id="insights"
+      className="max-w-7xl mx-auto px-6 py-20"
+      aria-label="Network insights"
+    >
+      <div className="text-center max-w-3xl mx-auto mb-10">
+        <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
+          NETWORK INSIGHTS
+        </p>
+        <h2 className="text-4xl md:text-5xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
+          On-chain patterns,
+          <span className="block font-semibold italic text-coffee-800">
+            quietly observed.
+          </span>
+        </h2>
+        <p className="mt-5 text-base leading-7 text-coffee-700 font-light">
+          Aggregated from the last 50,000 blocks (~7 days) of Sepolia.
+          {history.isLoading && " Loading from chain…"}
+        </p>
+      </div>
+
+      {history.error && (
+        <div className="max-w-3xl mx-auto mb-8 rounded-xl bg-red-50 border border-red-200 text-red-900 px-4 py-3 text-xs">
+          <span className="font-semibold">Could not load history:</span>{" "}
+          {history.error}
+        </div>
+      )}
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="lg:col-span-2">
+          {inView ? (
+            <Suspense fallback={<ChartSkeleton />}>
+              <DailyVolumeChart data={history.dailyVolume} animate={animate} />
+            </Suspense>
+          ) : (
+            <ChartSkeleton />
+          )}
+        </div>
+
+        {account && (
+          <div className="lg:col-span-2">
+            {inView ? (
+              <Suspense fallback={<ChartSkeleton />}>
+                <PersonalChart
+                  events={history.events}
+                  decimals={history.decimals}
+                  account={account}
+                  animate={animate}
+                />
+              </Suspense>
+            ) : (
+              <ChartSkeleton />
+            )}
+          </div>
+        )}
+
+        <Leaderboard
+          entries={history.leaderboard}
+          isLoading={history.isLoading}
+        />
+
+        <div className="rounded-[1.85rem] bg-gradient-to-b from-coffee-800 to-coffee-950 text-white p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.13)]">
+          <p className="font-mono text-[10px] tracking-widest text-amber-200 font-semibold">
+            HOLDER COUNT
+          </p>
+          <p className="mt-2 text-5xl font-bold tabular-nums">
+            {history.holderCount}
+          </p>
+          <p className="mt-2 text-xs text-coffee-100 font-light leading-5">
+            Unique addresses with positive HMZ balance, derived from the last
+            50,000 blocks of Transfer events. An undercount if older holders
+            haven't moved tokens since.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
