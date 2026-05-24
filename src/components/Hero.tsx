@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
 import { AnimatedNumber } from "./AnimatedNumber";
 import { CoffeeSteam } from "./CoffeeSteam";
+import { SpinningCoin } from "./SpinningCoin";
 
 type Props = {
   account: string;
@@ -110,6 +111,11 @@ export function Hero({
 
         <div className="relative lg:pl-4">
           <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl"></div>
+
+          <div className="absolute -top-12 -left-4 md:-left-10 z-30 w-20 h-20 md:w-[120px] md:h-[120px]">
+            <SpinningCoin reduceMotion={reduceMotion} size={120} />
+          </div>
+
           <div className="relative rounded-[2rem] bg-coffee-50/50 border border-white shadow-[0_30px_80px_-35px_rgba(67,48,36,0.22),inset_0_2px_0_rgba(255,255,255,1)] p-4 sm:p-5">
             <div className="hidden md:block absolute inset-0 z-20 pointer-events-none">
               <div className="hmz-float-bubble absolute -right-7 top-10 rounded-2xl bg-white/90 backdrop-blur border border-white px-4 py-3 shadow-[0_18px_38px_-20px_rgba(67,48,36,0.2),inset_0_1px_0_white] min-w-[12rem]">
