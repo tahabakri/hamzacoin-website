@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Icon } from "@iconify/react";
+import confetti from "canvas-confetti";
 import { SEPOLIA_EXPLORER } from "../utils/constants";
 import type { TxStatus, TxType } from "../hooks/useHmzContract";
 
@@ -14,7 +15,18 @@ type Props = {
     memo: string,
     txType: TxType,
   ) => Promise<boolean>;
+  reduceMotion: boolean;
+  onSuccess: () => void;
+  onError: () => void;
 };
+
+const CONFETTI_COLORS = [
+  "#84644D",
+  "#D4C4B0",
+  "#FAF8F5",
+  "#E6B97A",
+  "#B87333",
+];
 
 const TX_TYPES: TxType[] = ["Tip Friend", "Cafe Spot", "Book Rec"];
 
@@ -24,11 +36,15 @@ export function SendForm({
   txStatus,
   onConnect,
   onSend,
+  reduceMotion,
+  onSuccess,
+  onError,
 }: Props) {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [txType, setTxType] = useState<TxType>("Tip Friend");
+  const lastTxRef = useRef<string>("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +55,30 @@ export function SendForm({
       setMemo("");
     }
   };
+
+  useEffect(() => {
+    if (txStatus.success === true && txStatus.txHash && txStatus.txHash !== lastTxRef.current) {
+      lastTxRef.current = txStatus.txHash;
+      onSuccess();
+      if (!reduceMotion) {
+        confetti({
+          particleCount: 60,
+          spread: 70,
+          ticks: 200,
+          origin: { y: 0.65 },
+          colors: CONFETTI_COLORS,
+          disableForReducedMotion: true,
+        });
+      }
+    } else if (
+      txStatus.success === false &&
+      txStatus.message.startsWith("Transfer failed") &&
+      txStatus.message !== lastTxRef.current
+    ) {
+      lastTxRef.current = txStatus.message;
+      onError();
+    }
+  }, [txStatus, reduceMotion, onSuccess, onError]);
 
   return (
     <div className="flex flex-col justify-between">
@@ -122,7 +162,9 @@ export function SendForm({
             <button
               type="submit"
               disabled={isTxPending}
-              className="w-full flex items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_10px_24px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all duration-300 disabled:opacity-50"
+              className={`w-full flex items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_10px_24px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all duration-300 disabled:opacity-90 ${
+                isTxPending && !reduceMotion ? "hmz-pulse-pending" : ""
+              }`}
             >
               {isTxPending
                 ? "Awaiting Transaction Confirmation..."

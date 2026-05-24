@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@iconify/react": "^5.0.2",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/three": "^0.184.1",
+    "canvas-confetti": "^1.9.4",
     "ethers": "^6.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "recharts": "^3.8.1",
     "three": "^0.184.0"
   },
   "devDependencies": {

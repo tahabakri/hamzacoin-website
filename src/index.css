@@ -193,6 +193,87 @@
     animation: hmzFinalFloatTwo 6.25s ease-in-out infinite;
   }
 
+  @keyframes hmz-pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+  }
+
+  @keyframes hmz-pulse-pending {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(0.99);
+    }
+  }
+
+  @keyframes hmz-steam-rise {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.55;
+    }
+    100% {
+      transform: translateY(-22px) scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes hmz-row-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hmz-pulse-connected {
+    animation: hmz-pulse-glow 2.4s ease-in-out infinite;
+  }
+
+  .hmz-pulse-pending {
+    animation: hmz-pulse-pending 1.2s ease-in-out infinite;
+  }
+
+  .hmz-steam-wisp {
+    transform-origin: center bottom;
+    animation: hmz-steam-rise 4.5s ease-out infinite;
+    opacity: 0;
+  }
+
+  .hmz-row-in {
+    animation: hmz-row-in 400ms ease-out;
+  }
+
+  .hmz-motion-reduced .hmz-pulse-connected,
+  .hmz-motion-reduced .hmz-pulse-pending,
+  .hmz-motion-reduced .hmz-steam-wisp,
+  .hmz-motion-reduced .hmz-row-in,
+  .hmz-motion-reduced .hmz-bg-blob-one,
+  .hmz-motion-reduced .hmz-bg-blob-two,
+  .hmz-motion-reduced .hmz-bg-blob-three,
+  .hmz-motion-reduced .hmz-bg-dots,
+  .hmz-motion-reduced .hmz-float-bubble,
+  .hmz-motion-reduced .hmz-hero-card,
+  .hmz-motion-reduced .animate-final-float-1,
+  .hmz-motion-reduced .animate-final-float-2 {
+    animation: none !important;
+    opacity: 1;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hmz-bg-blob-one,
     .hmz-bg-blob-two,
@@ -200,6 +281,10 @@
     .hmz-bg-dots,
     .hmz-float-bubble,
     .hmz-hero-card,
+    .hmz-pulse-connected,
+    .hmz-pulse-pending,
+    .hmz-steam-wisp,
+    .hmz-row-in,
     .animate-final-float-1,
     .animate-final-float-2 {
       animation: none;

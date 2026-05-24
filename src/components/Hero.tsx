@@ -1,18 +1,36 @@
+import { formatUnits } from "ethers";
 import { Icon } from "@iconify/react";
-import { formatAddress, formatBalance } from "../utils/format";
+import { formatAddress } from "../utils/format";
+import { AnimatedNumber } from "./AnimatedNumber";
+import { CoffeeSteam } from "./CoffeeSteam";
 
 type Props = {
   account: string;
   balance: string;
   isLoadingBalance: boolean;
   balanceError: string | null;
+  totalSupply: bigint | null;
+  totalSupplyDecimals: bigint | null;
+  holderCount: number;
+  reduceMotion: boolean;
 };
 
-export function Hero({ account, balance, isLoadingBalance, balanceError }: Props) {
-  const balanceDisplay =
-    account && isLoadingBalance
-      ? "…"
-      : `${formatBalance(balance)} HMZ`;
+export function Hero({
+  account,
+  balance,
+  isLoadingBalance,
+  balanceError,
+  totalSupply,
+  totalSupplyDecimals,
+  holderCount,
+  reduceMotion,
+}: Props) {
+  const numericBalance = Number(balance);
+  const showBalanceSkeleton = Boolean(account) && isLoadingBalance;
+  const totalSupplyNumber =
+    totalSupply && totalSupplyDecimals
+      ? Number(formatUnits(totalSupply, totalSupplyDecimals))
+      : 50000;
   return (
     <section className="max-w-7xl mx-auto px-6 pt-32 md:pt-40 pb-20">
       <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-12 lg:gap-16 items-center">
@@ -170,9 +188,23 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                     <p className="text-xs text-coffee-500 font-light mb-1">
                       Total Quiet Supply
                     </p>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-coffee-950">
-                      50,000 HMZ
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-coffee-950 tabular-nums">
+                      <AnimatedNumber
+                        value={totalSupplyNumber}
+                        decimals={0}
+                        suffix=" HMZ"
+                        enabled={!reduceMotion}
+                      />
                     </h2>
+                    {holderCount > 0 && (
+                      <p className="mt-1 text-[10px] text-coffee-500 font-mono">
+                        <AnimatedNumber
+                          value={holderCount}
+                          enabled={!reduceMotion}
+                        />{" "}
+                        holders · last 7 days
+                      </p>
+                    )}
                   </div>
                   <div className="w-11 h-11 rounded-2xl bg-coffee-50 border border-coffee-100 flex items-center justify-center text-coffee-700 shadow-[inset_0_1px_0_white]">
                     <Icon icon="solar:stars-linear" className="text-2xl" />
@@ -216,9 +248,15 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-semibold text-stone-800">
-                            Quiet Recommendations
-                          </p>
+                          <div className="flex items-center gap-1">
+                            <p className="text-sm font-semibold text-stone-800">
+                              Quiet Recommendations
+                            </p>
+                            <CoffeeSteam
+                              reduceMotion={reduceMotion}
+                              className="text-orange-500 w-4 h-5"
+                            />
+                          </div>
                           <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5 font-medium">
                             Active
                           </span>
@@ -241,8 +279,17 @@ export function Hero({ account, balance, isLoadingBalance, balanceError }: Props
                               Your Balance
                             </p>
                           </div>
-                          <p className="mt-2 text-xl font-bold tracking-tight text-coffee-950">
-                            {balanceDisplay}
+                          <p className="mt-2 text-xl font-bold tracking-tight text-coffee-950 tabular-nums">
+                            {showBalanceSkeleton ? (
+                              <span aria-label="Loading balance">…</span>
+                            ) : (
+                              <AnimatedNumber
+                                value={numericBalance}
+                                decimals={2}
+                                suffix=" HMZ"
+                                enabled={!reduceMotion}
+                              />
+                            )}
                           </p>
                           {balanceError && (
                             <p className="mt-1 text-[10px] text-red-700 font-medium">
