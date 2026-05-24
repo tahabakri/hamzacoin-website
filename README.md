@@ -136,6 +136,12 @@ The contract is a standard OpenZeppelin ERC20 — nothing custom on-chain. All t
 - ✅ ARIA labels + roles on all interactive controls
 - ✅ Mobile responsive (Tailwind breakpoints throughout)
 
+### Demo features (alive & impressive)
+
+Visual flourishes that make the dApp feel alive even when Sepolia is quiet. Each can be toggled or respects motion preferences.
+
+- ✅ **Live transaction map** — every transfer becomes a glowing coffee-colored particle traveling between SVG nodes. Node size scales with cumulative HMZ volume; hover a node for its address + volume. Ambient flow particles drift between connected wallets so the map never goes silent.
+
 ---
 
 ## Tech Stack
@@ -203,6 +209,7 @@ hamzacoin-react/
         ├── SendForm.tsx             # confetti + ding + haptic on success
         ├── Stats.tsx                # live transfer feed (relative timestamps)
         ├── NetworkActivity.tsx      # global Transfer stream (Group B)
+        ├── TransactionMap.tsx       # SVG node-link diagram with animated particles
         ├── NetworkInsights.tsx      # charts section, Intersection-Observer gated
         ├── DailyVolumeChart.tsx     # recharts AreaChart (lazy)
         ├── PersonalChart.tsx        # recharts BarChart, connected only (lazy)

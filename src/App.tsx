@@ -6,6 +6,7 @@ import { useSound } from "./hooks/useSound";
 import { useHaptic } from "./hooks/useHaptic";
 import { useTotalSupply } from "./hooks/useTotalSupply";
 import { useTransferHistory } from "./hooks/useTransferHistory";
+import { useTransferEvents } from "./hooks/useTransferEvents";
 import { CONTRACT_ADDRESS } from "./utils/constants";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FluidBackground } from "./components/FluidBackground";
@@ -18,6 +19,7 @@ import { DemoSection } from "./components/DemoSection";
 import { SendForm } from "./components/SendForm";
 import { Stats } from "./components/Stats";
 import { NetworkActivity } from "./components/NetworkActivity";
+import { TransactionMap } from "./components/TransactionMap";
 import { NetworkInsights } from "./components/NetworkInsights";
 import { Technical } from "./components/Technical";
 import { Economy } from "./components/Economy";
@@ -34,6 +36,7 @@ function App() {
   const haptic = useHaptic();
   const supply = useTotalSupply();
   const history = useTransferHistory();
+  const liveTransfers = useTransferEvents(supply.decimals);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -108,6 +111,12 @@ function App() {
         </DemoSection>
         <ErrorBoundary label="NetworkActivity">
           <NetworkActivity decimals={supply.decimals} />
+        </ErrorBoundary>
+        <ErrorBoundary label="TransactionMap">
+          <TransactionMap
+            events={liveTransfers}
+            reduceMotion={settings.reduceMotion}
+          />
         </ErrorBoundary>
         <ErrorBoundary label="NetworkInsights">
           <NetworkInsights

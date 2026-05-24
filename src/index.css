@@ -258,8 +258,23 @@
     animation: hmz-row-in 400ms ease-out;
   }
 
+  @keyframes hmz-node-aura {
+    0%,
+    100% {
+      opacity: 0.65;
+    }
+    50% {
+      opacity: 0.15;
+    }
+  }
+
+  .hmz-node-aura {
+    animation: hmz-node-aura 2.6s ease-in-out infinite;
+  }
+
   .hmz-motion-reduced .hmz-pulse-connected,
   .hmz-motion-reduced .hmz-pulse-pending,
+  .hmz-motion-reduced .hmz-node-aura,
   .hmz-motion-reduced .hmz-steam-wisp,
   .hmz-motion-reduced .hmz-row-in,
   .hmz-motion-reduced .hmz-bg-blob-one,
@@ -283,6 +298,7 @@
     .hmz-hero-card,
     .hmz-pulse-connected,
     .hmz-pulse-pending,
+    .hmz-node-aura,
     .hmz-steam-wisp,
     .hmz-row-in,
     .animate-final-float-1,
