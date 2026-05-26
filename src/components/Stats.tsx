@@ -9,16 +9,22 @@ type Props = {
 export function Stats({ transfers, onCopyContract }: Props) {
   return (
     <div className="rounded-[1.85rem] bg-gradient-to-b from-white to-coffee-100 border border-coffee-200 overflow-hidden shadow-[inset_0_1px_0_white] flex flex-col justify-between">
-      <div className="px-5 py-4 border-b border-coffee-200 flex items-center justify-between bg-white/80">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-xs font-semibold text-stone-900">
-            Recent Moment Logs
+      <div className="px-5 py-4 border-b border-coffee-200 bg-white/80">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="text-xs font-semibold text-stone-900">
+              Recent transfers
+            </span>
+          </div>
+          <span className="font-mono text-[10px] text-coffee-400">
+            SEPOLIA LIVE
           </span>
         </div>
-        <span className="font-mono text-[10px] text-coffee-400">
-          SEPOLIA LIVE
-        </span>
+        <p className="mt-2 text-[11px] italic text-coffee-600 leading-relaxed">
+          Memos shown below are local to your browser. On-chain only the
+          addresses and amounts are stored.
+        </p>
       </div>
 
       <div className="p-5 flex-1 space-y-3 overflow-y-auto max-h-[340px]">

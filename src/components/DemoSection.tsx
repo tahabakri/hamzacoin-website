@@ -18,8 +18,8 @@ export function DemoSection({ children }: Props) {
           </span>
         </h2>
         <p className="mt-6 text-base md:text-lg leading-8 text-coffee-700 font-light max-w-3xl mx-auto">
-          Connect MetaMask. Send HMZ to any address with a memo. Your
-          transaction shows up in the live feed below as soon as it confirms.
+          Connect MetaMask. Send HMZ on Sepolia. The transfer is real
+          on-chain — the memo is a local note for your own feed.
         </p>
       </div>
 

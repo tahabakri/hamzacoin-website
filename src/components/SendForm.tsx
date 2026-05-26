@@ -101,17 +101,13 @@ export function SendForm({
   return (
     <div className="flex flex-col justify-between">
       <div>
-        <div className="inline-flex items-center gap-2 rounded-full bg-coffee-50 border border-coffee-100 px-3.5 py-1.5 text-xs text-coffee-700 font-semibold mb-6 shadow-[inset_0_1px_0_white]">
-          <Icon
-            icon="solar:lock-keyhole-linear"
-            className="text-base text-coffee-600"
-          />
-          Smart Contract Utility
-        </div>
-
-        <h3 className="text-3xl font-bold tracking-tight text-coffee-950 leading-[1.1] mb-6">
-          Send HMZ with custom memo logs.
+        <h3 className="text-3xl font-bold tracking-tight text-coffee-950 leading-[1.1] mb-3">
+          Send HMZ
         </h3>
+        <p className="text-sm text-coffee-600 font-light leading-6 mb-6">
+          An ERC20 transfer on Sepolia. The amount goes on-chain, the memo
+          stays in your browser.
+        </p>
 
         {account ? (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -120,7 +116,7 @@ export function SendForm({
                 htmlFor="recipient-input"
                 className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
               >
-                Recipient Sepolia Address
+                Recipient address
               </label>
               <div className="relative">
                 <input
@@ -256,7 +252,7 @@ export function SendForm({
                   htmlFor="txtype-select"
                   className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
                 >
-                  Transaction Type
+                  Category (personal tag)
                 </label>
                 <select
                   id="txtype-select"
@@ -278,7 +274,7 @@ export function SendForm({
                 htmlFor="memo-input"
                 className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
               >
-                Recommendation Message (Stored Local/Memo)
+                Note for yourself
               </label>
               <input
                 id="memo-input"
@@ -288,8 +284,17 @@ export function SendForm({
                 placeholder="e.g. 'Enjoy a quiet cortado here...'"
                 inputMode="text"
                 maxLength={140}
+                aria-describedby="memo-disclaimer"
                 className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
               />
+              <p
+                id="memo-disclaimer"
+                className="mt-2 text-[11px] italic text-coffee-600 leading-relaxed"
+              >
+                Saved in your browser only. The ERC20 standard does not carry
+                text on-chain — only sender, recipient, and amount appear on
+                Etherscan.
+              </p>
             </div>
 
             <button
@@ -299,9 +304,7 @@ export function SendForm({
                 isTxPending && !reduceMotion ? "hmz-pulse-pending" : ""
               }`}
             >
-              {isTxPending
-                ? "Awaiting Transaction Confirmation..."
-                : "Execute HMZ Recommendation Transfer"}
+              {isTxPending ? "Awaiting confirmation..." : "Send HMZ"}
             </button>
           </form>
         ) : (
