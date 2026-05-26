@@ -58,7 +58,7 @@ export function Header({
                   HAMZACOIN
                 </span>
                 <span className="mt-0.5 text-[10px] font-light tracking-[-0.03em] text-coffee-500">
-                  Quiet Recommendations
+                  Learn-to-earn ERC20
                 </span>
               </span>
             </a>
