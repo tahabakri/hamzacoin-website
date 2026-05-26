@@ -2,22 +2,34 @@ import { Icon } from "@iconify/react";
 
 const FAQS = [
   {
-    icon: "solar:chat-round-like-linear",
-    question: "How do I earn HamzaCoin (HMZ)?",
+    icon: "solar:hand-money-linear",
+    question: "How do I earn HMZ?",
     answer:
-      "Currently, you can gain testnet HMZ via direct faucet provisions, recommendations shared using the on-chain transfer logs, or through community ritual verifications.",
+      "Connect your wallet and head to Learn & Earn. Pick a Wikipedia article, finish a 5-question quiz. The backend signs your score, and a smart contract on Sepolia pays out 1 HMZ per correct answer.",
   },
   {
-    icon: "solar:shield-check-linear",
-    question: "Is my physical coordinate private?",
+    icon: "solar:shield-warning-linear",
+    question: "Is this real money?",
     answer:
-      "Yes. Geolocation coordinate verification is compiled and hashed client-side before submission, preventing active physical location data tracking.",
+      "No. HMZ runs on Sepolia, Ethereum's test network. Tokens are free to claim and worthless outside this demo. Sepolia ETH for gas is also free from faucets.",
   },
   {
-    icon: "solar:global-linear",
-    question: "Which network is HamzaCoin deployed on?",
+    icon: "solar:lock-keyhole-linear",
+    question: "Why does it need a backend?",
     answer:
-      "HamzaCoin is live on the Sepolia Ethereum test network at address 0x619F30ec004442cdc3BE060FC927A3688054e6c3. It is completely free to verify and test.",
+      "To prevent users from faking their quiz score. The backend grades your answers in private, then signs an EIP-712 message that the contract verifies on-chain before paying out.",
+  },
+  {
+    icon: "solar:smartphone-linear",
+    question: "Can I use this on my phone?",
+    answer:
+      "Yes — open the site inside the MetaMask app's built-in browser. A banner will guide you if you're in regular Safari or Chrome.",
+  },
+  {
+    icon: "solar:code-square-linear",
+    question: "Is the code open source?",
+    answer:
+      "Yes. Contracts, backend, and frontend are all on GitHub. See the links in the footer.",
   },
 ];
 
@@ -29,9 +41,9 @@ export function FAQ() {
           FAQ
         </p>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-coffee-950">
-          Cozy queries.
+          Plain questions.
           <span className="block font-semibold italic text-coffee-800">
-            Clear answers.
+            Honest answers.
           </span>
         </h2>
       </div>
@@ -57,12 +69,12 @@ export function FAQ() {
               STILL CURIOUS?
             </p>
             <h3 className="text-3xl font-light leading-tight">
-              Start quietly. Stay connected.
+              Open source. Free to test.
             </h3>
             <p className="mt-5 text-sm text-coffee-100 font-light leading-relaxed">
-              HamzaCoin requires zero active engagement metrics. You hold the
-              token, share recommendations directly via standard transfer
-              inputs, and log quiet moments on Sepolia testnet.
+              HamzaCoin is a learning project on Ethereum&apos;s Sepolia test
+              network. The token has no monetary value. The code for the
+              contracts, the backend, and this site is on GitHub.
             </p>
           </div>
 

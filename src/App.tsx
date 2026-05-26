@@ -27,7 +27,6 @@ import { NetworkInsights } from "./components/NetworkInsights";
 import { AudioVisualizer } from "./components/AudioVisualizer";
 import { LazyMount } from "./components/LazyMount";
 import { Technical } from "./components/Technical";
-import { Economy } from "./components/Economy";
 import { FAQ } from "./components/FAQ";
 import { Creator } from "./components/Creator";
 import { FinalCTA } from "./components/FinalCTA";
@@ -169,7 +168,6 @@ function App() {
           />
         </ErrorBoundary>
         <Technical />
-        <Economy />
         <FAQ />
         <Creator />
         <FinalCTA account={wallet.account} onConnect={wallet.connect} />
