@@ -131,27 +131,53 @@ export function SendForm({
                   autoCapitalize="off"
                   autoCorrect="off"
                   spellCheck={false}
-                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-10 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono"
+                  aria-describedby="recipient-hint"
+                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-12 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono"
                 />
-                {history.entries.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setShowRecipientList((v) => !v)}
-                    aria-label="Show recent recipients"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg hover:bg-coffee-50 flex items-center justify-center text-coffee-600 transition-colors"
-                  >
-                    <Icon
-                      icon="solar:history-linear"
-                      className="text-base"
-                    />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowRecipientList((v) => !v)}
+                  aria-label={
+                    history.entries.length > 0
+                      ? `Show ${history.entries.length} recent recipient${history.entries.length === 1 ? "" : "s"}`
+                      : "Recent recipients (none yet)"
+                  }
+                  title={
+                    history.entries.length > 0
+                      ? `${history.entries.length} recent recipient${history.entries.length === 1 ? "" : "s"} — click to pick`
+                      : "Recent recipients will appear here after a successful send"
+                  }
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    history.entries.length > 0
+                      ? "text-coffee-700 hover:bg-coffee-50"
+                      : "text-coffee-300 hover:bg-coffee-50 hover:text-coffee-500"
+                  }`}
+                >
+                  <Icon icon="solar:history-linear" className="text-lg" />
+                  {history.entries.length > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-coffee-700 text-white text-[9px] font-bold flex items-center justify-center"
+                    >
+                      {history.entries.length}
+                    </span>
+                  )}
+                </button>
               </div>
 
-              {showRecipientList && filteredEntries.length > 0 && (
+              <p
+                id="recipient-hint"
+                className="mt-1.5 text-[11px] text-coffee-500 font-light"
+              >
+                {history.entries.length > 0
+                  ? `${history.entries.length} saved — click the history icon or focus the field to pick one.`
+                  : "Past recipients show up here automatically after a successful send."}
+              </p>
+
+              {showRecipientList && (
                 <div
                   aria-label="Recent recipients"
-                  className="absolute left-0 right-0 top-full mt-1 z-30 rounded-xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden max-h-72 overflow-y-auto"
+                  className="absolute left-0 right-0 top-[calc(100%+1.5rem)] mt-1 z-30 rounded-xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden max-h-72 overflow-y-auto"
                 >
                   <div className="px-3 py-2 border-b border-coffee-100 flex items-center justify-between">
                     <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
@@ -170,52 +196,78 @@ export function SendForm({
                       </button>
                     )}
                   </div>
-                  <ul>
-                    {filteredEntries.map((entry) => (
-                      <li
-                        key={entry.address}
-                        className="flex items-center hover:bg-coffee-50 transition-colors"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setRecipient(entry.address);
-                            setShowRecipientList(false);
-                          }}
-                          className="flex-1 px-3 py-2 flex items-center gap-3 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
+                  {filteredEntries.length > 0 ? (
+                    <ul>
+                      {filteredEntries.map((entry) => (
+                        <li
+                          key={entry.address}
+                          className="flex items-center hover:bg-coffee-50 transition-colors"
                         >
-                          <div className="w-7 h-7 rounded-lg bg-coffee-50 border border-coffee-100 flex items-center justify-center shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRecipient(entry.address);
+                              setShowRecipientList(false);
+                            }}
+                            className="flex-1 px-3 py-2 flex items-center gap-3 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
+                          >
+                            <div className="w-7 h-7 rounded-lg bg-coffee-50 border border-coffee-100 flex items-center justify-center shrink-0">
+                              <Icon
+                                icon="solar:user-rounded-linear"
+                                className="text-sm text-coffee-700"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="font-mono text-xs text-coffee-900 truncate"
+                                title={entry.address}
+                              >
+                                {formatAddress(entry.address)}
+                              </p>
+                              <p className="text-[10px] text-coffee-500 font-light">
+                                {formatRelative(entry.lastUsed)}
+                              </p>
+                            </div>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => history.remove(entry.address)}
+                            aria-label={`Remove ${formatAddress(entry.address)} from history`}
+                            className="px-2 py-2 text-coffee-400 hover:text-coffee-800 transition-colors"
+                          >
                             <Icon
-                              icon="solar:user-rounded-linear"
-                              className="text-sm text-coffee-700"
+                              icon="solar:close-circle-linear"
+                              className="text-sm"
                             />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p
-                              className="font-mono text-xs text-coffee-900 truncate"
-                              title={entry.address}
-                            >
-                              {formatAddress(entry.address)}
-                            </p>
-                            <p className="text-[10px] text-coffee-500 font-light">
-                              {formatRelative(entry.lastUsed)}
-                            </p>
-                          </div>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => history.remove(entry.address)}
-                          aria-label={`Remove ${formatAddress(entry.address)} from history`}
-                          className="px-2 py-2 text-coffee-400 hover:text-coffee-800 transition-colors"
-                        >
-                          <Icon
-                            icon="solar:close-circle-linear"
-                            className="text-sm"
-                          />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : history.entries.length === 0 ? (
+                    <div className="px-4 py-5 text-center">
+                      <Icon
+                        icon="solar:history-linear"
+                        className="text-2xl text-coffee-300 mx-auto"
+                      />
+                      <p className="mt-2 text-xs font-semibold text-coffee-800">
+                        No recent recipients yet
+                      </p>
+                      <p className="mt-1 text-[11px] text-coffee-500 leading-relaxed">
+                        After your first successful send, the address will be
+                        saved here so you don't have to type it again.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="px-4 py-4 text-center">
+                      <p className="text-xs text-coffee-600">
+                        No saved address matches{" "}
+                        <span className="font-mono text-coffee-800">
+                          {recipient}
+                        </span>
+                        .
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
