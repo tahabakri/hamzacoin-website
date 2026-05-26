@@ -10,7 +10,7 @@
 ![Network](https://img.shields.io/badge/Network-Sepolia_Testnet-7c3aed)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-This is one of three repos. The others are the [smart contracts](https://github.com/tahabakri/crypto_class) and the [backend](https://github.com/tahabakri/hamzacoin-website/tree/main/hamzacoin-backend). You need all three running to demo the project end-to-end.
+This is one of three repos. The others are the [smart contracts](https://github.com/tahabakri/hamzacoin-contract) and the [backend](https://github.com/tahabakri/hamzacoin-backend). You need all three running to demo the project end-to-end.
 
 ---
 
@@ -46,8 +46,8 @@ Follow this guide and you will have:
 | **HamzaCoin (ERC20)** | `0x619F30ec004442cdc3BE060FC927A3688054e6c3` |
 | **Network** | Sepolia Testnet (chain ID `11155111` / `0xaa36a7`) |
 | **Etherscan** | [sepolia.etherscan.io/address/0x619F30ec004442cdc3BE060FC927A3688054e6c3](https://sepolia.etherscan.io/address/0x619F30ec004442cdc3BE060FC927A3688054e6c3) |
-| **Smart contract repo** | [github.com/tahabakri/crypto_class](https://github.com/tahabakri/crypto_class) |
-| **Backend repo** | [github.com/tahabakri/hamzacoin-website/tree/main/hamzacoin-backend](https://github.com/tahabakri/hamzacoin-website/tree/main/hamzacoin-backend) |
+| **Smart contract repo** | [github.com/tahabakri/hamzacoin-contract](https://github.com/tahabakri/hamzacoin-contract) |
+| **Backend repo** | [github.com/tahabakri/hamzacoin-backend](https://github.com/tahabakri/hamzacoin-backend) |
 
 To add HMZ to MetaMask: **Import Token** → paste the contract address → symbol `HMZ`, decimals `18`.
 
@@ -142,8 +142,9 @@ This is a three-piece project. If you're starting from this repo, you still need
 
 ```bash
 # in any working folder (e.g. C:/Users/you/dev/)
-git clone https://github.com/tahabakri/crypto_class.git
+git clone https://github.com/tahabakri/hamzacoin-contract.git
 git clone https://github.com/tahabakri/hamzacoin-website.git
+git clone https://github.com/tahabakri/hamzacoin-backend.git
 ```
 
 You should end up with:
@@ -526,7 +527,6 @@ The whole site is structured so that swapping the coin name, symbol, address, an
 
 ## Companion repos
 
-- **Smart contracts**: [github.com/tahabakri/crypto_class](https://github.com/tahabakri/crypto_class)
-- **Frontend + backend monorepo (you are here)**: [github.com/tahabakri/hamzacoin-website](https://github.com/tahabakri/hamzacoin-website)
-  - `hamzacoin-react/` — this folder
-  - `hamzacoin-backend/` — Express + Groq + EIP-712 signer
+- **Smart contracts**: [github.com/tahabakri/hamzacoin-contract](https://github.com/tahabakri/hamzacoin-contract)
+- **Frontend (this repo)**: [github.com/tahabakri/hamzacoin-website](https://github.com/tahabakri/hamzacoin-website)
+- **Backend**: [github.com/tahabakri/hamzacoin-backend](https://github.com/tahabakri/hamzacoin-backend)
