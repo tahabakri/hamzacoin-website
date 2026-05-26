@@ -48,7 +48,6 @@ export const FAUCET_ABI = [
 
 export type Transfer = {
   id: number;
-  type: "checkin" | "music" | "book" | "direct";
   from: string;
   to: string;
   amount: string;
@@ -61,29 +60,26 @@ const SEED_NOW = Date.now();
 export const SEED_TRANSFERS: Transfer[] = [
   {
     id: 1,
-    type: "checkin",
     from: "0x3aF8...9d21",
     to: "0x619F...e6c3",
     amount: "5",
-    recommendation: "Coffee check-in: 'Solitude Brews' Cafe",
+    recommendation: "Sample transfer (shown before you connect a wallet)",
     timestamp: SEED_NOW - 1000 * 60 * 18,
   },
   {
     id: 2,
-    type: "music",
     from: "0x12Cc...d942",
     to: "0x74Ab...c112",
     amount: "2",
-    recommendation: "Shared: 'Quietly Yours' by Warm Melodies",
+    recommendation: "Sample transfer (shown before you connect a wallet)",
     timestamp: SEED_NOW - 1000 * 60 * 47,
   },
   {
     id: 3,
-    type: "book",
     from: "0x89Df...f551",
     to: "0x22Ee...a991",
     amount: "3",
-    recommendation: "Recommended reading: 'The Art of Solitude'",
+    recommendation: "Sample transfer (shown before you connect a wallet)",
     timestamp: SEED_NOW - 1000 * 60 * 60 * 2,
   },
 ];

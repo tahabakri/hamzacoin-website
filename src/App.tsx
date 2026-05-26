@@ -76,7 +76,6 @@ function App() {
         to: wallet.account || "0x0000000000000000000000000000000000000000",
         amount: String(score),
         memo: `Learn & Earn: ${articleTitle}`,
-        type: "book",
       });
       void txHash; // referenced for clarity; the Etherscan link is rendered inside ClaimReward
       void hmz.refreshBalance();

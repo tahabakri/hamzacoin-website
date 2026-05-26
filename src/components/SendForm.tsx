@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Icon } from "@iconify/react";
 import { SEPOLIA_EXPLORER } from "../utils/constants";
-import type { TxStatus, TxType } from "../hooks/useHmzContract";
+import type { TxStatus } from "../hooks/useHmzContract";
 import { useRecipientHistory } from "../hooks/useRecipientHistory";
 import { formatAddress } from "../utils/format";
 import { formatRelative } from "../hooks/useRelativeTime";
@@ -16,14 +16,11 @@ type Props = {
     recipient: string,
     amount: string,
     memo: string,
-    txType: TxType,
   ) => Promise<boolean>;
   reduceMotion: boolean;
   onSuccess: () => void;
   onError: () => void;
 };
-
-const TX_TYPES: TxType[] = ["Tip Friend", "Cafe Spot", "Book Rec"];
 
 export function SendForm({
   account,
@@ -38,7 +35,6 @@ export function SendForm({
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
-  const [txType, setTxType] = useState<TxType>("Tip Friend");
   const [showRecipientList, setShowRecipientList] = useState(false);
   const lastTxRef = useRef<string>("");
   const lastSentRecipientRef = useRef<string>("");
@@ -70,7 +66,7 @@ export function SendForm({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     lastSentRecipientRef.current = recipient;
-    const success = await onSend(recipient, amount, memo, txType);
+    const success = await onSend(recipient, amount, memo);
     if (success) {
       setRecipient("");
       setAmount("");
@@ -224,49 +220,27 @@ export function SendForm({
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="amount-input"
-                  className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
-                >
-                  Amount (HMZ)
-                </label>
-                <input
-                  id="amount-input"
-                  type="number"
-                  required
-                  min="0.0001"
-                  step="any"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="e.g. 5"
-                  inputMode="decimal"
-                  pattern="[0-9]*\.?[0-9]*"
-                  autoComplete="off"
-                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="txtype-select"
-                  className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
-                >
-                  Category (personal tag)
-                </label>
-                <select
-                  id="txtype-select"
-                  value={txType}
-                  onChange={(e) => setTxType(e.target.value as TxType)}
-                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
-                >
-                  {TX_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label
+                htmlFor="amount-input"
+                className="block text-xs font-semibold text-coffee-700 uppercase tracking-wider mb-2"
+              >
+                Amount (HMZ)
+              </label>
+              <input
+                id="amount-input"
+                type="number"
+                required
+                min="0.0001"
+                step="any"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="e.g. 5"
+                inputMode="decimal"
+                pattern="[0-9]*\.?[0-9]*"
+                autoComplete="off"
+                className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 text-sm text-stone-900 focus:outline-none focus:border-coffee-500 transition-colors"
+              />
             </div>
 
             <div>

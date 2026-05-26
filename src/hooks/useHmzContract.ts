@@ -24,8 +24,6 @@ export type TxStatus = {
   txHash: string;
 };
 
-export type TxType = "Tip Friend" | "Cafe Spot" | "Book Rec";
-
 export type HmzContractState = {
   balance: string;
   balanceError: string | null;
@@ -37,7 +35,6 @@ export type HmzContractState = {
     recipient: string,
     amount: string,
     memo: string,
-    txType: TxType,
   ) => Promise<boolean>;
   refreshBalance: () => Promise<void>;
   appendLocalTransfer: (entry: {
@@ -45,17 +42,10 @@ export type HmzContractState = {
     to: string;
     amount: string;
     memo: string;
-    type?: Transfer["type"];
   }) => void;
 };
 
 const EMPTY_STATUS: TxStatus = { success: null, message: "", txHash: "" };
-
-const TYPE_FOR_TX: Record<TxType, Transfer["type"]> = {
-  "Tip Friend": "direct",
-  "Cafe Spot": "checkin",
-  "Book Rec": "book",
-};
 
 export function useHmzContract(
   walletProvider: BrowserProvider | null,
@@ -156,7 +146,6 @@ export function useHmzContract(
         const value = e.args[2] as bigint;
         onChain.push({
           id: Number(BigInt(e.blockNumber) * 1000n + BigInt(e.index)),
-          type: "direct",
           from: formatAddress(from),
           to: formatAddress(to),
           amount: formatUnits(value, decimals),
@@ -189,7 +178,6 @@ export function useHmzContract(
       recipient: string,
       amount: string,
       memo: string,
-      txType: TxType,
     ): Promise<boolean> => {
       if (!account) {
         setTxStatus({
@@ -274,18 +262,13 @@ export function useHmzContract(
           txHash: tx.hash,
         });
 
-        const composedMemo = memo
-          ? `${txType}: ${memo}`
-          : `${txType}: Direct Recommendation Tip`;
-
         setRecentTransfers((prev) => [
           {
             id: Date.now(),
-            type: TYPE_FOR_TX[txType],
             from: formatAddress(account),
             to: formatAddress(recipient),
             amount,
-            recommendation: composedMemo,
+            recommendation: memo.trim() || "Transfer",
             timestamp: Date.now(),
           },
           ...prev,
@@ -323,12 +306,10 @@ export function useHmzContract(
       to: string;
       amount: string;
       memo: string;
-      type?: Transfer["type"];
     }) => {
       setRecentTransfers((prev) => [
         {
           id: Date.now(),
-          type: entry.type ?? "direct",
           from: formatAddress(entry.from),
           to: formatAddress(entry.to),
           amount: entry.amount,
