@@ -68,19 +68,25 @@ export function Header({
                 href="#about"
                 className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
               >
-                Purpose
+                How it works
               </a>
               <a
                 href="#capabilities"
                 className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
               >
-                Earn Loop
+                Features
+              </a>
+              <a
+                href="#learn-earn"
+                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Learn & Earn
               </a>
               <a
                 href="#demo"
                 className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
               >
-                Live Web3 App
+                Send HMZ
               </a>
               <a
                 href="#technical"

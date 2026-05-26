@@ -17,6 +17,7 @@ import { MobileWalletBanner } from "./components/MobileWalletBanner";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Capabilities } from "./components/Capabilities";
+import { LearnEarn } from "./components/LearnEarn";
 import { DemoSection } from "./components/DemoSection";
 import { SendForm } from "./components/SendForm";
 import { Stats } from "./components/Stats";
@@ -66,6 +67,24 @@ function App() {
     haptic.vibrateError();
   }, [sound, haptic]);
 
+  const handleLearnEarnClaim = useCallback(
+    ({ score, articleTitle, txHash }: { score: number; articleTitle: string; txHash: string }) => {
+      sound.playDing();
+      haptic.vibrateSuccess();
+      // Surface the win in the existing Recent Moments feed.
+      hmz.appendLocalTransfer({
+        from: "0x619F30ec004442cdc3BE060FC927A3688054e6c3",
+        to: wallet.account || "0x0000000000000000000000000000000000000000",
+        amount: String(score),
+        memo: `Learn & Earn: ${articleTitle}`,
+        type: "book",
+      });
+      void txHash; // referenced for clarity; the Etherscan link is rendered inside ClaimReward
+      void hmz.refreshBalance();
+    },
+    [hmz, sound, haptic, wallet.account],
+  );
+
   return (
     <>
       <FluidBackground />
@@ -99,6 +118,16 @@ function App() {
         />
         <About />
         <Capabilities />
+        <ErrorBoundary label="LearnEarn">
+          <LearnEarn
+            account={wallet.account}
+            walletProvider={wallet.provider}
+            onConnect={wallet.connect}
+            ensureSepolia={wallet.ensureSepolia}
+            reduceMotion={settings.reduceMotion}
+            onClaimSuccess={handleLearnEarnClaim}
+          />
+        </ErrorBoundary>
         <DemoSection>
           <SendForm
             account={wallet.account}

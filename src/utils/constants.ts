@@ -25,6 +25,27 @@ export const HISTORY_BLOCK_RANGE = 50_000n;
 export const MAX_FEED_ITEMS = 20;
 export const TOTAL_SUPPLY_POLL_MS = 30_000;
 
+// ----------------------------------------------------------------------------
+// HamzaFaucet — "Learn & Earn HMZ" contract on Sepolia.
+// ----------------------------------------------------------------------------
+// Address comes from VITE_FAUCET_ADDRESS at build time; empty string means
+// the feature is not configured (UI will disable the claim button with a
+// friendly message instead of crashing).
+export const FAUCET_ADDRESS: string =
+  (import.meta.env.VITE_FAUCET_ADDRESS ?? "").trim();
+
+export const BACKEND_URL: string =
+  (import.meta.env.VITE_BACKEND_URL ?? "http://localhost:3001").trim();
+
+// Minimal ABI — only what the frontend actually calls.
+export const FAUCET_ABI = [
+  "function claimReward(uint8 score, bytes32 articleHash, bytes signature)",
+  "function claimed(bytes32) view returns (bool)",
+  "function trustedSigner() view returns (address)",
+  "function faucetBalance() view returns (uint256)",
+  "event RewardClaimed(address indexed user, uint8 score, bytes32 indexed articleHash, uint256 reward)",
+] as const;
+
 export type Transfer = {
   id: number;
   type: "checkin" | "music" | "book" | "direct";

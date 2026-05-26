@@ -15,6 +15,7 @@ import {
   type Transfer,
 } from "../utils/constants";
 import { formatAddress } from "../utils/format";
+import { friendlyError } from "../utils/errors";
 import { useReadOnlyContract } from "./useReadOnlyContract";
 
 export type TxStatus = {
@@ -39,6 +40,13 @@ export type HmzContractState = {
     txType: TxType,
   ) => Promise<boolean>;
   refreshBalance: () => Promise<void>;
+  appendLocalTransfer: (entry: {
+    from: string;
+    to: string;
+    amount: string;
+    memo: string;
+    type?: Transfer["type"];
+  }) => void;
 };
 
 const EMPTY_STATUS: TxStatus = { success: null, message: "", txHash: "" };
@@ -47,51 +55,6 @@ const TYPE_FOR_TX: Record<TxType, Transfer["type"]> = {
   "Tip Friend": "direct",
   "Cafe Spot": "checkin",
   "Book Rec": "book",
-};
-
-type EthersLikeError = {
-  code?: string | number;
-  reason?: string;
-  shortMessage?: string;
-  message?: string;
-  info?: { error?: { code?: number; message?: string } };
-  error?: { message?: string };
-  data?: string;
-};
-
-const friendlyError = (err: unknown): string => {
-  const e = err as EthersLikeError;
-
-  if (e?.code === "ACTION_REJECTED" || e?.code === 4001) {
-    return "Transaction rejected in MetaMask.";
-  }
-  if (e?.code === "INSUFFICIENT_FUNDS") {
-    return "Not enough SepoliaETH for gas. Grab some from a faucet.";
-  }
-
-  const reason = e?.reason ?? "";
-  if (reason.includes("ERC20InsufficientBalance")) {
-    return "Your wallet doesn't have enough HMZ to send that amount.";
-  }
-  if (reason.includes("ERC20InvalidReceiver")) {
-    return "Recipient address is invalid for this contract.";
-  }
-
-  const inner = e?.info?.error?.message ?? e?.error?.message ?? "";
-  if (inner.toLowerCase().includes("insufficient funds")) {
-    return "Not enough SepoliaETH for gas.";
-  }
-  if (inner.toLowerCase().includes("user denied") || inner.toLowerCase().includes("user rejected")) {
-    return "Transaction rejected in MetaMask.";
-  }
-
-  return (
-    e?.shortMessage ||
-    e?.reason ||
-    inner ||
-    e?.message ||
-    "Execution failed. Check gas, network, and balance."
-  );
 };
 
 export function useHmzContract(
@@ -354,6 +317,30 @@ export function useHmzContract(
     ],
   );
 
+  const appendLocalTransfer = useCallback(
+    (entry: {
+      from: string;
+      to: string;
+      amount: string;
+      memo: string;
+      type?: Transfer["type"];
+    }) => {
+      setRecentTransfers((prev) => [
+        {
+          id: Date.now(),
+          type: entry.type ?? "direct",
+          from: formatAddress(entry.from),
+          to: formatAddress(entry.to),
+          amount: entry.amount,
+          recommendation: entry.memo,
+          timestamp: Date.now(),
+        },
+        ...prev,
+      ]);
+    },
+    [],
+  );
+
   return {
     balance,
     balanceError,
@@ -363,5 +350,6 @@ export function useHmzContract(
     recentTransfers,
     sendHmz,
     refreshBalance,
+    appendLocalTransfer,
   };
 }
