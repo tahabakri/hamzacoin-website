@@ -122,9 +122,15 @@ export function SendForm({
                   value={recipient}
                   onChange={(e) => {
                     setRecipient(e.target.value);
-                    setShowRecipientList(true);
+                    if (history.entries.length > 0) {
+                      setShowRecipientList(true);
+                    }
                   }}
-                  onFocus={() => setShowRecipientList(true)}
+                  onFocus={() => {
+                    if (history.entries.length > 0) {
+                      setShowRecipientList(true);
+                    }
+                  }}
                   placeholder="0x..."
                   inputMode="text"
                   autoComplete="off"
@@ -137,6 +143,7 @@ export function SendForm({
                 <button
                   type="button"
                   onClick={() => setShowRecipientList((v) => !v)}
+                  disabled={history.entries.length === 0}
                   aria-label={
                     history.entries.length > 0
                       ? `Show ${history.entries.length} recent recipient${history.entries.length === 1 ? "" : "s"}`
@@ -149,8 +156,8 @@ export function SendForm({
                   }
                   className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
                     history.entries.length > 0
-                      ? "text-coffee-700 hover:bg-coffee-50"
-                      : "text-coffee-300 hover:bg-coffee-50 hover:text-coffee-500"
+                      ? "text-coffee-700 hover:bg-coffee-50 cursor-pointer"
+                      : "text-coffee-300 cursor-not-allowed"
                   }`}
                 >
                   <Icon icon="solar:history-linear" className="text-lg" />
@@ -174,27 +181,25 @@ export function SendForm({
                   : "Past recipients show up here automatically after a successful send."}
               </p>
 
-              {showRecipientList && (
+              {showRecipientList && history.entries.length > 0 && (
                 <div
                   aria-label="Recent recipients"
-                  className="absolute left-0 right-0 top-[calc(100%+1.5rem)] mt-1 z-30 rounded-xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden max-h-72 overflow-y-auto"
+                  className="absolute left-0 right-0 top-[calc(100%+0.25rem)] z-30 rounded-xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden max-h-72 overflow-y-auto"
                 >
                   <div className="px-3 py-2 border-b border-coffee-100 flex items-center justify-between">
                     <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
                       Recent recipients
                     </p>
-                    {history.entries.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          history.clear();
-                          setShowRecipientList(false);
-                        }}
-                        className="text-[10px] text-coffee-500 hover:text-coffee-800 transition-colors"
-                      >
-                        Clear all
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        history.clear();
+                        setShowRecipientList(false);
+                      }}
+                      className="text-[10px] text-coffee-500 hover:text-coffee-800 transition-colors"
+                    >
+                      Clear all
+                    </button>
                   </div>
                   {filteredEntries.length > 0 ? (
                     <ul>
@@ -243,29 +248,13 @@ export function SendForm({
                         </li>
                       ))}
                     </ul>
-                  ) : history.entries.length === 0 ? (
-                    <div className="px-4 py-5 text-center">
-                      <Icon
-                        icon="solar:history-linear"
-                        className="text-2xl text-coffee-300 mx-auto"
-                      />
-                      <p className="mt-2 text-xs font-semibold text-coffee-800">
-                        No recent recipients yet
-                      </p>
-                      <p className="mt-1 text-[11px] text-coffee-500 leading-relaxed">
-                        After your first successful send, the address will be
-                        saved here so you don't have to type it again.
-                      </p>
-                    </div>
                   ) : (
-                    <div className="px-4 py-4 text-center">
-                      <p className="text-xs text-coffee-600">
-                        No saved address matches{" "}
-                        <span className="font-mono text-coffee-800">
-                          {recipient}
-                        </span>
-                        .
-                      </p>
+                    <div className="px-4 py-3 text-center text-xs text-coffee-600">
+                      No saved address matches{" "}
+                      <span className="font-mono text-coffee-800">
+                        {recipient}
+                      </span>
+                      .
                     </div>
                   )}
                 </div>
