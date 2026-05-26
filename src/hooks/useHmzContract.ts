@@ -17,6 +17,7 @@ import {
 import { formatAddress } from "../utils/format";
 import { friendlyError } from "../utils/errors";
 import { useReadOnlyContract } from "./useReadOnlyContract";
+import { useTransferMemos } from "./useTransferMemos";
 
 export type TxStatus = {
   success: boolean | null;
@@ -42,6 +43,7 @@ export type HmzContractState = {
     to: string;
     amount: string;
     memo: string;
+    txHash?: string;
   }) => void;
 };
 
@@ -54,6 +56,7 @@ export function useHmzContract(
 ): HmzContractState {
   const { contract: readContract, provider: readProvider } =
     useReadOnlyContract();
+  const memos = useTransferMemos();
 
   const [balance, setBalance] = useState("0");
   const [balanceError, setBalanceError] = useState<string | null>(null);
@@ -144,13 +147,15 @@ export function useHmzContract(
         const from = e.args[0] as string;
         const to = e.args[1] as string;
         const value = e.args[2] as bigint;
+        const savedMemo = memos.getMemo(e.transactionHash);
         onChain.push({
           id: Number(BigInt(e.blockNumber) * 1000n + BigInt(e.index)),
           from: formatAddress(from),
           to: formatAddress(to),
           amount: formatUnits(value, decimals),
-          recommendation: `Transfer on block ${e.blockNumber}`,
+          recommendation: savedMemo ?? `Transfer on block ${e.blockNumber}`,
           timestamp: blockTimes.get(e.blockNumber) ?? Date.now(),
+          txHash: e.transactionHash,
         });
       }
       onChain.sort((a, b) => b.id - a.id);
@@ -161,7 +166,7 @@ export function useHmzContract(
     } catch (err) {
       console.error("Could not load on-chain history", err);
     }
-  }, [account, readContract, readProvider, getDecimals]);
+  }, [account, readContract, readProvider, getDecimals, memos]);
 
   useEffect(() => {
     if (account) {
@@ -262,6 +267,9 @@ export function useHmzContract(
           txHash: tx.hash,
         });
 
+        // Persist the memo so it survives reloads. Saves nothing for blank memos.
+        memos.saveMemo(tx.hash, memo);
+
         setRecentTransfers((prev) => [
           {
             id: Date.now(),
@@ -270,6 +278,7 @@ export function useHmzContract(
             amount,
             recommendation: memo.trim() || "Transfer",
             timestamp: Date.now(),
+            txHash: tx.hash,
           },
           ...prev,
         ]);
@@ -297,6 +306,7 @@ export function useHmzContract(
       readContract,
       refreshBalance,
       loadOnChainHistory,
+      memos,
     ],
   );
 
@@ -306,7 +316,11 @@ export function useHmzContract(
       to: string;
       amount: string;
       memo: string;
+      txHash?: string;
     }) => {
+      if (entry.txHash) {
+        memos.saveMemo(entry.txHash, entry.memo);
+      }
       setRecentTransfers((prev) => [
         {
           id: Date.now(),
@@ -315,11 +329,12 @@ export function useHmzContract(
           amount: entry.amount,
           recommendation: entry.memo,
           timestamp: Date.now(),
+          ...(entry.txHash ? { txHash: entry.txHash } : {}),
         },
         ...prev,
       ]);
     },
-    [],
+    [memos],
   );
 
   return {

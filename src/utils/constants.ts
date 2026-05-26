@@ -53,6 +53,8 @@ export type Transfer = {
   amount: string;
   recommendation: string;
   timestamp: number;
+  /** Sepolia transaction hash, when known. Used for Etherscan links + memo lookup. */
+  txHash?: string;
 };
 
 const SEED_NOW = Date.now();

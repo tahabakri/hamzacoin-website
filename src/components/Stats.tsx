@@ -1,4 +1,9 @@
-import { CONTRACT_ADDRESS, type Transfer } from "../utils/constants";
+import { Icon } from "@iconify/react";
+import {
+  CONTRACT_ADDRESS,
+  SEPOLIA_EXPLORER,
+  type Transfer,
+} from "../utils/constants";
 import { RelativeTime } from "./RelativeTime";
 
 type Props = {
@@ -46,9 +51,24 @@ export function Stats({ transfers, onCopyContract }: Props) {
             <p className="mt-2 text-xs text-stone-700 italic font-light">
               "{tx.recommendation}"
             </p>
-            <p className="mt-1 text-[10px] text-coffee-400 font-mono">
+            <div className="mt-1 flex items-center justify-between gap-2 text-[10px] text-coffee-400 font-mono">
               <RelativeTime timestamp={tx.timestamp} />
-            </p>
+              {tx.txHash && (
+                <a
+                  href={`${SEPOLIA_EXPLORER}/tx/${tx.txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-coffee-600 hover:text-coffee-900 underline decoration-dotted underline-offset-2"
+                  title="View this transaction on Sepolia Etherscan"
+                >
+                  <Icon
+                    icon="solar:square-arrow-right-up-linear"
+                    className="text-xs"
+                  />
+                  Etherscan
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>

@@ -70,14 +70,15 @@ function App() {
     ({ score, articleTitle, txHash }: { score: number; articleTitle: string; txHash: string }) => {
       sound.playDing();
       haptic.vibrateSuccess();
-      // Surface the win in the existing Recent Moments feed.
+      // Surface the win in the existing Recent transfers feed.
+      // Passing txHash makes the row link to Etherscan and persists the memo.
       hmz.appendLocalTransfer({
         from: "0x619F30ec004442cdc3BE060FC927A3688054e6c3",
         to: wallet.account || "0x0000000000000000000000000000000000000000",
         amount: String(score),
         memo: `Learn & Earn: ${articleTitle}`,
+        txHash,
       });
-      void txHash; // referenced for clarity; the Etherscan link is rendered inside ClaimReward
       void hmz.refreshBalance();
     },
     [hmz, sound, haptic, wallet.account],

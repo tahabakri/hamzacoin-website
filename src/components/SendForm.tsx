@@ -306,9 +306,10 @@ export function SendForm({
                 id="memo-disclaimer"
                 className="mt-2 text-[11px] italic text-coffee-600 leading-relaxed"
               >
-                Saved in your browser only. The ERC20 standard does not carry
-                text on-chain — only sender, recipient, and amount appear on
-                Etherscan.
+                Saved in your browser only, tied to the transaction hash —
+                appears in the Recent transfers feed below and survives page
+                reloads. The ERC20 standard does not carry text on-chain — only
+                sender, recipient, and amount appear on Etherscan.
               </p>
             </div>
 
