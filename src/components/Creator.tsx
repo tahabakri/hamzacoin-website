@@ -9,15 +9,14 @@ export function Creator() {
         Why I built this.
       </h2>
       <p className="relative text-base md:text-lg leading-8 text-stone-700 font-light max-w-2xl mx-auto mb-8">
-        "This project started as an honest investigation into smart contract
-        protocols and Web3 mechanics, but evolved into something with real-world
-        substance — a desire to build a quieter version of online social
-        exchange."
+        "I built this to learn ERC20, EIP-712 signature verification, AI
+        integration, and end-to-end Web3 in one project. Three real features,
+        no fake activity, all source on GitHub."
       </p>
       <div className="flex items-center justify-center gap-3">
         <span className="w-8 h-px bg-coffee-300"></span>
         <span className="text-xs font-semibold text-coffee-600 tracking-wider">
-          HAMZA & COZY LABS
+          TAHA BAKRI · LEARNING PROJECT
         </span>
         <span className="w-8 h-px bg-coffee-300"></span>
       </div>

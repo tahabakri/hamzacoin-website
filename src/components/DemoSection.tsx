@@ -9,17 +9,17 @@ export function DemoSection({ children }: Props) {
     <section id="demo" className="max-w-7xl mx-auto px-6 py-20">
       <div className="text-center max-w-5xl mx-auto mb-14">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
-          ON-CHAIN WORKSPACE
+          SEND HMZ
         </p>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
-          Quiet Value Exchange
+          Send HMZ
           <span className="block font-semibold italic text-coffee-800">
-            in real-time.
+            on Sepolia.
           </span>
         </h2>
         <p className="mt-6 text-base md:text-lg leading-8 text-coffee-700 font-light max-w-3xl mx-auto">
-          Connect your MetaMask to Sepolia. Inspect your HMZ balances, tip a
-          friend with a custom advice memo, and watch live transactions post.
+          Connect MetaMask. Send HMZ to any address with a memo. Your
+          transaction shows up in the live feed below as soon as it confirms.
         </p>
       </div>
 

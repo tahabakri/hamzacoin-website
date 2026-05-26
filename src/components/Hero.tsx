@@ -2,8 +2,8 @@ import { formatUnits } from "ethers";
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
 import { AnimatedNumber } from "./AnimatedNumber";
-import { CoffeeSteam } from "./CoffeeSteam";
 import { SpinningCoin } from "./SpinningCoin";
+import { useFaucetBalance, formatFaucetHmz } from "../hooks/useFaucetBalance";
 
 type Props = {
   account: string;
@@ -32,6 +32,7 @@ export function Hero({
     totalSupply && totalSupplyDecimals
       ? Number(formatUnits(totalSupply, totalSupplyDecimals))
       : 50000;
+  const faucet = useFaucetBalance();
   return (
     <section className="max-w-7xl mx-auto px-6 pt-32 md:pt-40 pb-20">
       <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-12 lg:gap-16 items-center">
@@ -41,7 +42,7 @@ export function Hero({
               <Icon icon="solar:stars-linear" className="text-base text-amber-600" />
             </span>
             <span className="font-mono text-xs font-medium tracking-[-0.04em] text-coffee-600">
-              PREMIUM UTILITY ERC20
+              LEARN-TO-EARN · SEPOLIA
             </span>
           </div>
 
@@ -49,36 +50,36 @@ export function Hero({
             className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-light tracking-[-0.075em] leading-[0.92] text-coffee-950"
             style={{ textShadow: "0 1px 1px rgba(255,255,255,0.8)" }}
           >
-            <span className="block whitespace-nowrap">Share beauty.</span>
-            <span className="block whitespace-nowrap mt-2">Earn quietly.</span>
+            <span className="block whitespace-nowrap">Read articles.</span>
+            <span className="block whitespace-nowrap mt-2">Take quizzes.</span>
             <span className="inline-flex whitespace-nowrap mt-4 rounded-[1.35rem] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-4 md:px-5 pb-2.5 pt-1.5 text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
-              Hold moments.
+              Earn HMZ.
             </span>
           </h1>
 
           <p className="mt-8 text-base md:text-lg leading-8 text-coffee-800 font-light max-w-2xl mx-auto lg:mx-0">
-            HamzaCoin is "The Quiet Recommendation Token" — built for people who
-            prefer beautiful moments, deep cafes, books, and music over chaotic
-            feeds and algorithm-driven likes.
+            A learn-to-earn ERC20 on Sepolia. Read a Wikipedia article, answer
+            five questions, and a smart contract pays you 1–5 HMZ. Then send it
+            anywhere with a memo.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
             <a
-              href="#demo"
+              href="#learn-earn"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 text-white text-sm font-semibold shadow-[0_10px_24px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 hover:-translate-y-0.5 active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.18)] transition-all duration-300"
             >
-              Open Web3 Portal
+              Learn & Earn
               <Icon icon="solar:arrow-right-linear" className="text-lg" />
             </a>
             <a
-              href="#capabilities"
+              href="#demo"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 bg-gradient-to-b from-white to-coffee-50 border border-coffee-200 text-coffee-800 text-sm font-semibold shadow-[0_4px_12px_rgba(67,48,36,0.05),inset_0_1px_0_white] hover:from-coffee-50 hover:to-coffee-100 hover:-translate-y-0.5 transition-all duration-300"
             >
               <Icon
-                icon="solar:play-circle-linear"
+                icon="solar:transfer-horizontal-linear"
                 className="text-lg text-coffee-600"
               />
-              How to Earn
+              Send HMZ
             </a>
           </div>
 
@@ -99,13 +100,18 @@ export function Hero({
               Etherscan Verified
             </span>
             <span className="hidden sm:block w-1 h-1 rounded-full bg-coffee-300"></span>
-            <span className="inline-flex items-center gap-2">
+            <a
+              href="https://github.com/tahabakri/hamzacoin-website"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 hover:text-coffee-950 transition-colors"
+            >
               <Icon
-                icon="solar:cup-hot-linear"
+                icon="solar:code-square-linear"
                 className="text-base text-coffee-600"
               />
-              Built for focused creators
-            </span>
+              Open source
+            </a>
           </div>
         </div>
 
@@ -122,35 +128,39 @@ export function Hero({
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
                     <Icon
-                      icon="solar:map-point-linear"
+                      icon="solar:shield-check-linear"
                       className="text-lg text-emerald-600"
                     />
                   </div>
                   <div>
                     <p className="text-xs text-stone-900 font-medium">
-                      Coffee verified
+                      Live on Sepolia
                     </p>
                     <p className="text-[10px] text-stone-400 font-light">
-                      +5 HMZ Earned
+                      Chain ID 11155111
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="hmz-float-bubble absolute -right-7 top-[35%] rounded-2xl bg-white/90 backdrop-blur border border-white px-4 py-3 shadow-[0_18px_38px_-20px_rgba(67,48,36,0.2),inset_0_1px_0_white] min-w-[12rem]">
+              <div className="hmz-float-bubble absolute -right-7 top-[35%] rounded-2xl bg-white/90 backdrop-blur border border-white px-4 py-3 shadow-[0_18px_38px_-20px_rgba(67,48,36,0.2),inset_0_1px_0_white] min-w-[13rem]">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
                     <Icon
-                      icon="solar:headphones-round-linear"
+                      icon="solar:hand-money-linear"
                       className="text-lg text-amber-600"
                     />
                   </div>
                   <div>
                     <p className="text-xs text-stone-900 font-medium">
-                      Jazz Shared
+                      Learn & Earn faucet
                     </p>
                     <p className="text-[10px] text-stone-400 font-light">
-                      Emailed recommendations
+                      {faucet.isConfigured
+                        ? faucet.balance !== null
+                          ? `${formatFaucetHmz(faucet.balance)} HMZ available`
+                          : "Reading balance…"
+                        : "Not configured yet"}
                     </p>
                   </div>
                 </div>
@@ -160,16 +170,16 @@ export function Hero({
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-coffee-100 flex items-center justify-center">
                     <Icon
-                      icon="solar:notebook-linear"
+                      icon="solar:wallet-linear"
                       className="text-lg text-coffee-600"
                     />
                   </div>
                   <div>
                     <p className="text-xs text-stone-900 font-medium">
-                      Outlines Minted
+                      {account ? "Wallet connected" : "Wallet ready"}
                     </p>
-                    <p className="text-[10px] text-stone-400 font-light">
-                      Book club reward (+3 HMZ)
+                    <p className="text-[10px] text-stone-400 font-light font-mono">
+                      {account ? formatAddress(account) : "Connect to claim"}
                     </p>
                   </div>
                 </div>
@@ -192,7 +202,7 @@ export function Hero({
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <div>
                     <p className="text-xs text-coffee-500 font-light mb-1">
-                      Total Quiet Supply
+                      Total HMZ supply
                     </p>
                     <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-coffee-950 tabular-nums">
                       <AnimatedNumber
@@ -208,7 +218,7 @@ export function Hero({
                           value={holderCount}
                           enabled={!reduceMotion}
                         />{" "}
-                        holders · last 7 days
+                        holders on chain
                       </p>
                     )}
                   </div>
@@ -248,28 +258,22 @@ export function Hero({
                     <div className="flex items-start gap-3">
                       <div className="mt-0.5 w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center">
                         <Icon
-                          icon="solar:cup-hot-linear"
+                          icon="solar:book-bookmark-linear"
                           className="text-lg text-orange-600"
                         />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1">
-                            <p className="text-sm font-semibold text-stone-800">
-                              Quiet Recommendations
-                            </p>
-                            <CoffeeSteam
-                              reduceMotion={reduceMotion}
-                              className="text-orange-500 w-4 h-5"
-                            />
-                          </div>
+                          <p className="text-sm font-semibold text-stone-800">
+                            Learn & Earn
+                          </p>
                           <span className="text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5 font-medium">
                             Active
                           </span>
                         </div>
                         <div className="mt-2 text-xs text-stone-500 font-light space-y-1">
-                          <div>☕ Café Visits: Earn 5 HMZ</div>
-                          <div>🎵 Music Shared: Earn 2 HMZ</div>
+                          <div>📚 Wikipedia article + 5-question AI quiz</div>
+                          <div>🪙 Up to 5 HMZ per article, signed on-chain</div>
                         </div>
                       </div>
                     </div>

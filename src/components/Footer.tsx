@@ -22,17 +22,17 @@ export function Footer({ onCopyContract }: Props) {
                   HAMZACOIN
                 </span>
                 <span className="mt-1 text-[10px] font-light text-coffee-500">
-                  Quiet Recommendations
+                  Learn-to-earn ERC20
                 </span>
               </span>
             </a>
             <p className="mt-5 max-w-sm text-sm leading-6 text-stone-500 font-light">
-              A Web3 protocol layer built to reward the actions, rituals, reads,
-              and sounds that make life meaningful.
+              A learn-to-earn ERC20 on Sepolia. Read, quiz, earn, send — all
+              on-chain.
             </p>
             <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-coffee-50 border border-coffee-100 px-3 py-1.5 text-xs text-coffee-700 shadow-[inset_0_1px_0_white] font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-coffee-600"></span>
-              Cozy & Connected
+              Sepolia · Open source
             </div>
           </div>
 
@@ -64,41 +64,41 @@ export function Footer({ onCopyContract }: Props) {
 
             <div>
               <p className="font-mono text-[10px] font-semibold text-stone-400 uppercase mb-4">
-                Earn Methods
+                Sections
               </p>
               <div className="flex flex-col gap-3 text-sm text-stone-500 font-light">
-                <a href="#capabilities" className="hover:text-coffee-600">
-                  Cafe Check-in
+                <a href="#learn-earn" className="hover:text-coffee-600">
+                  Learn & Earn
                 </a>
-                <a href="#capabilities" className="hover:text-coffee-600">
-                  Acoustic Shares
+                <a href="#demo" className="hover:text-coffee-600">
+                  Send HMZ
                 </a>
-                <a href="#capabilities" className="hover:text-coffee-600">
-                  Book Summarizing
+                <a href="#technical" className="hover:text-coffee-600">
+                  Contracts
                 </a>
               </div>
             </div>
 
             <div>
               <p className="font-mono text-[10px] font-semibold text-stone-400 uppercase mb-4">
-                Creator Socials
+                Source
               </p>
               <div className="flex flex-col gap-3 text-sm text-stone-500 font-light">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/tahabakri/hamzacoin-website"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-coffee-600"
                 >
-                  GitHub Codebase
+                  Frontend on GitHub
                 </a>
                 <a
-                  href="https://x.com"
+                  href="https://github.com/tahabakri"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-coffee-600"
                 >
-                  X / Twitter
+                  Contracts & backend
                 </a>
                 <span className="text-xs text-coffee-600 font-semibold bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full w-fit self-center sm:self-auto shadow-sm">
                   Built with Solidity & React
@@ -110,12 +110,17 @@ export function Footer({ onCopyContract }: Props) {
 
         <div className="mt-12 pt-6 border-t border-coffee-100 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-stone-400 font-light">
-            © 2026 HamzaCoin. All rights reserved.
+            © 2026 HamzaCoin. Learning project on Sepolia testnet.
           </p>
           <div className="flex items-center gap-4 text-xs text-stone-400 font-light">
-            <span className="hover:text-coffee-600">
-              Minimalist Web3 Protocol Layer
-            </span>
+            <a
+              href="https://github.com/tahabakri/hamzacoin-website"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-coffee-600"
+            >
+              MIT licensed · view source on GitHub
+            </a>
           </div>
         </div>
       </div>
