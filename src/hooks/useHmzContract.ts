@@ -49,6 +49,13 @@ export type HmzContractState = {
 
 const EMPTY_STATUS: TxStatus = { success: null, message: "", txHash: "" };
 
+// Module-level cache: block timestamps NEVER change once mined, so caching
+// them across hook re-runs / component re-mounts cuts ~80% of getBlock calls
+// out of loadOnChainHistory. Without this, every reload fires N parallel
+// getBlock requests (one per unique block touched by your transfers), which
+// is the easiest way to instantly hit the public RPCs' 429 limit.
+const blockTimestampCache = new Map<number, number>();
+
 export function useHmzContract(
   walletProvider: BrowserProvider | null,
   account: string,
@@ -124,18 +131,36 @@ export function useHmzContract(
         new Set(allEvents.map((e) => e.blockNumber)),
       );
       const blockTimes = new Map<number, number>();
-      await Promise.all(
-        uniqueBlocks.map(async (bn) => {
-          try {
-            const block = await readProvider.getBlock(bn);
-            if (block?.timestamp) {
-              blockTimes.set(bn, block.timestamp * 1000);
-            }
-          } catch {
-            // skip
-          }
-        }),
+      // Only fetch block timestamps that aren't already cached. Block
+      // timestamps are immutable once mined, so the cache is forever-valid.
+      const missingBlocks = uniqueBlocks.filter(
+        (bn) => !blockTimestampCache.has(bn),
       );
+      // Pre-fill from cache
+      for (const bn of uniqueBlocks) {
+        const cached = blockTimestampCache.get(bn);
+        if (cached !== undefined) blockTimes.set(bn, cached);
+      }
+      // Chunk fetches so we don't blast the RPC with 30 parallel requests
+      // when an account has activity across many blocks.
+      const CHUNK_SIZE = 5;
+      for (let i = 0; i < missingBlocks.length; i += CHUNK_SIZE) {
+        const chunk = missingBlocks.slice(i, i + CHUNK_SIZE);
+        await Promise.all(
+          chunk.map(async (bn) => {
+            try {
+              const block = await readProvider.getBlock(bn);
+              if (block?.timestamp) {
+                const ms = block.timestamp * 1000;
+                blockTimes.set(bn, ms);
+                blockTimestampCache.set(bn, ms);
+              }
+            } catch {
+              // skip — likely 429, will be retried on next load attempt
+            }
+          }),
+        );
+      }
 
       const seen = new Set<string>();
       const onChain: Transfer[] = [];

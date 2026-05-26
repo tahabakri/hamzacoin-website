@@ -14,14 +14,25 @@ export const SEPOLIA_CHAIN_ID = "0xaa36a7";
 export const SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
 // Browser-callable: each endpoint below must return Access-Control-Allow-Origin: *
 // for localhost origins. BlastAPI's free public endpoint does NOT, so it's out.
-export const SEPOLIA_RPCS: readonly string[] = [
+//
+// If VITE_SEPOLIA_RPC_URL is set, it goes FIRST and the public RPCs become
+// pure fallbacks. Strongly recommended for any non-trivial use — public
+// nodes throttle aggressively (HTTP 429) when several hooks poll in parallel.
+const USER_RPC = (import.meta.env.VITE_SEPOLIA_RPC_URL ?? "").trim();
+const PUBLIC_RPCS: readonly string[] = [
   "https://ethereum-sepolia-rpc.publicnode.com",
   "https://sepolia.drpc.org",
   "https://1rpc.io/sepolia",
 ];
+export const SEPOLIA_RPCS: readonly string[] = USER_RPC
+  ? [USER_RPC, ...PUBLIC_RPCS]
+  : PUBLIC_RPCS;
 export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";
 
-export const HISTORY_BLOCK_RANGE = 50_000n;
+// Public Sepolia RPCs throttle hard with a 50k-block range, so we keep a
+// short tail by default (~1 day on Sepolia at 12s blocks). Users with a
+// private RPC (VITE_SEPOLIA_RPC_URL) can safely widen this if they want.
+export const HISTORY_BLOCK_RANGE = USER_RPC ? 50_000n : 5_000n;
 export const MAX_FEED_ITEMS = 20;
 export const TOTAL_SUPPLY_POLL_MS = 30_000;
 

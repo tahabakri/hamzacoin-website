@@ -10,7 +10,7 @@
 // Cap: 200 most-recent memos (old ones drop off when full).
 // ============================================================================
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "hmz-memos-v1";
 const MAX_MEMOS = 200;
@@ -114,11 +114,19 @@ export function useTransferMemos(): TransferMemosApi {
 
   const clearAll = useCallback(() => setStore({}), []);
 
-  return {
-    getMemo,
-    saveMemo,
-    removeMemo,
-    clearAll,
-    count: Object.keys(store).length,
-  };
+  // Memoize the returned object so its identity is stable across renders that
+  // don't change `store`. Without this, every render of any component that
+  // calls useTransferMemos hands consumers a brand-new object — which breaks
+  // useCallback/useEffect deps downstream and causes infinite re-render
+  // loops in hooks that depend on the memos API (e.g. useHmzContract).
+  return useMemo(
+    () => ({
+      getMemo,
+      saveMemo,
+      removeMemo,
+      clearAll,
+      count: Object.keys(store).length,
+    }),
+    [getMemo, saveMemo, removeMemo, clearAll, store],
+  );
 }
