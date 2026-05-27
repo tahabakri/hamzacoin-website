@@ -6,7 +6,7 @@ type Props = {
 
 export function DemoSection({ children }: Props) {
   return (
-    <section id="demo" className="max-w-7xl mx-auto px-6 py-12 sm:py-20">
+    <section id="demo" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="text-center max-w-5xl mx-auto mb-14">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           SEND HMZ
@@ -23,7 +23,7 @@ export function DemoSection({ children }: Props) {
         </p>
       </div>
 
-      <div className="relative overflow-hidden rounded-[2.75rem] bg-white/55 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] px-6 md:px-10 py-12">
+      <div className="relative overflow-hidden rounded-[clamp(1.5rem,4vw,2.75rem)] bg-white/55 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] px-4 sm:px-6 md:px-10 py-8 sm:py-12">
         <div
           className="absolute inset-0 opacity-[0.16] pointer-events-none"
           style={{
@@ -32,7 +32,7 @@ export function DemoSection({ children }: Props) {
             backgroundSize: "2rem 2rem",
           }}
         ></div>
-        <div className="grid lg:grid-cols-2 gap-12 items-stretch relative">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch relative">
           {children}
         </div>
       </div>

@@ -97,7 +97,7 @@ export function SendForm({
   return (
     <div className="flex flex-col justify-between">
       <div>
-        <h3 className="text-3xl font-bold tracking-tight text-coffee-950 leading-[1.1] mb-3">
+        <h3 className="text-fluid-lg font-bold tracking-tight text-coffee-950 mb-3">
           Send HMZ
         </h3>
         <p className="text-sm text-coffee-600 font-light leading-6 mb-6">
@@ -138,7 +138,7 @@ export function SendForm({
                   autoCorrect="off"
                   spellCheck={false}
                   aria-describedby="recipient-hint"
-                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-12 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono"
+                  className="w-full bg-white/70 border border-coffee-200 rounded-xl px-4 py-3 pr-12 text-sm text-stone-900 placeholder-coffee-300 focus:outline-none focus:border-coffee-500 transition-colors font-mono min-w-0"
                 />
                 <button
                   type="button"
@@ -154,7 +154,7 @@ export function SendForm({
                       ? `${history.entries.length} recent recipient${history.entries.length === 1 ? "" : "s"} — click to pick`
                       : "Recent recipients will appear here after a successful send"
                   }
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                  className={`absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
                     history.entries.length > 0
                       ? "text-coffee-700 hover:bg-coffee-50 cursor-pointer"
                       : "text-coffee-300 cursor-not-allowed"
@@ -214,7 +214,7 @@ export function SendForm({
                               setRecipient(entry.address);
                               setShowRecipientList(false);
                             }}
-                            className="flex-1 px-3 py-2 flex items-center gap-3 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none"
+                            className="flex-1 min-w-0 px-3 py-2.5 sm:py-2 flex items-center gap-3 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coffee-500 focus-visible:outline-none min-h-[44px] sm:min-h-0"
                           >
                             <div className="w-7 h-7 rounded-lg bg-coffee-50 border border-coffee-100 flex items-center justify-center shrink-0">
                               <Icon
@@ -238,7 +238,7 @@ export function SendForm({
                             type="button"
                             onClick={() => history.remove(entry.address)}
                             aria-label={`Remove ${formatAddress(entry.address)} from history`}
-                            className="px-2 py-2 text-coffee-400 hover:text-coffee-800 transition-colors"
+                            className="shrink-0 w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center text-coffee-400 hover:text-coffee-800 transition-colors"
                           >
                             <Icon
                               icon="solar:close-circle-linear"
@@ -332,7 +332,7 @@ export function SendForm({
             <button
               type="button"
               onClick={onConnect}
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-xs text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_5px_12px_rgba(67,48,36,0.15)] font-semibold"
+              className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 sm:py-3 text-xs text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_5px_12px_rgba(67,48,36,0.15)] font-semibold min-h-[44px] sm:min-h-0 w-full sm:w-auto"
             >
               <Icon icon="solar:wallet-bold" className="text-base" />
               Connect MetaMask

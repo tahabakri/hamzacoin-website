@@ -74,10 +74,10 @@ export function Stats({ transfers, onCopyContract }: Props) {
       </div>
 
       <div className="p-4 bg-coffee-50 border-t border-coffee-100 flex items-center justify-between gap-2 text-[11px] text-coffee-600 flex-wrap">
-        <span className="break-all">Address: {CONTRACT_ADDRESS.substring(0, 8)}...</span>
+        <span className="break-all min-w-0">Address: {CONTRACT_ADDRESS.substring(0, 8)}...</span>
         <button
           onClick={onCopyContract}
-          className="underline font-semibold hover:text-coffee-950 active:text-coffee-700 min-h-[36px] py-1"
+          className="underline font-semibold hover:text-coffee-950 active:text-coffee-700 min-h-[40px] py-1 px-1 -mx-1"
         >
           Copy Contract Address
         </button>
