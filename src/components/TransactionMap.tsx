@@ -303,14 +303,14 @@ export function TransactionMap({
   return (
     <section
       id="transaction-map"
-      className="max-w-7xl mx-auto px-6 py-12 sm:py-20"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20"
       aria-label="Live transaction map"
     >
       <div className="text-center max-w-3xl mx-auto mb-10">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           LIVE ACTIVITY MAP
         </p>
-        <h2 className="text-4xl md:text-5xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
+        <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950">
           HMZ flows,
           <span className="block font-semibold italic text-coffee-800">
             quietly visualised.
@@ -322,7 +322,7 @@ export function TransactionMap({
         </p>
       </div>
 
-      <div className="relative overflow-hidden rounded-[2.25rem] bg-white/90 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.25),inset_0_1px_0_rgba(255,255,255,1)] p-4 md:p-6">
+      <div className="relative overflow-hidden rounded-[clamp(1.25rem,4vw,2.25rem)] bg-white/90 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.25),inset_0_1px_0_rgba(255,255,255,1)] p-3 sm:p-4 md:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-4 border-b border-coffee-100">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="relative inline-flex w-2 h-2">
@@ -363,7 +363,7 @@ export function TransactionMap({
                 <button
                   type="button"
                   onClick={onEnableDemo}
-                  className="mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 bg-coffee-100 hover:bg-coffee-200 border border-coffee-200 text-xs font-semibold text-coffee-900 transition-colors"
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 sm:py-2 bg-coffee-100 hover:bg-coffee-200 border border-coffee-200 text-xs font-semibold text-coffee-900 transition-colors min-h-[40px] sm:min-h-0"
                 >
                   <span>👻</span> Turn on demo mode
                 </button>

@@ -68,7 +68,7 @@ export default function PersonalChart({
   const hasData = data.some((d) => d.volume > 0);
 
   return (
-    <div className="rounded-[1.85rem] bg-white/80 backdrop-blur border border-coffee-200 p-5 md:p-6 shadow-[inset_0_1px_0_white]">
+    <div className="rounded-[clamp(1rem,3vw,1.85rem)] bg-white/80 backdrop-blur border border-coffee-200 p-4 sm:p-5 md:p-6 shadow-[inset_0_1px_0_white]">
       <div className="flex items-center justify-between mb-5">
         <div>
           <p className="font-mono text-[10px] tracking-widest text-coffee-500 font-semibold">

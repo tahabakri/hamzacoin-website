@@ -48,14 +48,14 @@ export function NetworkInsights({ account, reduceMotion }: Props) {
     <section
       ref={sectionRef}
       id="insights"
-      className="max-w-7xl mx-auto px-6 py-12 sm:py-20"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20"
       aria-label="Network insights"
     >
       <div className="text-center max-w-3xl mx-auto mb-10">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           NETWORK INSIGHTS
         </p>
-        <h2 className="text-4xl md:text-5xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
+        <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950">
           On-chain patterns,
           <span className="block font-semibold italic text-coffee-800">
             quietly observed.
@@ -107,11 +107,11 @@ export function NetworkInsights({ account, reduceMotion }: Props) {
           isLoading={history.isLoading}
         />
 
-        <div className="rounded-[1.85rem] bg-gradient-to-b from-coffee-800 to-coffee-950 text-white p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.13)]">
+        <div className="rounded-[clamp(1rem,3vw,1.85rem)] bg-gradient-to-b from-coffee-800 to-coffee-950 text-white p-4 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.13)]">
           <p className="font-mono text-[10px] tracking-widest text-amber-200 font-semibold">
             HOLDER COUNT
           </p>
-          <p className="mt-2 text-5xl font-bold tabular-nums">
+          <p className="mt-2 text-[clamp(2.5rem,10vw,4rem)] font-bold tabular-nums leading-none">
             {history.holderCount}
           </p>
           <p className="mt-2 text-xs text-coffee-100 font-light leading-5">
