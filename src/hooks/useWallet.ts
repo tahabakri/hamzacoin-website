@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BrowserProvider } from "ethers";
 import { SEPOLIA_CHAIN_ID } from "../utils/constants";
 import { ensureSepoliaNetwork } from "../utils/network";
+import { buildMetaMaskDeepLink, isMobileUA } from "../utils/device";
 
 const DISCONNECT_FLAG_KEY = "hmz-wallet-disconnected-v1";
 
@@ -110,8 +111,21 @@ export function useWallet(): WalletState {
 
   const connect = useCallback(async () => {
     if (!window.ethereum) {
+      // No injected provider. On phones, MetaMask Mobile isn't installed (or
+      // we're in a regular browser tab, not MetaMask's in-app browser). The
+      // best UX is to hand off to MetaMask's universal link, which either
+      // opens the MetaMask app to this dApp (if installed) or redirects to
+      // the App Store / Play Store to install it.
+      if (isMobileUA()) {
+        try {
+          window.location.href = buildMetaMaskDeepLink();
+          return;
+        } catch {
+          // fall through to the error below
+        }
+      }
       setError(
-        "MetaMask is not installed. Please install it to interact with live features.",
+        "MetaMask is not installed. Install the browser extension (desktop) or the MetaMask mobile app to connect.",
       );
       return;
     }

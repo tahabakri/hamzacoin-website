@@ -82,24 +82,38 @@ const drawTextCanvas = (
   ctx.fillStyle = "#FAF8F5";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const titleSize = Math.round(180 * dpr);
+  // Watermark scales with viewport so it doesn't dominate the hero on phones.
+  // On a 360-wide phone the title is ~75px tall instead of 180px (which used
+  // to take up half the screen and look like dead space above the hero).
+  const isMobile = width < 768;
+  const titleBasePx = isMobile ? Math.max(60, width * 0.22) : 180;
+  const subBasePx = isMobile ? Math.max(13, width * 0.038) : 28;
+
+  const titleSize = Math.round(titleBasePx * dpr);
   ctx.font = `600 ${titleSize}px 'Bebas Neue', sans-serif`;
-  ctx.fillStyle = "rgba(108, 79, 59, 0.08)";
+  // Fainter watermark on mobile so it reads as background, not content.
+  ctx.fillStyle = isMobile
+    ? "rgba(108, 79, 59, 0.05)"
+    : "rgba(108, 79, 59, 0.08)";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(
     "HAMZACOIN",
     canvas.width / 2,
-    canvas.height / 2 - 80 * dpr,
+    canvas.height / 2 - (isMobile ? 40 : 80) * dpr,
   );
 
-  const subSize = Math.round(28 * dpr);
+  const subSize = Math.round(subBasePx * dpr);
   ctx.font = `300 ${subSize}px 'JetBrains Mono', monospace`;
-  ctx.fillStyle = "rgba(132, 100, 77, 0.35)";
+  // Subtitle is more visible on desktop; on mobile we drop opacity hard so it
+  // doesn't compete with the hero headline.
+  ctx.fillStyle = isMobile
+    ? "rgba(132, 100, 77, 0.18)"
+    : "rgba(132, 100, 77, 0.35)";
   ctx.fillText(
     "THE SILENT RECOMMENDATION PROTOCOL",
     canvas.width / 2,
-    canvas.height / 2 + 100 * dpr,
+    canvas.height / 2 + (isMobile ? 50 : 100) * dpr,
   );
 };
 

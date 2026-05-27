@@ -34,7 +34,7 @@ export function Hero({
       : 50000;
   const faucet = useFaucetBalance();
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 lg:pt-40 pb-12 sm:pb-20 overflow-hidden">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-32 lg:pt-40 pb-12 sm:pb-20 overflow-hidden">
       <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 sm:gap-12 lg:gap-16 items-center min-w-0">
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/75 border border-white px-3.5 py-2 shadow-[0_6px_18px_-12px_rgba(67,48,36,0.2),inset_0_1px_0_white] mb-6 sm:mb-8">
