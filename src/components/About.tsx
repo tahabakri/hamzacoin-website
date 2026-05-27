@@ -41,7 +41,7 @@ export function About() {
           <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
             WHAT THIS ACTUALLY IS
           </p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
+          <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950">
             A learning project,
             <span className="block text-coffee-800 font-semibold italic">
               in three honest parts.

@@ -23,7 +23,9 @@ export function Header({
   settings,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const mobileNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -39,7 +41,37 @@ export function Header({
     return () => document.removeEventListener("pointerdown", handlePointer);
   }, [open]);
 
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const handlePointer = (e: PointerEvent) => {
+      if (
+        mobileNavRef.current &&
+        !mobileNavRef.current.contains(e.target as Node)
+      ) {
+        setMobileNavOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointer);
+    return () => document.removeEventListener("pointerdown", handlePointer);
+  }, [mobileNavOpen]);
+
+  // Auto-close mobile nav when the route hash changes (user tapped a link).
+  useEffect(() => {
+    const handleHash = () => setMobileNavOpen(false);
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   const showNetworkWarn = account && !isCorrectNetwork;
+
+  const NAV_LINKS: { href: string; label: string }[] = [
+    { href: "#about", label: "How it works" },
+    { href: "#capabilities", label: "Features" },
+    { href: "#learn-earn", label: "Learn & Earn" },
+    { href: "#demo", label: "Send HMZ" },
+    { href: "#technical", label: "Contract" },
+    { href: "#faq", label: "FAQ" },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -63,46 +95,63 @@ export function Header({
               </span>
             </a>
 
-            <div className="hidden md:flex items-center gap-7 text-xs text-coffee-700 font-medium">
-              <a
-                href="#about"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                How it works
-              </a>
-              <a
-                href="#capabilities"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Features
-              </a>
-              <a
-                href="#learn-earn"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Learn & Earn
-              </a>
-              <a
-                href="#demo"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Send HMZ
-              </a>
-              <a
-                href="#technical"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Contract
-              </a>
-              <a
-                href="#faq"
-                className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
-              >
-                FAQ
-              </a>
+            <div className="hidden md:flex items-center gap-5 lg:gap-7 text-xs text-coffee-700 font-medium">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="relative transition-colors duration-300 hover:text-coffee-950 after:absolute after:left-0 after:-bottom-1.5 after:h-px after:w-0 after:bg-coffee-600 after:transition-all after:duration-300 hover:after:w-full"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Mobile-only hamburger — opens a dropdown sheet with NAV_LINKS */}
+              <div className="md:hidden relative" ref={mobileNavRef}>
+                <button
+                  type="button"
+                  onClick={() => setMobileNavOpen((v) => !v)}
+                  aria-label={mobileNavOpen ? "Close navigation" : "Open navigation"}
+                  aria-expanded={mobileNavOpen}
+                  aria-controls="mobile-nav-panel"
+                  className="w-10 h-10 rounded-full bg-coffee-50 hover:bg-coffee-100 active:scale-95 border border-coffee-200 shadow-[inset_0_1px_0_white] flex items-center justify-center text-coffee-700 transition-all"
+                >
+                  <Icon
+                    icon={mobileNavOpen ? "solar:close-circle-linear" : "solar:hamburger-menu-linear"}
+                    className="text-xl"
+                  />
+                </button>
+                {mobileNavOpen && (
+                  <div
+                    id="mobile-nav-panel"
+                    role="menu"
+                    aria-label="Site sections"
+                    className="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden"
+                  >
+                    <div className="px-4 py-2 border-b border-coffee-100">
+                      <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
+                        Jump to
+                      </p>
+                    </div>
+                    <ul>
+                      {NAV_LINKS.map((link) => (
+                        <li key={link.href}>
+                          <a
+                            href={link.href}
+                            role="menuitem"
+                            onClick={() => setMobileNavOpen(false)}
+                            className="block px-4 py-3 text-sm text-coffee-800 hover:bg-coffee-50 active:bg-coffee-100 transition-colors"
+                          >
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
               <BlockCounter reduceMotion={settings.reduceMotion} />
               <SettingsMenu settings={settings} />
               {account ? (

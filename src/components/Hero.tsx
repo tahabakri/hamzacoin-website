@@ -47,12 +47,12 @@ export function Hero({
           </div>
 
           <h1
-            className="text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-light tracking-[-0.075em] leading-[0.95] sm:leading-[0.92] text-coffee-950"
+            className="text-fluid-display font-light tracking-[-0.075em] text-coffee-950"
             style={{ textShadow: "0 1px 1px rgba(255,255,255,0.8)" }}
           >
             <span className="block whitespace-nowrap">Read articles.</span>
             <span className="block whitespace-nowrap mt-1.5 sm:mt-2">Take quizzes.</span>
-            <span className="inline-flex whitespace-nowrap mt-3 sm:mt-4 rounded-[1.1rem] sm:rounded-[1.35rem] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-3.5 sm:px-4 md:px-5 pb-2 sm:pb-2.5 pt-1 sm:pt-1.5 text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
+            <span className="inline-flex whitespace-nowrap mt-3 sm:mt-4 rounded-[clamp(0.875rem,1.5vw,1.35rem)] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-[clamp(0.75rem,1.5vw,1.25rem)] pb-[clamp(0.4rem,0.6vw,0.625rem)] pt-[clamp(0.15rem,0.4vw,0.375rem)] text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
               Earn HMZ.
             </span>
           </h1>
@@ -118,7 +118,7 @@ export function Hero({
         <div className="relative lg:pl-4">
           <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl"></div>
 
-          <div className="absolute -top-8 left-2 sm:-top-12 sm:-left-4 md:-left-10 z-30 w-16 h-16 sm:w-20 sm:h-20 md:w-[120px] md:h-[120px] overflow-hidden">
+          <div className="absolute -top-8 left-2 sm:-top-12 sm:-left-4 md:-left-10 z-30 w-[clamp(3.75rem,7vw,7.5rem)] h-[clamp(3.75rem,7vw,7.5rem)] overflow-hidden">
             <SpinningCoin reduceMotion={reduceMotion} size={120} />
           </div>
 

@@ -17,7 +17,7 @@ export function FinalCTA({ account, onConnect }: Props) {
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.05] max-w-5xl mx-auto">
+          <h2 className="text-fluid-h2 font-normal max-w-5xl mx-auto">
             Learn, earn, send.
             <span className="block italic font-semibold text-amber-200">
               All on-chain.

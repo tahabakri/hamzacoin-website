@@ -5,7 +5,7 @@ export function Creator() {
       <p className="relative font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-3">
         ABOUT THE CREATOR
       </p>
-      <h2 className="relative text-3xl md:text-4xl font-normal text-coffee-950 mb-6">
+      <h2 className="relative text-fluid-lg font-normal text-coffee-950 mb-6">
         Why I built this.
       </h2>
       <p className="relative text-base md:text-lg leading-8 text-stone-700 font-light max-w-2xl mx-auto mb-8">

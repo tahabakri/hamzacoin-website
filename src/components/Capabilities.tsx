@@ -28,7 +28,7 @@ export function Capabilities() {
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           WHAT IT DOES
         </p>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-coffee-950 leading-[1.05]">
+        <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950">
           Three things this dApp
           <span className="block font-semibold italic text-coffee-800">
             actually does.
