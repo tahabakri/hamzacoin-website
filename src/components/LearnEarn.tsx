@@ -320,7 +320,7 @@ export function LearnEarn({
   }, [state.status]);
 
   return (
-    <section id="learn-earn" className="relative py-20 sm:py-28 px-6">
+    <section id="learn-earn" className="relative py-14 sm:py-20 lg:py-28 px-6">
       <style>{`
         .le-reader-body { font-family: "Lora", Georgia, "Times New Roman", serif; line-height: 1.75; color: #271B14; }
         .le-reader-body { font-size: 16px; }

@@ -34,10 +34,10 @@ export function Hero({
       : 50000;
   const faucet = useFaucetBalance();
   return (
-    <section className="max-w-7xl mx-auto px-6 pt-32 md:pt-40 pb-20">
-      <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-12 lg:gap-16 items-center">
+    <section className="max-w-7xl mx-auto px-6 pt-28 sm:pt-32 md:pt-40 pb-12 sm:pb-20">
+      <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 sm:gap-12 lg:gap-16 items-center">
         <div className="text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/75 border border-white px-3.5 py-2 shadow-[0_6px_18px_-12px_rgba(67,48,36,0.2),inset_0_1px_0_white] mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/75 border border-white px-3.5 py-2 shadow-[0_6px_18px_-12px_rgba(67,48,36,0.2),inset_0_1px_0_white] mb-6 sm:mb-8">
             <span className="w-7 h-7 rounded-full bg-gradient-to-b from-amber-50 to-white border border-amber-100 shadow-[inset_0_1px_0_white] flex items-center justify-center animate-pulse">
               <Icon icon="solar:stars-linear" className="text-base text-amber-600" />
             </span>
@@ -47,23 +47,23 @@ export function Hero({
           </div>
 
           <h1
-            className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-light tracking-[-0.075em] leading-[0.92] text-coffee-950"
+            className="text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-light tracking-[-0.075em] leading-[0.95] sm:leading-[0.92] text-coffee-950"
             style={{ textShadow: "0 1px 1px rgba(255,255,255,0.8)" }}
           >
             <span className="block whitespace-nowrap">Read articles.</span>
-            <span className="block whitespace-nowrap mt-2">Take quizzes.</span>
-            <span className="inline-flex whitespace-nowrap mt-4 rounded-[1.35rem] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-4 md:px-5 pb-2.5 pt-1.5 text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
+            <span className="block whitespace-nowrap mt-1.5 sm:mt-2">Take quizzes.</span>
+            <span className="inline-flex whitespace-nowrap mt-3 sm:mt-4 rounded-[1.1rem] sm:rounded-[1.35rem] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-3.5 sm:px-4 md:px-5 pb-2 sm:pb-2.5 pt-1 sm:pt-1.5 text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
               Earn HMZ.
             </span>
           </h1>
 
-          <p className="mt-8 text-base md:text-lg leading-8 text-coffee-800 font-light max-w-2xl mx-auto lg:mx-0">
+          <p className="mt-6 sm:mt-8 text-base md:text-lg leading-7 sm:leading-8 text-coffee-800 font-light max-w-2xl mx-auto lg:mx-0">
             A learn-to-earn ERC20 on Sepolia. Read a Wikipedia article, answer
             five questions, and a smart contract pays you 1–5 HMZ. Then send it
             anywhere with a memo.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+          <div className="mt-7 sm:mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
             <a
               href="#learn-earn"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 text-white text-sm font-semibold shadow-[0_10px_24px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 hover:-translate-y-0.5 active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.18)] transition-all duration-300"
@@ -83,7 +83,7 @@ export function Hero({
             </a>
           </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-coffee-600 font-light">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-coffee-600 font-light">
             <span className="inline-flex items-center gap-2">
               <Icon
                 icon="solar:shield-check-linear"
@@ -118,7 +118,7 @@ export function Hero({
         <div className="relative lg:pl-4">
           <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl"></div>
 
-          <div className="absolute -top-12 -left-4 md:-left-10 z-30 w-20 h-20 md:w-[120px] md:h-[120px]">
+          <div className="absolute -top-8 left-2 sm:-top-12 sm:-left-4 md:-left-10 z-30 w-16 h-16 sm:w-20 sm:h-20 md:w-[120px] md:h-[120px] overflow-hidden">
             <SpinningCoin reduceMotion={reduceMotion} size={120} />
           </div>
 

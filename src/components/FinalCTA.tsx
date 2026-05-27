@@ -7,9 +7,9 @@ type Props = {
 
 export function FinalCTA({ account, onConnect }: Props) {
   return (
-    <section className="max-w-7xl mx-auto px-6 pt-14 pb-20">
+    <section className="max-w-7xl mx-auto px-6 pt-8 sm:pt-14 pb-12 sm:pb-20">
       <div className="relative isolate overflow-hidden rounded-[2.75rem] bg-gradient-to-b from-coffee-600 via-coffee-700 to-coffee-800 text-white border border-coffee-900 shadow-[0_40px_90px_-45px_rgba(67,48,36,0.6),inset_0_1px_0_rgba(255,255,255,0.25)]">
-        <div className="relative z-10 px-6 py-24 text-center">
+        <div className="relative z-10 px-6 py-14 sm:py-20 lg:py-24 text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/20 px-3.5 py-2 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
             <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_0_5px_rgba(255,255,255,0.14)]"></span>
             <span className="font-mono text-xs font-semibold text-coffee-50 uppercase">

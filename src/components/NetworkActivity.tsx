@@ -21,7 +21,7 @@ export function NetworkActivity({ realEvents, ghostEvents, demoMode }: Props) {
   return (
     <section
       id="network-activity"
-      className="max-w-7xl mx-auto px-6 py-20"
+      className="max-w-7xl mx-auto px-6 py-12 sm:py-20"
       aria-label="Live network activity"
     >
       <div className="text-center max-w-3xl mx-auto mb-10">

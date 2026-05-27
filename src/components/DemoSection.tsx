@@ -6,7 +6,7 @@ type Props = {
 
 export function DemoSection({ children }: Props) {
   return (
-    <section id="demo" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="demo" className="max-w-7xl mx-auto px-6 py-12 sm:py-20">
       <div className="text-center max-w-5xl mx-auto mb-14">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           SEND HMZ
