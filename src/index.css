@@ -5,6 +5,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Safety net: any rogue element (absolute halo, watermark canvas, fixed
+     * decoration) that extends past the right viewport edge would otherwise
+     * cause horizontal scroll. We clip globally so the page is always exactly
+     * viewport-width. */
+    overflow-x: hidden;
   }
   :target {
     scroll-margin-top: 7.5rem;
@@ -12,6 +17,9 @@
   body {
     @apply bg-coffee-50 text-stone-900 font-sans antialiased;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    /* Belt-and-suspenders: force the body to never exceed viewport width. */
+    max-width: 100vw;
   }
 
   button,

@@ -23,7 +23,7 @@ const CAPABILITIES = [
 
 export function Capabilities() {
   return (
-    <section id="capabilities" className="max-w-7xl mx-auto px-6 py-12 sm:py-20">
+    <section id="capabilities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="text-center max-w-5xl mx-auto mb-14">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           WHAT IT DOES

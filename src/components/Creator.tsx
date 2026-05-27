@@ -1,6 +1,6 @@
 export function Creator() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-12 sm:py-20 text-center relative overflow-hidden">
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 text-center relative overflow-hidden">
       <div className="absolute -inset-10 bg-gradient-to-b from-transparent via-amber-100/10 to-transparent blur-2xl pointer-events-none"></div>
       <p className="relative font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-3">
         ABOUT THE CREATOR

@@ -35,7 +35,7 @@ const DEMO_ITEMS = [
 
 export function About() {
   return (
-    <section id="about" className="max-w-7xl mx-auto px-6 py-12 sm:py-20">
+    <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="flex flex-col z-10 w-full relative gap-y-16">
         <div className="max-w-3xl">
           <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">

@@ -75,21 +75,23 @@ export function Header({
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <nav className="max-w-7xl mx-auto px-6 pt-5">
-        <div className="relative rounded-full bg-white/80 backdrop-blur-2xl border border-white/90 shadow-[0_14px_38px_-22px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] px-4 py-3">
+      <nav className="max-w-7xl mx-auto px-3 sm:px-6 pt-3 sm:pt-5">
+        <div className="relative rounded-full bg-white/80 backdrop-blur-2xl border border-white/90 shadow-[0_14px_38px_-22px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] px-3 sm:px-4 py-2 sm:py-3">
           <div className="absolute inset-0 rounded-full bg-white/40 pointer-events-none"></div>
-          <div className="relative z-10 flex items-center justify-between">
-            <a href="#" className="flex items-center gap-3 group">
-              <span className="w-9 h-9 rounded-full bg-gradient-to-b from-white to-coffee-100 border border-coffee-200 shadow-[0_2px_8px_rgba(67,48,36,0.06),inset_0_1px_0_white] flex items-center justify-center">
+          <div className="relative z-10 flex items-center justify-between gap-2 min-w-0">
+            <a href="#" className="flex items-center gap-2 sm:gap-3 group min-w-0 shrink">
+              <span className="shrink-0 w-9 h-9 rounded-full bg-gradient-to-b from-white to-coffee-100 border border-coffee-200 shadow-[0_2px_8px_rgba(67,48,36,0.06),inset_0_1px_0_white] flex items-center justify-center">
                 <span className="font-mono text-xs font-semibold tracking-[-0.08em] text-coffee-700">
                   HM
                 </span>
               </span>
-              <span className="flex flex-col justify-center leading-none">
-                <span className="font-mono text-sm font-bold tracking-[-0.08em] text-coffee-950 group-hover:text-coffee-700 transition-colors">
+              {/* Brand name is hidden on the tightest phones; logo alone still
+                  identifies the site. From sm: up we show the full block. */}
+              <span className="hidden xs:flex sm:flex flex-col justify-center leading-none min-w-0">
+                <span className="font-mono text-sm font-bold tracking-[-0.08em] text-coffee-950 group-hover:text-coffee-700 transition-colors truncate">
                   HAMZACOIN
                 </span>
-                <span className="mt-0.5 text-[10px] font-light tracking-[-0.03em] text-coffee-500">
+                <span className="hidden sm:block mt-0.5 text-[10px] font-light tracking-[-0.03em] text-coffee-500 truncate">
                   Learn-to-earn ERC20
                 </span>
               </span>
@@ -107,7 +109,7 @@ export function Header({
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               {/* Mobile-only hamburger — opens a dropdown sheet with NAV_LINKS */}
               <div className="md:hidden relative" ref={mobileNavRef}>
                 <button
@@ -235,9 +237,16 @@ export function Header({
                   type="button"
                   onClick={onConnect}
                   disabled={isConnecting}
-                  className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_5px_14px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] hover:from-coffee-600 hover:to-coffee-700 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-60 disabled:hover:translate-y-0"
+                  aria-label={isConnecting ? "Connecting wallet" : "Connect wallet"}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full px-3 sm:px-4 py-2 text-xs text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_5px_14px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] hover:from-coffee-600 hover:to-coffee-700 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-60 disabled:hover:translate-y-0 shrink-0"
                 >
-                  {isConnecting ? "Connecting..." : "Connect Wallet"}
+                  <Icon icon="solar:wallet-bold" className="text-sm sm:hidden" />
+                  <span className="hidden sm:inline">
+                    {isConnecting ? "Connecting..." : "Connect Wallet"}
+                  </span>
+                  <span className="sm:hidden">
+                    {isConnecting ? "..." : "Connect"}
+                  </span>
                 </button>
               )}
             </div>

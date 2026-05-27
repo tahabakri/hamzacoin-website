@@ -34,8 +34,8 @@ export function Hero({
       : 50000;
   const faucet = useFaucetBalance();
   return (
-    <section className="max-w-7xl mx-auto px-6 pt-28 sm:pt-32 md:pt-40 pb-12 sm:pb-20">
-      <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 sm:gap-12 lg:gap-16 items-center">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 md:pt-40 pb-12 sm:pb-20 overflow-hidden">
+      <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 sm:gap-12 lg:gap-16 items-center min-w-0">
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/75 border border-white px-3.5 py-2 shadow-[0_6px_18px_-12px_rgba(67,48,36,0.2),inset_0_1px_0_white] mb-6 sm:mb-8">
             <span className="w-7 h-7 rounded-full bg-gradient-to-b from-amber-50 to-white border border-amber-100 shadow-[inset_0_1px_0_white] flex items-center justify-center animate-pulse">
@@ -50,9 +50,9 @@ export function Hero({
             className="text-fluid-display font-light tracking-[-0.075em] text-coffee-950"
             style={{ textShadow: "0 1px 1px rgba(255,255,255,0.8)" }}
           >
-            <span className="block whitespace-nowrap">Read articles.</span>
-            <span className="block whitespace-nowrap mt-1.5 sm:mt-2">Take quizzes.</span>
-            <span className="inline-flex whitespace-nowrap mt-3 sm:mt-4 rounded-[clamp(0.875rem,1.5vw,1.35rem)] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-[clamp(0.75rem,1.5vw,1.25rem)] pb-[clamp(0.4rem,0.6vw,0.625rem)] pt-[clamp(0.15rem,0.4vw,0.375rem)] text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]">
+            <span className="block">Read articles.</span>
+            <span className="block mt-1.5 sm:mt-2">Take quizzes.</span>
+            <span className="inline-flex mt-3 sm:mt-4 rounded-[clamp(0.875rem,1.5vw,1.35rem)] bg-gradient-to-b from-coffee-600 to-coffee-800 border border-coffee-900 px-[clamp(0.75rem,1.5vw,1.25rem)] pb-[clamp(0.4rem,0.6vw,0.625rem)] pt-[clamp(0.15rem,0.4vw,0.375rem)] text-white font-normal shadow-[0_18px_38px_-20px_rgba(86,62,47,0.55),inset_0_1px_0_rgba(255,255,255,0.2)] max-w-full">
               Earn HMZ.
             </span>
           </h1>
@@ -115,8 +115,8 @@ export function Hero({
           </div>
         </div>
 
-        <div className="relative lg:pl-4">
-          <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl"></div>
+        <div className="relative lg:pl-4 min-w-0">
+          <div className="absolute -inset-4 sm:-inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl pointer-events-none"></div>
 
           <div className="absolute -top-8 left-2 sm:-top-12 sm:-left-4 md:-left-10 z-30 w-[clamp(3.75rem,7vw,7.5rem)] h-[clamp(3.75rem,7vw,7.5rem)] overflow-hidden">
             <SpinningCoin reduceMotion={reduceMotion} size={120} />

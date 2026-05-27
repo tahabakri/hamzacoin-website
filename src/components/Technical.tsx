@@ -45,12 +45,12 @@ contract HamzaFaucet is EIP712, Ownable {
 
 export function Technical() {
   return (
-    <section id="technical" className="max-w-7xl mx-auto px-6 py-12 sm:py-20">
+    <section id="technical" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
       <div className="text-center max-w-5xl mx-auto mb-14">
         <p className="font-mono text-xs font-semibold tracking-[-0.04em] text-coffee-600 mb-4">
           SPECIFICATIONS
         </p>
-        <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950">
+        <h2 className="text-fluid-h2 font-normal tracking-tight text-coffee-950 text-balance">
           Two open-source contracts
           <span className="block font-semibold italic text-coffee-800">
             on Sepolia.
@@ -58,13 +58,13 @@ export function Technical() {
         </h2>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-        <div className="flex flex-col justify-center space-y-6">
-          <div className="rounded-2xl bg-white border border-coffee-100 p-6 shadow-sm">
-            <h3 className="text-xl font-bold text-coffee-950 mb-3">
+      <div className="grid lg:grid-cols-2 gap-8 items-stretch min-w-0">
+        <div className="flex flex-col justify-center space-y-6 min-w-0">
+          <div className="rounded-2xl bg-white border border-coffee-100 p-5 sm:p-6 shadow-sm min-w-0">
+            <h3 className="text-lg sm:text-xl font-bold text-coffee-950 mb-3 text-balance">
               HamzaCoin — the ERC20 token
             </h3>
-            <p className="text-sm text-stone-600 leading-relaxed font-light">
+            <p className="text-sm text-stone-600 leading-relaxed font-light text-pretty">
               Built on OpenZeppelin&apos;s audited ERC20. 18 decimals to match
               ETH&apos;s convention so wallets display HMZ consistently. Total
               supply is fixed at 50,000 HMZ — minted once in the constructor,
@@ -81,11 +81,11 @@ export function Technical() {
             </a>
           </div>
 
-          <div className="rounded-2xl bg-white border border-coffee-100 p-6 shadow-sm">
-            <h3 className="text-xl font-bold text-coffee-950 mb-3">
+          <div className="rounded-2xl bg-white border border-coffee-100 p-5 sm:p-6 shadow-sm min-w-0">
+            <h3 className="text-lg sm:text-xl font-bold text-coffee-950 mb-3 text-balance">
               HamzaFaucet — the Learn & Earn payout
             </h3>
-            <p className="text-sm text-stone-600 leading-relaxed font-light mb-4">
+            <p className="text-sm text-stone-600 leading-relaxed font-light mb-4 text-pretty">
               The faucet contract verifies an EIP-712 signature from the
               backend before paying out. score × 1 HMZ per claim, one claim
               per (user, article). Source includes the typed-data digest and
@@ -109,21 +109,21 @@ export function Technical() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="rounded-3xl bg-coffee-950 text-coffee-100 p-6 font-mono text-xs leading-relaxed overflow-x-auto shadow-xl border border-coffee-800">
+        <div className="flex flex-col gap-4 min-w-0 max-w-full">
+          <div className="rounded-3xl bg-coffee-950 text-coffee-100 p-4 sm:p-6 font-mono text-xs leading-relaxed shadow-xl border border-coffee-800 min-w-0 max-w-full">
             <div className="flex items-center justify-between pb-4 border-b border-coffee-800 mb-4">
               <span className="text-coffee-400">HamzaCoin.sol</span>
               <span className="text-[10px] text-amber-400">SOLIDITY v0.8.20</span>
             </div>
-            <pre className="text-[11px] text-stone-300">{HAMZACOIN_SNIPPET}</pre>
+            <pre className="text-[11px] text-stone-300 overflow-x-auto whitespace-pre">{HAMZACOIN_SNIPPET}</pre>
           </div>
 
-          <div className="rounded-3xl bg-coffee-950 text-coffee-100 p-6 font-mono text-xs leading-relaxed overflow-x-auto shadow-xl border border-coffee-800">
+          <div className="rounded-3xl bg-coffee-950 text-coffee-100 p-4 sm:p-6 font-mono text-xs leading-relaxed shadow-xl border border-coffee-800 min-w-0 max-w-full">
             <div className="flex items-center justify-between pb-4 border-b border-coffee-800 mb-4">
               <span className="text-coffee-400">HamzaFaucet.sol</span>
               <span className="text-[10px] text-amber-400">EIP-712</span>
             </div>
-            <pre className="text-[11px] text-stone-300">{HAMZAFAUCET_SNIPPET}</pre>
+            <pre className="text-[11px] text-stone-300 overflow-x-auto whitespace-pre">{HAMZAFAUCET_SNIPPET}</pre>
           </div>
         </div>
       </div>
