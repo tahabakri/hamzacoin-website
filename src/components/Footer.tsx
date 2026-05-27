@@ -8,7 +8,7 @@ export function Footer({ onCopyContract }: Props) {
   return (
     <footer className="relative z-10 w-full bg-white/72 border-t border-white shadow-[inset_0_1px_0_white] backdrop-blur-xl">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-coffee-200 to-transparent"></div>
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.8fr] gap-10 lg:gap-16">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <a href="#" className="flex items-center gap-3 group">
@@ -41,10 +41,10 @@ export function Footer({ onCopyContract }: Props) {
               <p className="font-mono text-[10px] font-semibold text-stone-400 uppercase mb-4">
                 Contract Details
               </p>
-              <div className="flex flex-col gap-3 text-sm text-stone-500 font-light">
+              <div className="flex flex-col gap-1 text-sm text-stone-500 font-light">
                 <button
                   onClick={onCopyContract}
-                  className="hover:text-coffee-600 text-left"
+                  className="hover:text-coffee-600 text-left py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
                 >
                   Copy Address
                 </button>
@@ -52,11 +52,11 @@ export function Footer({ onCopyContract }: Props) {
                   href={`${SEPOLIA_EXPLORER}/address/${CONTRACT_ADDRESS}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-coffee-600"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
                 >
                   Sepolia Explorer
                 </a>
-                <span className="text-xs font-mono text-coffee-500 bg-coffee-100 px-2 py-1 rounded w-fit self-center sm:self-auto">
+                <span className="text-xs font-mono text-coffee-500 bg-coffee-100 px-2 py-1 rounded w-fit self-center sm:self-auto mt-2">
                   0x619F...e6c3
                 </span>
               </div>
@@ -66,14 +66,23 @@ export function Footer({ onCopyContract }: Props) {
               <p className="font-mono text-[10px] font-semibold text-stone-400 uppercase mb-4">
                 Sections
               </p>
-              <div className="flex flex-col gap-3 text-sm text-stone-500 font-light">
-                <a href="#learn-earn" className="hover:text-coffee-600">
+              <div className="flex flex-col gap-1 text-sm text-stone-500 font-light">
+                <a
+                  href="#learn-earn"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
+                >
                   Learn & Earn
                 </a>
-                <a href="#demo" className="hover:text-coffee-600">
+                <a
+                  href="#demo"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
+                >
                   Send HMZ
                 </a>
-                <a href="#technical" className="hover:text-coffee-600">
+                <a
+                  href="#technical"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
+                >
                   Contracts
                 </a>
               </div>
@@ -83,12 +92,12 @@ export function Footer({ onCopyContract }: Props) {
               <p className="font-mono text-[10px] font-semibold text-stone-400 uppercase mb-4">
                 Source
               </p>
-              <div className="flex flex-col gap-3 text-sm text-stone-500 font-light">
+              <div className="flex flex-col gap-1 text-sm text-stone-500 font-light">
                 <a
                   href="https://github.com/tahabakri/hamzacoin-website"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-coffee-600"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
                 >
                   Frontend on GitHub
                 </a>
@@ -96,11 +105,11 @@ export function Footer({ onCopyContract }: Props) {
                   href="https://github.com/tahabakri"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-coffee-600"
+                  className="hover:text-coffee-600 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 inline-flex items-center justify-center sm:justify-start"
                 >
                   Contracts & backend
                 </a>
-                <span className="text-xs text-coffee-600 font-semibold bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full w-fit self-center sm:self-auto shadow-sm">
+                <span className="text-xs text-coffee-600 font-semibold bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full w-fit self-center sm:self-auto shadow-sm mt-2">
                   Built with Solidity & React
                 </span>
               </div>
