@@ -44,16 +44,17 @@ export function LearnEarnProgressBar({ activeIndex }: Props) {
                   )}
                 </span>
                 <span
-                  className={`text-[11px] font-semibold uppercase tracking-wider truncate transition-colors ${
+                  className={`hidden sm:inline text-[11px] font-semibold uppercase tracking-wider truncate transition-colors ${
                     isActive ? "text-coffee-950" : isDone ? "text-coffee-700" : "text-coffee-400"
                   }`}
                 >
                   {step.label}
                 </span>
+                <span className="sm:hidden sr-only">{step.label}</span>
               </div>
               {i < STEPS.length - 1 && (
                 <div
-                  className={`flex-1 h-px mx-2 sm:mx-3 transition-colors duration-500 ${
+                  className={`flex-1 h-px mx-1.5 sm:mx-3 transition-colors duration-500 ${
                     isDone ? "bg-coffee-600" : "bg-coffee-200"
                   }`}
                   aria-hidden="true"

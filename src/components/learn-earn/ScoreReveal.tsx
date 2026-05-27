@@ -35,11 +35,11 @@ export function ScoreReveal({ questions, result, reduceMotion }: Props) {
           Your score
         </p>
         <p
-          className="text-5xl sm:text-6xl font-bold text-coffee-950 mt-1 tabular-nums"
+          className="text-[clamp(3rem,12vw,4rem)] font-bold text-coffee-950 mt-1 tabular-nums leading-none"
           aria-live="polite"
         >
           {result.score}
-          <span className="text-coffee-400 text-3xl"> / {questions.length}</span>
+          <span className="text-coffee-400 text-[clamp(1.5rem,6vw,2rem)]"> / {questions.length}</span>
         </p>
         <p className="text-sm text-coffee-700 mt-2">
           {result.score === 0

@@ -127,7 +127,7 @@ export function ArticlePicker({ onPick, completedEntries, totalEarned }: Props) 
           type="button"
           onClick={handleRandom}
           disabled={randomLoading}
-          className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.18),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all disabled:opacity-70 font-semibold"
+          className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm text-white bg-gradient-to-b from-coffee-700 to-coffee-800 border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.18),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all disabled:opacity-70 font-semibold min-h-[44px] w-full sm:w-auto"
         >
           <Icon icon="solar:dice-linear" className="text-base" />
           {randomLoading ? "Picking..." : "Random article"}
@@ -171,7 +171,7 @@ export function ArticlePicker({ onPick, completedEntries, totalEarned }: Props) 
                     setResults([]);
                     setShowResults(false);
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-coffee-900 hover:bg-coffee-50 transition-colors flex items-center gap-2"
+                  className="w-full text-left px-4 py-3 text-sm text-coffee-900 hover:bg-coffee-50 transition-colors flex items-center gap-2 min-h-[44px]"
                 >
                   <Icon icon="solar:book-bookmark-linear" className="text-coffee-500" />
                   {title}

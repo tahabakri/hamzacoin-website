@@ -320,10 +320,13 @@ export function LearnEarn({
   }, [state.status]);
 
   return (
-    <section id="learn-earn" className="relative py-14 sm:py-20 lg:py-28 px-6">
+    <section
+      id="learn-earn"
+      className="relative py-14 sm:py-20 lg:py-28 px-4 sm:px-6 lg:px-8"
+    >
       <style>{`
         .le-reader-body { font-family: "Lora", Georgia, "Times New Roman", serif; line-height: 1.75; color: #271B14; }
-        .le-reader-body { font-size: 16px; }
+        .le-reader-body { font-size: clamp(15px, 1vw + 12px, 17px); }
         .le-reader-html { max-width: 65ch; }
         .le-reader-html h1, .le-reader-html h2, .le-reader-html h3 { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #271B14; margin-top: 1.4em; margin-bottom: 0.5em; }
         .le-reader-html h2 { font-size: 1.25rem; font-weight: 700; }
@@ -347,10 +350,10 @@ export function LearnEarn({
               <Icon icon="solar:book-bookmark-linear" className="text-sm" />
               Learn & Earn HMZ
             </div>
-            <h2 className="mt-3 text-4xl sm:text-5xl font-bold tracking-tight text-coffee-950 leading-[1.05]">
+            <h2 className="mt-3 text-fluid-h2 font-bold tracking-tight text-coffee-950">
               Read. Quiz. Earn HMZ.
             </h2>
-            <p className="mt-3 max-w-2xl text-sm sm:text-base text-coffee-600">
+            <p className="mt-3 max-w-2xl text-sm sm:text-base text-coffee-600 text-pretty">
               Pick a Wikipedia article, answer a 5-question quiz, and a signature-gated faucet on Sepolia pays out up to 5 HMZ. No staking, no purchase — just curiosity.
             </p>
           </div>
@@ -362,7 +365,7 @@ export function LearnEarn({
                 faucet.reset();
                 setNetworkError(null);
               }}
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/70 hover:bg-white border border-coffee-200 px-3.5 py-2 text-xs font-semibold text-coffee-800 transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full bg-white/70 hover:bg-white border border-coffee-200 px-3.5 py-2.5 sm:py-2 text-xs font-semibold text-coffee-800 transition-colors min-h-[40px] sm:min-h-0"
             >
               <Icon icon="solar:arrow-left-linear" className="text-base" />
               Change article
@@ -371,7 +374,7 @@ export function LearnEarn({
         </div>
 
         {/* Glass panel */}
-        <div className="rounded-[2.75rem] bg-white/55 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] p-5 sm:p-8">
+        <div className="rounded-[clamp(1.5rem,4vw,2.75rem)] bg-white/55 backdrop-blur-xl border border-white shadow-[0_30px_80px_-45px_rgba(67,48,36,0.3),inset_0_1px_0_rgba(255,255,255,1)] p-4 sm:p-6 lg:p-8">
           {/* Progress */}
           <div className="mb-6">
             <LearnEarnProgressBar activeIndex={activeStep} />

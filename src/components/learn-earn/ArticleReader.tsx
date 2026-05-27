@@ -105,7 +105,7 @@ export function ArticleReader({
   return (
     <div className="rounded-3xl bg-[#FBF6EE] border border-coffee-200 shadow-[0_18px_40px_-30px_rgba(67,48,36,0.4),inset_0_1px_0_white] overflow-hidden">
       {/* Reader header */}
-      <div className="px-5 sm:px-8 py-4 border-b border-coffee-200 flex items-start justify-between gap-3 bg-white/40">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 border-b border-coffee-200 flex items-start justify-between gap-3 bg-white/40">
         <div className="min-w-0">
           <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wider">
             Wikipedia
@@ -130,7 +130,7 @@ export function ArticleReader({
 
       {/* Body */}
       <div
-        className="max-h-[60vh] sm:max-h-[68vh] overflow-y-auto px-5 sm:px-10 py-6"
+        className="max-h-[60vh] sm:max-h-[68vh] overflow-y-auto px-4 sm:px-6 lg:px-10 py-5 sm:py-6"
         aria-live="polite"
       >
         {isLoading && (
@@ -179,7 +179,7 @@ export function ArticleReader({
       </div>
 
       {/* Sticky-ish footer — adapts to where the user is in the flow */}
-      <div className="px-5 sm:px-8 py-4 border-t border-coffee-200 bg-white/50 flex items-center justify-between gap-3 flex-wrap">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 border-t border-coffee-200 bg-white/50 flex items-center justify-between gap-3 flex-wrap">
         <div className="text-xs text-coffee-600">
           {quizComplete ? (
             <span className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
@@ -205,7 +205,7 @@ export function ArticleReader({
             type="button"
             onClick={onStartQuiz}
             disabled={!hasReachedEnd || quizLoading || !article}
-            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
+            className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 sm:py-2.5 text-sm font-semibold transition-all duration-300 min-h-[44px] ${
               hasReachedEnd && article && !quizLoading
                 ? "bg-gradient-to-b from-coffee-700 to-coffee-800 text-white border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700"
                 : "bg-coffee-100 text-coffee-500 border border-coffee-200 cursor-not-allowed"

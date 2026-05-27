@@ -42,7 +42,7 @@ export function ClaimReward({
         <button
           type="button"
           onClick={onSkip}
-          className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 text-xs font-semibold transition-colors"
+          className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 sm:py-2 text-xs font-semibold transition-colors min-h-[40px] sm:min-h-0"
         >
           Pick another article
         </button>
@@ -79,7 +79,7 @@ export function ClaimReward({
           <button
             type="button"
             onClick={onDone}
-            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-coffee-700 to-coffee-800 text-white px-5 py-2.5 text-sm font-semibold shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-b from-coffee-700 to-coffee-800 text-white px-5 py-3 sm:py-2.5 text-sm font-semibold shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all min-h-[44px] sm:min-h-0"
           >
             <Icon icon="solar:refresh-linear" className="text-base" />
             Read another article
@@ -118,7 +118,7 @@ export function ClaimReward({
           <button
             type="button"
             onClick={onConnect}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-coffee-700 to-coffee-800 text-white px-5 py-2.5 text-sm font-semibold shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all"
+            className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-coffee-700 to-coffee-800 text-white px-5 py-3 sm:py-2.5 text-sm font-semibold shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700 transition-all min-h-[44px] sm:min-h-0 w-full sm:w-auto"
           >
             <Icon icon="solar:wallet-bold" className="text-base" />
             Connect wallet to claim
@@ -129,7 +129,7 @@ export function ClaimReward({
             onClick={onClaim}
             disabled={isClaimPending}
             aria-busy={isClaimPending}
-            className={`mt-4 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+            className={`mt-4 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 sm:py-2.5 text-sm font-semibold transition-all min-h-[44px] sm:min-h-0 w-full sm:w-auto ${
               isClaimPending
                 ? "bg-coffee-100 text-coffee-500 border border-coffee-200 cursor-not-allowed hmz-pulse-pending"
                 : "bg-gradient-to-b from-coffee-700 to-coffee-800 text-white border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700"

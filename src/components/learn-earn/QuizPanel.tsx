@@ -140,7 +140,7 @@ export function QuizPanel({ questions, answers, onAnswer, onSubmit, isGrading }:
           type="button"
           onClick={() => setCurrent((c) => Math.max(0, c - 1))}
           disabled={current === 0}
-          className="inline-flex items-center gap-1.5 rounded-full bg-white/70 hover:bg-white border border-coffee-200 px-4 py-2 text-xs font-semibold text-coffee-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full bg-white/70 hover:bg-white border border-coffee-200 px-4 py-2.5 sm:py-2 text-xs font-semibold text-coffee-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-h-[40px] sm:min-h-0"
         >
           <Icon icon="solar:alt-arrow-left-linear" className="text-base" />
           Previous
@@ -152,7 +152,7 @@ export function QuizPanel({ questions, answers, onAnswer, onSubmit, isGrading }:
             onClick={onSubmit}
             disabled={answered === null || isGrading}
             aria-busy={isGrading}
-            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+            className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 sm:py-2.5 text-sm font-semibold transition-all min-h-[44px] sm:min-h-0 ${
               answered !== null && !isGrading
                 ? "bg-gradient-to-b from-coffee-700 to-coffee-800 text-white border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700"
                 : "bg-coffee-100 text-coffee-500 border border-coffee-200 cursor-not-allowed"
@@ -166,7 +166,7 @@ export function QuizPanel({ questions, answers, onAnswer, onSubmit, isGrading }:
             type="button"
             onClick={() => setCurrent((c) => Math.min(questions.length - 1, c + 1))}
             disabled={answered === null}
-            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all ${
+            className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 sm:py-2.5 text-sm font-semibold transition-all min-h-[44px] sm:min-h-0 ${
               answered !== null
                 ? "bg-gradient-to-b from-coffee-700 to-coffee-800 text-white border border-coffee-900 shadow-[0_8px_18px_rgba(67,48,36,0.2),inset_0_1px_0_rgba(255,255,255,0.25)] hover:from-coffee-600 hover:to-coffee-700"
                 : "bg-coffee-100 text-coffee-500 border border-coffee-200 cursor-not-allowed"
