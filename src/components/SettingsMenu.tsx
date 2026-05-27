@@ -46,7 +46,11 @@ export function SettingsMenu({ settings }: Props) {
         <div
           role="dialog"
           aria-label="Settings"
-          className="absolute right-0 mt-2 w-[min(18rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-50"
+          /* On phones, anchor to the viewport's right edge with a small inset
+             so the dropdown never clips off the left of the screen when the
+             trigger sits in the middle of the header row. On sm: and up the
+             trigger is at the right end so absolute right-0 works. */
+          className="fixed top-[3.75rem] sm:top-[4.5rem] sm:absolute sm:top-full sm:mt-2 right-3 sm:right-0 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-[60]"
         >
           <div className="px-4 py-3 border-b border-coffee-100">
             <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">

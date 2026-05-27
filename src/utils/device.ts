@@ -30,10 +30,24 @@ export const isInMetaMaskBrowser = (): boolean => {
   return Boolean(eth?.isMetaMask) && isMobileUA();
 };
 
+/**
+ * Build a MetaMask universal link that opens the current dApp inside the
+ * MetaMask mobile app's in-app browser. Tapping this URL on a phone:
+ *   1. iOS / Android registers `metamask.app.link` as a universal/app link
+ *   2. If MetaMask Mobile is installed, the OS hands the URL to MetaMask
+ *      which opens its in-app browser to the dApp
+ *   3. If not installed, the link resolves at metamask.app.link which
+ *      redirects to the App Store / Play Store
+ *
+ * Format per MetaMask docs:  https://metamask.app.link/dapp/<host><path>
+ * The dapp path should NOT include the https:// prefix — MetaMask infers it.
+ */
 export const buildMetaMaskDeepLink = (): string => {
   if (typeof window === "undefined") {
     return "https://metamask.app.link/";
   }
-  const { host, pathname, search } = window.location;
-  return `https://metamask.app.link/dapp/${host}${pathname}${search}`;
+  const { host, pathname, search, hash } = window.location;
+  // Strip any leading slash from pathname so we don't double-slash after host.
+  const safePath = pathname === "/" ? "" : pathname;
+  return `https://metamask.app.link/dapp/${host}${safePath}${search}${hash}`;
 };

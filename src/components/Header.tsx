@@ -130,7 +130,11 @@ export function Header({
                     id="mobile-nav-panel"
                     role="menu"
                     aria-label="Site sections"
-                    className="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden"
+                    /* Fixed-position so the panel anchors to the viewport's
+                       right edge instead of the hamburger button's right edge.
+                       Avoids the left-clipping bug when the hamburger sits
+                       in the middle of the header row on narrow screens. */
+                    className="fixed top-[3.75rem] sm:top-[4.5rem] right-3 sm:right-6 w-[min(15rem,calc(100vw-1.5rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-[60]"
                   >
                     <div className="px-4 py-2 border-b border-coffee-100">
                       <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
@@ -144,7 +148,7 @@ export function Header({
                             href={link.href}
                             role="menuitem"
                             onClick={() => setMobileNavOpen(false)}
-                            className="block px-4 py-3 text-sm text-coffee-800 hover:bg-coffee-50 active:bg-coffee-100 transition-colors"
+                            className="block px-4 py-3 text-sm text-coffee-800 hover:bg-coffee-50 active:bg-coffee-100 transition-colors min-h-[44px] flex items-center"
                           >
                             {link.label}
                           </a>
@@ -188,7 +192,7 @@ export function Header({
                   </button>
 
                   {open && (
-                    <div className="absolute right-0 mt-2 w-[min(16rem,calc(100vw-2rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden">
+                    <div className="fixed top-[3.75rem] sm:top-[4.5rem] sm:absolute sm:top-full sm:mt-2 right-3 sm:right-0 w-[min(16rem,calc(100vw-1.5rem))] rounded-2xl bg-white border border-coffee-200 shadow-[0_18px_38px_-12px_rgba(67,48,36,0.25)] overflow-hidden z-[60]">
                       <div className="px-4 py-3 border-b border-coffee-100">
                         <p className="text-[10px] font-mono uppercase text-coffee-500 tracking-wide">
                           Connected

@@ -34,7 +34,7 @@ export function Hero({
       : 50000;
   const faucet = useFaucetBalance();
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 md:pt-40 pb-12 sm:pb-20 overflow-hidden">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 lg:pt-40 pb-12 sm:pb-20 overflow-hidden">
       <div className="grid lg:grid-cols-[1.02fr_0.98fr] gap-10 sm:gap-12 lg:gap-16 items-center min-w-0">
         <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/75 border border-white px-3.5 py-2 shadow-[0_6px_18px_-12px_rgba(67,48,36,0.2),inset_0_1px_0_white] mb-6 sm:mb-8">
@@ -115,7 +115,12 @@ export function Hero({
           </div>
         </div>
 
-        <div className="relative lg:pl-4 min-w-0">
+        {/* Side panel (Stats card + 3D coin + decorative floating bubbles) —
+            hidden on mobile / tablet because the same balance / supply / wallet
+            data is already accessible elsewhere on the page (FAQ, Stats list,
+            Hero CTA buttons) and on small screens this card just creates a
+            tall translucent gap that pushes the hero text out of the fold. */}
+        <div className="relative lg:pl-4 min-w-0 hidden lg:block">
           <div className="absolute -inset-4 sm:-inset-8 rounded-[3rem] bg-gradient-to-br from-amber-200/30 via-white/20 to-orange-200/20 blur-3xl pointer-events-none"></div>
 
           <div className="absolute -top-8 left-2 sm:-top-12 sm:-left-4 md:-left-10 z-30 w-[clamp(3.75rem,7vw,7.5rem)] h-[clamp(3.75rem,7vw,7.5rem)] overflow-hidden">
