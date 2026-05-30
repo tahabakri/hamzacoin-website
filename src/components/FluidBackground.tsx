@@ -69,7 +69,10 @@ const RENDER_FRAGMENT = /* glsl */ `
   }
 `;
 
-const drawTextCanvas = (
+// The fixed background is a faint, on-brand HMZ coin emblem instead of the old
+// "HAMZACOIN" wordmark. The coin reads as a watermark and ripples under the
+// fluid shader, without a giant word competing with each section's content.
+const drawCoinWatermark = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   width: number,
@@ -82,39 +85,67 @@ const drawTextCanvas = (
   ctx.fillStyle = "#FAF8F5";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Watermark scales with viewport so it doesn't dominate the hero on phones.
-  // On a 360-wide phone the title is ~75px tall instead of 180px (which used
-  // to take up half the screen and look like dead space above the hero).
-  const isMobile = width < 768;
-  const titleBasePx = isMobile ? Math.max(60, width * 0.22) : 180;
-  const subBasePx = isMobile ? Math.max(13, width * 0.038) : 28;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
 
-  const titleSize = Math.round(titleBasePx * dpr);
-  ctx.font = `600 ${titleSize}px 'Bebas Neue', sans-serif`;
-  // Fainter watermark on mobile so it reads as background, not content.
-  ctx.fillStyle = isMobile
-    ? "rgba(108, 79, 59, 0.05)"
-    : "rgba(108, 79, 59, 0.08)";
+  // Coin scales with the viewport so it stays centered and never dominates.
+  // Slightly larger on phones where the viewport is narrow.
+  const isMobile = width < 768;
+  const radius =
+    Math.min(canvas.width, canvas.height) * (isMobile ? 0.34 : 0.24);
+
+  // coffee-600 line art, kept faint so it reads as background, not content.
+  const ink = "108, 79, 59";
+  ctx.save();
+  ctx.globalAlpha = isMobile ? 0.06 : 0.1;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(
-    "HAMZACOIN",
-    canvas.width / 2,
-    canvas.height / 2 - (isMobile ? 40 : 80) * dpr,
-  );
 
-  const subSize = Math.round(subBasePx * dpr);
-  ctx.font = `300 ${subSize}px 'JetBrains Mono', monospace`;
-  // Subtitle is more visible on desktop; on mobile we drop opacity hard so it
-  // doesn't compete with the hero headline.
-  ctx.fillStyle = isMobile
-    ? "rgba(132, 100, 77, 0.18)"
-    : "rgba(132, 100, 77, 0.35)";
-  ctx.fillText(
-    "THE SILENT RECOMMENDATION PROTOCOL",
-    canvas.width / 2,
-    canvas.height / 2 + (isMobile ? 50 : 100) * dpr,
-  );
+  // Soft struck-metal fill so the disc reads as a coin, not just a ring.
+  const radial = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+  radial.addColorStop(0, `rgba(${ink}, 0.22)`);
+  radial.addColorStop(0.72, `rgba(${ink}, 0.1)`);
+  radial.addColorStop(1, `rgba(${ink}, 0)`);
+  ctx.fillStyle = radial;
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Outer rim + inner ring.
+  ctx.strokeStyle = `rgba(${ink}, 0.85)`;
+  ctx.lineWidth = Math.max(2, radius * 0.018);
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.9, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = `rgba(${ink}, 0.4)`;
+  ctx.lineWidth = Math.max(1, radius * 0.008);
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.82, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // HMZ monogram, same as the 3D spinning coin.
+  ctx.fillStyle = `rgba(${ink}, 0.95)`;
+  ctx.font = `600 ${Math.round(radius * 0.6)}px 'Bebas Neue', sans-serif`;
+  ctx.fillText("HMZ", cx, cy);
+
+  // Milled edge dots.
+  const dotCount = 28;
+  ctx.fillStyle = `rgba(${ink}, 0.6)`;
+  for (let i = 0; i < dotCount; i++) {
+    const a = (i / dotCount) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(
+      cx + Math.cos(a) * radius * 0.74,
+      cy + Math.sin(a) * radius * 0.74,
+      Math.max(1, radius * 0.012),
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+
+  ctx.restore();
 };
 
 export function FluidBackground() {
@@ -145,7 +176,7 @@ export function FluidBackground() {
     const textCtx = textCanvas.getContext("2d");
     if (!textCtx) return;
 
-    drawTextCanvas(textCanvas, textCtx, width, height, dpr);
+    drawCoinWatermark(textCanvas, textCtx, width, height, dpr);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -250,15 +281,15 @@ export function FluidBackground() {
       simMaterial.uniforms.uResolution.value.set(width * rtScale, height * rtScale);
       renderMaterial.uniforms.uResolution.value.set(width * rtScale, height * rtScale);
 
-      drawTextCanvas(textCanvas, textCtx, width, height, dpr);
+      drawCoinWatermark(textCanvas, textCtx, width, height, dpr);
       textTexture.needsUpdate = true;
     };
     window.addEventListener("resize", handleResize);
 
-    // Redraw text once Bebas Neue + JetBrains Mono have loaded
+    // Redraw the coin once Bebas Neue has loaded so the HMZ monogram is correct
     if (document.fonts && document.fonts.ready) {
       void document.fonts.ready.then(() => {
-        drawTextCanvas(textCanvas, textCtx, width, height, dpr);
+        drawCoinWatermark(textCanvas, textCtx, width, height, dpr);
         textTexture.needsUpdate = true;
       });
     }
