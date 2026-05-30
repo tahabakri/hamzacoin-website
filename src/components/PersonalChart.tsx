@@ -15,6 +15,7 @@ import {
   type DailyVolumePoint,
   type RawTransferEvent,
 } from "../utils/transfers";
+import { HISTORY_WINDOW_DAYS, HISTORY_WINDOW_LABEL } from "../utils/constants";
 
 type Props = {
   events: RawTransferEvent[];
@@ -54,7 +55,7 @@ export default function PersonalChart({
     if (!decimals || !account) return [];
     const lower = account.toLowerCase();
     const outgoing = events.filter((e) => e.from.toLowerCase() === lower);
-    return groupByDay(outgoing, decimals, 30);
+    return groupByDay(outgoing, decimals, HISTORY_WINDOW_DAYS);
   }, [events, decimals, account]);
 
   const totalSent = useMemo(() => {
@@ -75,7 +76,7 @@ export default function PersonalChart({
             YOUR ACTIVITY
           </p>
           <h3 className="mt-1 text-lg font-bold text-coffee-950">
-            HMZ sent by you — last 30 days
+            HMZ sent by you — {HISTORY_WINDOW_LABEL}
           </h3>
         </div>
         <div className="text-right">
@@ -135,14 +136,14 @@ export default function PersonalChart({
             icon="solar:inbox-linear"
             className="text-3xl text-coffee-300 mx-auto mb-3"
           />
-          No outgoing transfers in the last 30 days.
+          No outgoing transfers in the {HISTORY_WINDOW_LABEL}.
           <br />
           Send your first HMZ to see it here.
         </div>
       )}
 
       <table className="sr-only">
-        <caption>Your outgoing HMZ transfers, last 30 days</caption>
+        <caption>Your outgoing HMZ transfers, {HISTORY_WINDOW_LABEL}</caption>
         <thead>
           <tr>
             <th>Date</th>

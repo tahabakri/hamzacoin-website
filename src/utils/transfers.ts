@@ -5,7 +5,8 @@ export type RawTransferEvent = {
   to: string;
   value: bigint;
   blockNumber: number;
-  blockTimestampMs: number;
+  /** ms since epoch, or null when the block timestamp couldn't be resolved. */
+  blockTimestampMs: number | null;
   txHash: string;
   logIndex: number;
 };
@@ -99,13 +100,16 @@ const shortLabel = (ms: number): string => {
 export const groupByDay = (
   events: RawTransferEvent[],
   decimals: bigint,
-  days = 30,
+  days: number,
 ): DailyVolumePoint[] => {
   const now = Date.now();
   const points: DailyVolumePoint[] = [];
   const bucket = new Map<string, { volume: number; count: number }>();
 
   for (const ev of events) {
+    // Skip events whose block timestamp couldn't be resolved — dropping a
+    // transfer is better than misdating it into "today" and faking a spike.
+    if (ev.blockTimestampMs === null) continue;
     const key = dateKey(ev.blockTimestampMs);
     const entry = bucket.get(key) ?? { volume: 0, count: 0 };
     entry.volume += Number(formatUnits(ev.value, decimals));

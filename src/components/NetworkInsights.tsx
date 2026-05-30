@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useTransferHistory } from "../hooks/useTransferHistory";
 import { Leaderboard } from "./Leaderboard";
+import { HISTORY_WINDOW_LABEL, HISTORY_BLOCK_LABEL } from "../utils/constants";
 
 const DailyVolumeChart = lazy(() => import("./DailyVolumeChart"));
 const PersonalChart = lazy(() => import("./PersonalChart"));
@@ -62,7 +63,8 @@ export function NetworkInsights({ account, reduceMotion }: Props) {
           </span>
         </h2>
         <p className="mt-5 text-base leading-7 text-coffee-700 font-light">
-          Aggregated from the last 50,000 blocks (~7 days) of Sepolia.
+          Aggregated from the {HISTORY_WINDOW_LABEL} of Sepolia{" "}
+          ({HISTORY_BLOCK_LABEL}).
           {history.isLoading && " Loading from chain…"}
         </p>
       </div>
@@ -78,7 +80,11 @@ export function NetworkInsights({ account, reduceMotion }: Props) {
         <div className="lg:col-span-2">
           {inView ? (
             <Suspense fallback={<ChartSkeleton />}>
-              <DailyVolumeChart data={history.dailyVolume} animate={animate} />
+              <DailyVolumeChart
+                data={history.dailyVolume}
+                animate={animate}
+                isLoading={history.isLoading}
+              />
             </Suspense>
           ) : (
             <ChartSkeleton />
@@ -115,9 +121,9 @@ export function NetworkInsights({ account, reduceMotion }: Props) {
             {history.holderCount}
           </p>
           <p className="mt-2 text-xs text-coffee-100 font-light leading-5">
-            Unique addresses with positive HMZ balance, derived from the last
-            50,000 blocks of Transfer events. An undercount if older holders
-            haven't moved tokens since.
+            Unique addresses with positive HMZ balance, derived from the last{" "}
+            {HISTORY_BLOCK_LABEL} of Transfer events. An undercount if older
+            holders haven't moved tokens since.
           </p>
         </div>
       </div>

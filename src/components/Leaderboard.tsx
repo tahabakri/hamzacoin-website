@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { formatAddress } from "../utils/format";
-import { SEPOLIA_EXPLORER } from "../utils/constants";
+import { SEPOLIA_EXPLORER, HISTORY_BLOCK_LABEL } from "../utils/constants";
 import type { LeaderboardEntry } from "../utils/transfers";
 
 type Props = {
@@ -37,7 +37,7 @@ export function Leaderboard({ entries, isLoading }: Props) {
         </div>
       ) : entries.length === 0 ? (
         <div className="py-12 text-center text-xs text-coffee-500 font-light">
-          No transfers recorded in the last 50,000 blocks.
+          No transfers recorded in the last {HISTORY_BLOCK_LABEL}.
         </div>
       ) : (
         <ol className="space-y-3" aria-label="Leaderboard">

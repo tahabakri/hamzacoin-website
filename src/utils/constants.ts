@@ -33,6 +33,23 @@ export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";
 // short tail by default (~1 day on Sepolia at 12s blocks). Users with a
 // private RPC (VITE_SEPOLIA_RPC_URL) can safely widen this if they want.
 export const HISTORY_BLOCK_RANGE = USER_RPC ? 50_000n : 5_000n;
+
+// Sepolia targets ~12s block times. The insights charts and their copy derive
+// their window from the SAME block range we actually query, so the chart axis
+// can never claim more history than we fetched (kills the flat-then-spike).
+export const SEPOLIA_BLOCK_SECONDS = 12;
+export const HISTORY_WINDOW_DAYS = Math.max(
+  1,
+  Math.round((Number(HISTORY_BLOCK_RANGE) * SEPOLIA_BLOCK_SECONDS) / 86_400),
+);
+// Human-friendly window label for chart titles + section copy.
+export const HISTORY_WINDOW_LABEL =
+  HISTORY_WINDOW_DAYS === 1 ? "last 24 hours" : `last ${HISTORY_WINDOW_DAYS} days`;
+// Formatted block count for "last N blocks" copy (e.g. "50,000 blocks").
+export const HISTORY_BLOCK_LABEL = `${Number(
+  HISTORY_BLOCK_RANGE,
+).toLocaleString("en-US")} blocks`;
+
 export const MAX_FEED_ITEMS = 20;
 export const TOTAL_SUPPLY_POLL_MS = 30_000;
 

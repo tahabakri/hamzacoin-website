@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { type EventLog } from "ethers";
-import { HISTORY_BLOCK_RANGE } from "../utils/constants";
+import { HISTORY_BLOCK_RANGE, HISTORY_WINDOW_DAYS } from "../utils/constants";
 import {
   computeHolders,
   decodeTransferArgs,
@@ -58,6 +58,9 @@ export function useTransferHistory(): TransferHistoryState {
           new Set(rawEvents.map((e) => e.blockNumber)),
         );
         const blockTimestamps = new Map<number, number>();
+        // FOLLOW-UP (P2): this fans out one getBlock per unique block in
+        // parallel. Fine at current volume; batch/throttle if Transfer activity
+        // grows so we don't trip public-RPC rate limits (HTTP 429).
         await Promise.all(
           blockNumbers.map(async (bn) => {
             try {
@@ -83,8 +86,9 @@ export function useTransferHistory(): TransferHistoryState {
             to: e.args?.[1] as string,
             value: e.args?.[2] as bigint,
             blockNumber: e.blockNumber,
-            blockTimestampMs:
-              blockTimestamps.get(e.blockNumber) ?? Date.now(),
+            // null (not Date.now()) when unresolved — groupByDay drops these so
+            // an old transfer never lands in "today" and manufactures a spike.
+            blockTimestampMs: blockTimestamps.get(e.blockNumber) ?? null,
             txHash: e.transactionHash,
             logIndex: e.index,
           }))
@@ -175,7 +179,7 @@ export function useTransferHistory(): TransferHistoryState {
   );
 
   const dailyVolume = useMemo(
-    () => (decimals ? groupByDay(events, decimals, 30) : []),
+    () => (decimals ? groupByDay(events, decimals, HISTORY_WINDOW_DAYS) : []),
     [events, decimals],
   );
 
