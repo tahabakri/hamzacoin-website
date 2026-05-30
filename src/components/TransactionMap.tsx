@@ -57,6 +57,31 @@ const PALETTE = {
   ambient: { core: "#84644D", halo: "#D4C4B0" },
 } as const;
 
+type NodeColors = { core: string; hot: string; halo: string; label: string };
+
+// Deterministic per-wallet colour: hash the address to a hue so a given wallet
+// keeps the SAME colour across every render (no flicker), with fixed S/L for a
+// cohesive, readable set on the cream background.
+const hueForAddress = (address: string): number => {
+  let h = 2166136261; // FNV-1a 32-bit offset basis
+  const s = address.toLowerCase();
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) % 360;
+};
+
+const colorForAddress = (address: string): NodeColors => {
+  const hue = hueForAddress(address);
+  return {
+    core: `hsl(${hue}, 68%, 52%)`,
+    hot: `hsl(${hue}, 82%, 60%)`,
+    halo: `hsl(${hue}, 80%, 72%)`,
+    label: `hsl(${hue}, 52%, 34%)`,
+  };
+};
+
 const ringRadiusFor = (count: number): number => {
   if (count <= 1) return 0;
   if (count === 2) return 110;
@@ -317,8 +342,9 @@ export function TransactionMap({
           </span>
         </h2>
         <p className="mt-5 text-base leading-7 text-coffee-700 font-light">
-          Every transfer becomes a particle of light, traveling between wallets.
-          Hover any node for its address and total HMZ volume.
+          Every transfer becomes a particle of light, traveling between wallets,
+          each with its own colour. Hover any node for its address and total HMZ
+          volume.
         </p>
       </div>
 
@@ -382,10 +408,21 @@ export function TransactionMap({
                   <stop offset="70%" stopColor="#FAF8F5" stopOpacity="0.15" />
                   <stop offset="100%" stopColor="#FAF8F5" stopOpacity="0" />
                 </radialGradient>
-                <radialGradient id="hmz-node-glow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#E6B97A" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#E6B97A" stopOpacity="0" />
-                </radialGradient>
+                {renderedNodes.map((n, i) => {
+                  const c = colorForAddress(n.address);
+                  return (
+                    <radialGradient
+                      key={n.address}
+                      id={`hmz-node-glow-${i}`}
+                      cx="50%"
+                      cy="50%"
+                      r="50%"
+                    >
+                      <stop offset="0%" stopColor={c.halo} stopOpacity="0.6" />
+                      <stop offset="100%" stopColor={c.halo} stopOpacity="0" />
+                    </radialGradient>
+                  );
+                })}
                 <radialGradient id="hmz-map-center" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#E6B97A" stopOpacity="0.35" />
                   <stop offset="100%" stopColor="#E6B97A" stopOpacity="0" />
@@ -426,9 +463,10 @@ export function TransactionMap({
                 );
               })}
 
-              {renderedNodes.map((n) => {
+              {renderedNodes.map((n, i) => {
                 const r = nodeRadius(n.volume, maxVolume);
                 const isHot = now - n.lastSeenAt < 3000;
+                const c = colorForAddress(n.address);
                 return (
                   <g
                     key={n.address}
@@ -443,14 +481,14 @@ export function TransactionMap({
                       cx={n.x}
                       cy={n.y}
                       r={r + 12}
-                      fill="url(#hmz-node-glow)"
+                      fill={`url(#hmz-node-glow-${i})`}
                       className={reduceMotion ? "" : "hmz-node-aura"}
                     />
                     <circle
                       cx={n.x}
                       cy={n.y}
                       r={r}
-                      fill={isHot ? "#A07053" : "#84644D"}
+                      fill={isHot ? c.hot : c.core}
                       stroke="#FAF8F5"
                       strokeWidth="2"
                     />
@@ -463,7 +501,7 @@ export function TransactionMap({
                         fontFamily: "JetBrains Mono, monospace",
                         fontSize: "9px",
                         fontWeight: 600,
-                        fill: "#6C4F3B",
+                        fill: c.label,
                       }}
                     >
                       {formatAddress(n.address)}
