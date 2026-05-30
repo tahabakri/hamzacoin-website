@@ -11,11 +11,15 @@ import {
 import { formatUnits } from "ethers";
 import { Icon } from "@iconify/react";
 import {
-  groupByDay,
+  groupByWindow,
   type DailyVolumePoint,
   type RawTransferEvent,
 } from "../utils/transfers";
-import { HISTORY_WINDOW_DAYS, HISTORY_WINDOW_LABEL } from "../utils/constants";
+import {
+  HISTORY_BUCKET,
+  HISTORY_BUCKET_COUNT,
+  HISTORY_WINDOW_LABEL,
+} from "../utils/constants";
 
 type Props = {
   events: RawTransferEvent[];
@@ -55,7 +59,7 @@ export default function PersonalChart({
     if (!decimals || !account) return [];
     const lower = account.toLowerCase();
     const outgoing = events.filter((e) => e.from.toLowerCase() === lower);
-    return groupByDay(outgoing, decimals, HISTORY_WINDOW_DAYS);
+    return groupByWindow(outgoing, decimals, HISTORY_BUCKET_COUNT, HISTORY_BUCKET);
   }, [events, decimals, account]);
 
   const totalSent = useMemo(() => {
@@ -125,6 +129,7 @@ export default function PersonalChart({
                 dataKey="volume"
                 fill="#84644D"
                 radius={[6, 6, 0, 0]}
+                maxBarSize={56}
                 isAnimationActive={animate}
               />
             </BarChart>

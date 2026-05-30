@@ -82,48 +82,63 @@ export type LeaderboardEntry = {
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const HOUR_MS = 60 * 60 * 1000;
 
-const dateKey = (ms: number): string => {
+const pad2 = (n: number): string => String(n).padStart(2, "0");
+
+const dayKey = (ms: number): string => {
   const d = new Date(ms);
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
 };
 
-const shortLabel = (ms: number): string => {
-  const d = new Date(ms);
-  return d.toLocaleDateString("en-US", {
+const hourKey = (ms: number): string =>
+  `${dayKey(ms)}-${pad2(new Date(ms).getUTCHours())}`;
+
+const dayLabel = (ms: number): string =>
+  new Date(ms).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     timeZone: "UTC",
   });
-};
 
-export const groupByDay = (
+const hourLabel = (ms: number): string =>
+  `${pad2(new Date(ms).getUTCHours())}:00`;
+
+export type ChartGranularity = "hour" | "day";
+
+// Bucket transfers into the last `buckets` slots of size `granularity`, walking
+// backward from now. Hourly granularity keeps a short window (a single day of
+// data) from collapsing into one lonely point. Events whose timestamp couldn't
+// be resolved are skipped (never misdated into the current bucket).
+export const groupByWindow = (
   events: RawTransferEvent[],
   decimals: bigint,
-  days: number,
+  buckets: number,
+  granularity: ChartGranularity,
 ): DailyVolumePoint[] => {
   const now = Date.now();
-  const points: DailyVolumePoint[] = [];
-  const bucket = new Map<string, { volume: number; count: number }>();
+  const stepMs = granularity === "hour" ? HOUR_MS : DAY_MS;
+  const keyOf = granularity === "hour" ? hourKey : dayKey;
+  const labelOf = granularity === "hour" ? hourLabel : dayLabel;
 
+  const tally = new Map<string, { volume: number; count: number }>();
   for (const ev of events) {
-    // Skip events whose block timestamp couldn't be resolved — dropping a
-    // transfer is better than misdating it into "today" and faking a spike.
     if (ev.blockTimestampMs === null) continue;
-    const key = dateKey(ev.blockTimestampMs);
-    const entry = bucket.get(key) ?? { volume: 0, count: 0 };
+    const key = keyOf(ev.blockTimestampMs);
+    const entry = tally.get(key) ?? { volume: 0, count: 0 };
     entry.volume += Number(formatUnits(ev.value, decimals));
     entry.count += 1;
-    bucket.set(key, entry);
+    tally.set(key, entry);
   }
 
-  for (let i = days - 1; i >= 0; i--) {
-    const ms = now - i * DAY_MS;
-    const key = dateKey(ms);
-    const entry = bucket.get(key) ?? { volume: 0, count: 0 };
+  const points: DailyVolumePoint[] = [];
+  for (let i = buckets - 1; i >= 0; i--) {
+    const ms = now - i * stepMs;
+    const key = keyOf(ms);
+    const entry = tally.get(key) ?? { volume: 0, count: 0 };
     points.push({
       dateKey: key,
-      label: shortLabel(ms),
+      label: labelOf(ms),
       volume: Math.round(entry.volume * 100) / 100,
       count: entry.count,
     });

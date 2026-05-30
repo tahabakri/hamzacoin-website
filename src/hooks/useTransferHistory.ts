@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { type EventLog } from "ethers";
-import { HISTORY_BLOCK_RANGE, HISTORY_WINDOW_DAYS } from "../utils/constants";
+import {
+  HISTORY_BLOCK_RANGE,
+  HISTORY_BUCKET,
+  HISTORY_BUCKET_COUNT,
+} from "../utils/constants";
 import {
   computeHolders,
   decodeTransferArgs,
-  groupByDay,
+  groupByWindow,
   topSenders,
   type DailyVolumePoint,
   type LeaderboardEntry,
@@ -86,7 +90,7 @@ export function useTransferHistory(): TransferHistoryState {
             to: e.args?.[1] as string,
             value: e.args?.[2] as bigint,
             blockNumber: e.blockNumber,
-            // null (not Date.now()) when unresolved — groupByDay drops these so
+            // null (not Date.now()) when unresolved — groupByWindow drops these so
             // an old transfer never lands in "today" and manufactures a spike.
             blockTimestampMs: blockTimestamps.get(e.blockNumber) ?? null,
             txHash: e.transactionHash,
@@ -179,7 +183,10 @@ export function useTransferHistory(): TransferHistoryState {
   );
 
   const dailyVolume = useMemo(
-    () => (decimals ? groupByDay(events, decimals, HISTORY_WINDOW_DAYS) : []),
+    () =>
+      decimals
+        ? groupByWindow(events, decimals, HISTORY_BUCKET_COUNT, HISTORY_BUCKET)
+        : [],
     [events, decimals],
   );
 

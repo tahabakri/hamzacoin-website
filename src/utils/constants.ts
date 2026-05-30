@@ -38,13 +38,27 @@ export const HISTORY_BLOCK_RANGE = USER_RPC ? 50_000n : 5_000n;
 // their window from the SAME block range we actually query, so the chart axis
 // can never claim more history than we fetched (kills the flat-then-spike).
 export const SEPOLIA_BLOCK_SECONDS = 12;
-export const HISTORY_WINDOW_DAYS = Math.max(
+
+// How many hours of history the queried block range actually covers.
+export const HISTORY_WINDOW_HOURS = Math.max(
   1,
-  Math.round((Number(HISTORY_BLOCK_RANGE) * SEPOLIA_BLOCK_SECONDS) / 86_400),
+  Math.round((Number(HISTORY_BLOCK_RANGE) * SEPOLIA_BLOCK_SECONDS) / 3_600),
 );
+
+// Short windows (≤ 2 days) bucket HOURLY so a single day of data renders as a
+// real time series instead of one lonely point; longer windows bucket daily.
+export const HISTORY_BUCKET: "hour" | "day" =
+  HISTORY_WINDOW_HOURS <= 48 ? "hour" : "day";
+export const HISTORY_BUCKET_COUNT =
+  HISTORY_BUCKET === "hour"
+    ? HISTORY_WINDOW_HOURS
+    : Math.max(1, Math.round(HISTORY_WINDOW_HOURS / 24));
+
 // Human-friendly window label for chart titles + section copy.
 export const HISTORY_WINDOW_LABEL =
-  HISTORY_WINDOW_DAYS === 1 ? "last 24 hours" : `last ${HISTORY_WINDOW_DAYS} days`;
+  HISTORY_BUCKET === "hour"
+    ? `last ${HISTORY_BUCKET_COUNT} hours`
+    : `last ${HISTORY_BUCKET_COUNT} days`;
 // Formatted block count for "last N blocks" copy (e.g. "50,000 blocks").
 export const HISTORY_BLOCK_LABEL = `${Number(
   HISTORY_BLOCK_RANGE,
